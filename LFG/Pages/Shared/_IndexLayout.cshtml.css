@@ -1,0 +1,94 @@
+﻿main {
+  display: grid;
+  grid-template-columns: repeat(2, 60%);
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+  .logo-container {
+    width: 750px;
+    height: 750px;
+    display: grid;
+    grid-column: 1;
+    grid-row: 1;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+  }
+
+    .logo {
+      height: 700px;
+      width: 700px;
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+      left: 25px;
+      animation: rotate 6s infinite linear;
+    }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+    .lfg {
+      height: 315px;
+      width: 750px;
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+    }
+
+  .greeting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
+
+    .welcome {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 550px;
+      height: 130px;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 2px solid white;
+      border-radius: 25px;
+      background: linear-gradient(#0000ff 0%, #6328D5 86%);
+    }
+
+      h1 {
+        display: flex;
+        align-items: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 64px;
+        font-weight: bold;
+        line-height: 50px;
+        height: 130px;
+        background: linear-gradient(180deg, #1F1F1F 30%, #555555 100%);
+        background-clip: text;
+        color: transparent;
+        -webkit-text-stroke: 1px white;
+      }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 30px;
+  white-space: nowrap;
+  line-height: 60px;
+  background: rgb(31,31,31);
+  background: linear-gradient(0deg, rgba(31,31,31,1) 0%, rgba(0,0,0,1) 50%);
+}

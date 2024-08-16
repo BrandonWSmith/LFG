@@ -12,6 +12,6 @@ public class GamePublisher
 
     [Required]
     [ForeignKey("Company")]
-    public string CompanyId { get; set; }
+    public int CompanyId { get; set; }
     public Company Company { get; set; }
 }

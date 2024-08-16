@@ -8,13 +8,13 @@
 <form method="post">
   <div class="text-danger" asp-validation-summary="ModelOnly"></div>
   <div class="login-form">
-    <label class="login-form-label" for="User.Username"@*change to asp-for for building and remove label text*@>Username</label>
-    <input class="login-form-input" type="text" for="User.Username"@*change to asp-for for building*@ class="form-control"/>
+    <label class="login-form-label" asp-for="User.Username"></label>
+    <input class="login-form-input" type="text" asp-for="User.Username" class="form-control"/>
     <span class="text-danger" asp-validation-for="User.Username"></span>
     </div>
   <div class="login-form">
-    <label class="login-form-label" for="User.Password"@*change to asp-for for building and remove label text*@>Password</label>
-    <input class="login-form-input" type="password" for="User.Password"@*change to asp-for for building*@ class="form-control"/>
+    <label class="login-form-label" asp-for="User.Password"></label>
+    <input class="login-form-input" type="password" asp-for="User.Password" class="form-control"/>
     <span class="text-danger" asp-validation-for="User.Password"></span>
   </div>
   <div class="buttons">

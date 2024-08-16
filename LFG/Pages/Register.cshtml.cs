@@ -11,6 +11,12 @@ namespace LFG.Pages
 
         public void OnGet()
         {
+
+        }
+
+        public void OnPost()
+        {
+
         }
     }
 
@@ -19,6 +25,7 @@ namespace LFG.Pages
         [Required]
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
+        [Display(Name = "Re-type Password")]
         public string ConfirmPassword { get; set; }
     }
 }

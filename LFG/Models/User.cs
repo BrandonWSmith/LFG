@@ -11,7 +11,7 @@ namespace LFG.Models
 
         [Required]
         [Length(3, 20)]
-        [RegularExpression(@"^[A-Za-z]+\\\\w{2,19}")]
+        [RegularExpression(@"^[A-Za-z]+\w+")]
         public string Username { get; set; }
 
         [Required]

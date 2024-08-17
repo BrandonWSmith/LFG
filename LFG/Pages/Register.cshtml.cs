@@ -15,16 +15,27 @@ namespace LFG.Pages
             _context = context;
         }
 
-        public NewUser User { get; set; }
-
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            return Page();
         }
 
-        public void OnPost()
-        {
+        [BindProperty]
+        public NewUser User { get; set; }
 
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            User.Created = DateTime.Now;
+
+            _context.Users.Add(User);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Login");
         }
     }
 

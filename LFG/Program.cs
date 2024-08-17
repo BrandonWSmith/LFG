@@ -4,13 +4,22 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", o =>
+    {
+        o.Cookie.Name = "CookieAuth";
+    }
+);
+
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<LFGContext>(
-  o => o.UseNpgsql(builder.Configuration.GetConnectionString("LFGDb"))
+builder.Services.AddDbContext<LFGContext>(o =>
+    {
+        o.UseNpgsql(builder.Configuration.GetConnectionString("LFGDb"));
+    }
 );
 
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,6 +34,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

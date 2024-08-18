@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LFG.Migrations
 {
     [DbContext(typeof(LFGContext))]
-    [Migration("20240816185653_InitialDatabase")]
+    [Migration("20240817220836_InitialDatabase")]
     partial class InitialDatabase
     {
         /// <inheritdoc />
@@ -375,6 +375,9 @@ namespace LFG.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Persistent")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("Score")
                         .HasColumnType("integer");

@@ -373,6 +373,9 @@ namespace LFG.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("Persistent")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("Score")
                         .HasColumnType("integer");
 

@@ -1,14 +1,21 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+body {
+  height: 100%;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-}
-
-a {
-  color: #0000ff;
 }
 
 .btn-primary {
@@ -21,6 +28,41 @@ a {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+.side-navbar {
+  position: absolute;
+  top: 100px;
+  bottom: 0;
+  overflow: hidden;
+  width: 15%;
+  background-color: #3F3F3F;
+}
+
+.nav-container {
+  display: flex;
+  flex-flow: column;
+  padding: 0;
+  width: 100%;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
+  margin-right: auto;
+  margin-left: auto
+}
+
+.side-nav {
+  display: flex;
+  flex-flow: column;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+  font-size: 1.5rem;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.side-nav-item {
+  display: flex;
+  flex-flow: row;
 }
 
 .border-top {
@@ -43,9 +85,13 @@ button.accept-policy {
   position: absolute;
   bottom: 0;
   width: 100%;
-  min-height: 50px;
+  min-height: 30px;
   white-space: nowrap;
   line-height: 60px;
   background: rgb(31,31,31);
   background: linear-gradient(0deg, rgba(31,31,31,1) 0%, rgba(0,0,0,1) 50%);
+}
+
+.footer a {
+  color: #0000ff;
 }

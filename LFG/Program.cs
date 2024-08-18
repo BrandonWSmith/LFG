@@ -1,4 +1,5 @@
 using LFG.Data;
+using LFG.Utility;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<LFGContext>(o =>
         o.UseNpgsql(builder.Configuration.GetConnectionString("LFGDb"));
     }
 );
+
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

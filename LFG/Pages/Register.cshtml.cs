@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using LFG.Data;
 using LFG.Models;
+using LFG.Utility;
 
 namespace LFG.Pages
 {
     public class RegisterModel : PageModel
     {
         private readonly LFGContext _context;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterModel(LFGContext context)
+        public RegisterModel(LFGContext context, IPasswordHasher passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public IActionResult OnGet()
@@ -30,6 +33,7 @@ namespace LFG.Pages
                 return Page();
             }
 
+            User.Password = _passwordHasher.Hash(User.Password);
             User.Created = DateTime.Now;
 
             _context.Users.Add(User);

@@ -90,7 +90,8 @@ namespace LFG.Migrations
                     Bio = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
                     AvatarId = table.Column<int>(type: "integer", nullable: true),
                     Score = table.Column<int>(type: "integer", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Persistent = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

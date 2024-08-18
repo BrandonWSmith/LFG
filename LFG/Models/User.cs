@@ -42,5 +42,9 @@ namespace LFG.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime Created { get; set; }
+
+        [Required]
+        [Display(Name = "Remember Me")]
+        public bool Persistent { get; set; } = false;
     }
 }

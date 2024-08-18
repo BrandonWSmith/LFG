@@ -6,16 +6,21 @@
 }
 
 <form method="post">
-  <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+ <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+ <div class="text-danger">@Model.ErrorMessage</div>
   <div class="login-form">
     <label class="login-form-label" asp-for="User.Username"></label>
     <input class="login-form-input" type="text" asp-for="User.Username" class="form-control"/>
     <span class="text-danger" asp-validation-for="User.Username"></span>
     </div>
   <div class="login-form">
-    <label class="login-form-label" asp-for="User.Password"></label>
-    <input class="login-form-input" type="password" asp-for="User.Password" class="form-control"/>
-    <span class="text-danger" asp-validation-for="User.Password"></span>
+   <label class="login-form-label" asp-for="User.Password"></label>
+   <input class="login-form-input" type="password" asp-for="User.Password" class="form-control"/>
+   <span class="text-danger" asp-validation-for="User.Password"></span>
+  </div>
+  <div class="persist-check">
+   <label class="login-form-label" asp-for="User.Persistent"></label>
+   <input class="login-form-checkbox" type="checkbox" asp-for="User.Persistent"/>
   </div>
   <div class="buttons">
     <button type="submit">Login</button>

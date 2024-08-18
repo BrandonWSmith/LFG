@@ -2,11 +2,11 @@
 
 public enum Website
 {
-    Discord,
-    Facebook,
-    Twitter,
-    Instagram,
-    Reddit,
-    Steam,
-    Other
+  Discord,
+  Facebook,
+  Twitter,
+  Instagram,
+  Reddit,
+  Steam,
+  Other
 }

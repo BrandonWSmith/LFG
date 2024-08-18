@@ -5,27 +5,27 @@ namespace LFG.Models;
 
 public class Comment
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+  [Key]
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+  public int Id { get; set; }
 
-    [Required]
-    [ForeignKey("User")]
-    public int UserId { get; set; }
-    public User User { get; set; }
+  [Required]
+  [ForeignKey("User")]
+  public int UserId { get; set; }
+  public User User { get; set; }
 
-    [Required]
-    [ForeignKey("Thread")]
-    public int ThreadId { get; set; }
-    public Thread Thread { get; set; }
+  [Required]
+  [ForeignKey("Thread")]
+  public int ThreadId { get; set; }
+  public Thread Thread { get; set; }
 
-    [Required]
-    [Length(1, 500)]
-    public string Body { get; set; }
+  [Required]
+  [Length(1, 500)]
+  public string Body { get; set; }
 
-    public float? Rating { get; set; }
+  public float? Rating { get; set; }
 
-    [Required]
-    [DataType(DataType.DateTime)]
-    public DateTime Created { get; set; }
+  [Required]
+  [DataType(DataType.DateTime)]
+  public DateTime Created { get; set; }
 }

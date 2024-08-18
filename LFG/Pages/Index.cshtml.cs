@@ -1,20 +1,28 @@
+using LFG.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace LFG.Pages
 {
   public class IndexModel : PageModel
   {
-    private readonly ILogger<IndexModel> _logger;
+    private readonly LFGContext _context;
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(LFGContext context)
     {
-      _logger = logger;
+      _context = context;
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
+      if (!User.Identity.IsAuthenticated)
+      {
+        return Page();
+      }
 
+      var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+      return RedirectToPage("/Profile", new { foundUser.Username });
     }
   }
 }

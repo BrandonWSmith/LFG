@@ -5,13 +5,13 @@ namespace LFG.Models;
 
 public class GameDeveloper
 {
-    [Required]
-    [ForeignKey("Game")]
-    public int GameId { get; set; }
-    public Game Game { get; set; }
+  [Required]
+  [ForeignKey("Game")]
+  public int GameId { get; set; }
+  public Game Game { get; set; }
 
-    [Required]
-    [ForeignKey("Company")]
-    public int CompanyId { get; set; }
-    public Company Company { get; set; }
+  [Required]
+  [ForeignKey("Company")]
+  public int CompanyId { get; set; }
+  public Company Company { get; set; }
 }

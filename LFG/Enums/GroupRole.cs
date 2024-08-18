@@ -2,7 +2,7 @@
 
 public enum GroupRole
 {
-    Owner,
-    Moderator,
-    Member
+  Owner,
+  Moderator,
+  Member
 }

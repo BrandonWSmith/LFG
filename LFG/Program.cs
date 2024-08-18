@@ -1,22 +1,33 @@
+using System.Security.Claims;
 using LFG.Data;
 using LFG.Utility;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", o =>
-    {
-        o.Cookie.Name = "CookieAuth";
-    }
+  {
+    o.Cookie.Name = "CookieAuth";
+  }
+);
+builder.Services.AddAuthorization(o =>
+  {
+    o.AddPolicy("Registered",
+      policy => policy
+        .RequireClaim(ClaimTypes.Name)
+        .RequireClaim(ClaimTypes.Email)
+    );
+  }
 );
 
 builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<LFGContext>(o =>
-    {
-        o.UseNpgsql(builder.Configuration.GetConnectionString("LFGDb"));
-    }
+  {
+    o.UseNpgsql(builder.Configuration.GetConnectionString("LFGDb"));
+  }
 );
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

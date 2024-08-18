@@ -10,6 +10,11 @@ html {
   }
 }
 
+body {
+  background: rgb(31,31,31);
+  background: linear-gradient(180deg, rgba(31,31,31,1) 0%, rgba(0,0,0,1) 50%);
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -64,11 +69,6 @@ html {
   transition: all 100ms ease-out;
 }
 
-body {
-  background: rgb(31,31,31);
-  background: linear-gradient(180deg, rgba(31,31,31,1) 0%, rgba(0,0,0,1) 50%);
-}
-
 form {
   display: flex;
   flex-flow: column;
@@ -104,6 +104,20 @@ form {
   margin-top: 15px;
 }
 
+.logout-form {
+  justify-self: end;
+  margin-right: 15%;
+  grid-column: 3;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+  color: white;
+}
+
+.logout-form p {
+  margin: 2%;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
 .buttons {
   display: flex;
   flex-direction: column;
@@ -111,7 +125,7 @@ form {
   align-items: center;
 }
 
-.buttons button {
+button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,7 +142,7 @@ form {
   background: linear-gradient(#0000ff 0%, #6328D5 86%);
 }
 
-.buttons button:hover {
+button:hover {
   text-decoration: underline;
   box-shadow: white 2px 2px 7px;
   border: 2px solid white;
@@ -136,10 +150,17 @@ form {
   transition: all 100ms ease-out;
 }
 
-.buttons button:active {
+button:active {
   text-decoration: none;
   box-shadow: none;
   background: linear-gradient(#0000ff80 0%, #6328D580 86%);
   transform: scale(1);
   transition: all 100ms ease-out;
+}
+
+.logout-button button {
+  width: 150px;
+  height: 30px;
+  margin-top: 0;
+  font-size: 20px;
 }

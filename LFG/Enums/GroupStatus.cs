@@ -2,6 +2,6 @@
 
 public enum GroupStatus
 {
-    Open,
-    Closed
+  Open,
+  Closed
 }

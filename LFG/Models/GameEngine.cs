@@ -5,17 +5,17 @@ namespace LFG.Models;
 
 public class GameEngine
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+  [Key]
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+  public int Id { get; set; }
 
-    [Required]
-    public string Name { get; set; }
+  [Required]
+  public string Name { get; set; }
 
-    [Required]
-    [ForeignKey("Company")]
-    public int CompanyId { get; set; }
-    public Company Company { get; set; }
+  [Required]
+  [ForeignKey("Company")]
+  public int CompanyId { get; set; }
+  public Company Company { get; set; }
 
-    public int? LogoId { get; set; }
+  public int? LogoId { get; set; }
 }

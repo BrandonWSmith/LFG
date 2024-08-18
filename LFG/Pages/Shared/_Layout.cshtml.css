@@ -6,10 +6,19 @@ body {
 }
 
 header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  background: rgb(31,31,31);
+  background: linear-gradient(0deg, rgba(31,31,31,1) 0%, rgba(0,0,0,1) 50%);
+}
+
+.header-logo {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
+  grid-column: 2;
 }
 
 a.navbar-brand {

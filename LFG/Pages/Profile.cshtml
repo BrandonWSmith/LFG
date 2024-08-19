@@ -2,5 +2,46 @@
 
 @model ProfileModel
 @{
-    ViewData["Title"] = "Profile";
+  ViewData["Title"] = "Profile";
+}
+
+<h1>Profile</h1>
+<div class="user-card">
+  <partial name="Shared/_DefaultUserAvatarPartial"/>
+  <div class="user-info">
+    <h2>@Model.User.Username</h2>
+    @if (@Model.User.Score != null)
+    {
+      <div class="score">
+        <div class="score-icon"><i class="bi bi-shift-fill shift"></i><i class="bi bi-dpad-fill dpad"></i></div>
+        <h3>@string.Format("{0:N0}", Model.User.Score)</h3>
+      </div>
+    }
+    @if (@Model.User is { FirstName: not null, LastName: not null })
+    {
+      <p><b>Name: </b>@Model.User.FirstName @Model.User.LastName</p>
+    }
+    else if (@Model.User.FirstName != null)
+    {
+      <p><b>Name: </b>@Model.User.FirstName</p>
+    }
+    <p><b>Joined: </b>@Model.User.Created</p>
+    <p><b>Bio: </b>@Model.User.Bio</p>
+    <p><b>Platforms: </b>@string.Join(", ", @Model.UserPlatformNames)</p>
+  </div>
+</div>
+@if (@Model.UserGroups.Count != 0)
+{
+  <h1>Groups</h1>
+  <div class="user-groups">
+    @foreach (var group in @Model.UserGroups)
+    {
+      <a asp-page="/Group/@group.Name">
+        <div class="group-card">
+          <partial name="Shared/_GroupCardPartial" />
+          <h3 class="group-name">@group.Name</h3>
+        </div>
+      </a>
+    }
+  </div>
 }

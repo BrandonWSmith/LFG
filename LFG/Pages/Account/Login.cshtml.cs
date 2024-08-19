@@ -61,7 +61,7 @@ namespace LFG.Pages.Account
 
       await HttpContext.SignInAsync("CookieAuth", claimsPrincipal, authProperties);
 
-      return RedirectToPage("/Profile", new { foundUser.Username });
+      return RedirectToPage("/Profile/Profile", new { foundUser.Username });
     }
   }
 }

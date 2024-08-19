@@ -22,7 +22,7 @@ namespace LFG.Pages
       }
 
       var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
-      return RedirectToPage("/Profile", new { foundUser.Username });
+      return RedirectToPage("/Profile/Profile", new { foundUser.Username });
     }
   }
 }

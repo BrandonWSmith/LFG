@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace LFG.Pages
+namespace LFG.Pages.Profile
 {
   [Authorize(Policy = "Registered")]
   public class ProfileModel : PageModel
@@ -24,7 +24,7 @@ namespace LFG.Pages
 
     public async Task OnGetAsync()
     {
-      User  = await _context.Users.FirstOrDefaultAsync(u => u.Username == RouteData.Values["username"]);
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == RouteData.Values["username"]);
 
       UserPlatforms = await _context.UsersPlatforms
         .Where(p => p.UserId == User.Id)

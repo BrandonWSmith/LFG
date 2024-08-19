@@ -1,11 +1,19 @@
-﻿@page "{username}"
+﻿@page "/Profile/{username}"
 
 @model ProfileModel
 @{
   ViewData["Title"] = "Profile";
 }
 
-<h1>Profile</h1>
+<div class="profile-heading">
+  <h1>Profile</h1>
+  @if (@RouteData.Values["username"].ToString() == User.Identity.Name)
+  {
+    <div class="buttons edit-button">
+      <a asp-page="/Profile/EditProfile" asp-route-username="@RouteData.Values["username"]">Edit</a>
+    </div>
+  }
+</div>
 <div class="user-card">
   <partial name="Shared/_DefaultUserAvatarPartial"/>
   <div class="user-info">
@@ -26,11 +34,17 @@
       <p><b>Name: </b>@Model.User.FirstName</p>
     }
     <p><b>Joined: </b>@Model.User.Created</p>
-    <p><b>Bio: </b>@Model.User.Bio</p>
-    <p><b>Platforms: </b>@string.Join(", ", @Model.UserPlatformNames)</p>
+    @if(@Model.User.Bio != null)
+    {
+      <p><b>Bio: </b>@Model.User.Bio</p>
+    }
+    @if (@Model.UserPlatforms.Count > 0)
+    {
+      <p><b>Platforms: </b>@string.Join(", ", @Model.UserPlatformNames)</p>
+    }
   </div>
 </div>
-@if (@Model.UserGroups.Count != 0)
+@if (@Model.UserGroups.Count > 0)
 {
   <h1>Groups</h1>
   <div class="user-groups">

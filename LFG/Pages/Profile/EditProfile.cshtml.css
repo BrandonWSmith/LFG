@@ -20,6 +20,20 @@ h3 {
   font-size: 1.3rem;
 }
 
+.profile-heading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.profile-heading h1 {
+  grid-column: 2;
+}
+
+.edit-button {
+  grid-column: 3;
+  justify-self: end;
+}
+
 .user-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;

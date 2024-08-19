@@ -1,36 +1,3 @@
 ﻿.buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 10px;
 }
-
-  .buttons a {
-    width: 375px;
-    height: 60px;
-    margin: 20px;
-    border-radius: 25px;
-    color: white;
-    font-family: 'IBM Plex Mono', monospace, sans-serif;
-    font-size: 40px;
-    font-weight: bold;
-    text-decoration: none;
-    background: linear-gradient(#0000ff 0%, #6328D5 86%);
-  }
-
-    .buttons a:hover {
-      text-decoration: underline;
-      box-shadow: white 2px 2px 7px;
-      border: 2px solid white;
-      transform: scale(1.1);
-      transition: all 100ms ease-out;
-    }
-
-    .buttons a:active {
-      text-decoration: none;
-      box-shadow: none;
-      background: linear-gradient(#0000ff80 0%, #6328D580 86%);
-      transform: scale(1);
-      transition: all 100ms ease-out;
-    }

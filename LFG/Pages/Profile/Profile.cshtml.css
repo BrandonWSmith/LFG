@@ -1,0 +1,90 @@
+﻿h1 {
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  font-weight: bold;
+  height: 64px;
+  background: linear-gradient(#0000ff 0%, #6328D5 86%);
+  background-clip: text;
+  color: transparent;
+}
+
+h2,
+h3,
+p {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+.profile-heading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.profile-heading h1 {
+  grid-column: 2;
+}
+
+.edit-button {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.user-card {
+  display: grid;
+  grid-template-columns: 12.5rem 1fr;
+  margin-top: 3rem;
+}
+
+.user-info {
+  margin-left: 5%;
+}
+
+.score {
+  display: flex;
+  align-items: center;
+}
+
+.score-icon {
+  height: 1.4rem;
+  width: 1.7rem;
+  margin-bottom: .5rem;
+}
+
+.shift {
+  position: absolute;
+  transform: scale(1.6);
+  background: linear-gradient(#0000ff 0%, #6328D5 50%);
+  background-clip: text;
+  color: transparent;
+}
+
+.dpad {
+  position: absolute;
+  color: white;
+  transform: scale(.75);
+}
+
+.user-groups {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  margin-bottom: 50px;
+}
+
+.group-card {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.group-name {
+  margin: .5rem;
+  font-weight: bold;
+}

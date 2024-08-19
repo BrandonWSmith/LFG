@@ -1,0 +1,29 @@
+﻿@page "/Profile/{username}/Edit"
+
+@model LFG.Pages.Profile.EditProfileModel
+@{
+  ViewData["Title"] = "Edit Profile";
+}
+
+<div class="profile-heading">
+  <h1>Profile</h1>
+</div>
+<div class="user-card">
+  <partial name="Shared/_DefaultUserAvatarPartial"/>
+  <div class="user-info">
+    <h2>@Model.User.Username</h2>
+    <form method="post">
+      <label asp-for="User.FirstName"></label>
+      <input asp-for="User.FirstName" type="text"/>
+      <label asp-for="User.LastName"></label>
+      <input asp-for="User.LastName" type="text"/>
+      <label asp-for="User.Bio"></label>
+      <textarea asp-for="User.Bio" maxlength="250"></textarea>
+      <form method="post">
+        <label asp-for="SelectedPlatform">Platforms: @string.Join(", ", @Model.UserPlatformNames)</label>
+        <select asp-for="SelectedPlatform" asp-items="@Model.AllPlatformsList"></select>
+        <button class="bi bi-plus-lg" type="submit"></button>
+      </form>
+    </form>
+  </div>
+</div>

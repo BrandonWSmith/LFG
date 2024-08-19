@@ -65,7 +65,7 @@ public class LFGContext : DbContext
     modelBuilder.Entity<UserPlatform>(
         eb =>
         {
-          eb.HasNoKey();
+          eb.HasKey(x => new { x.UserId, x.PlatformId });
         }
     );
   }

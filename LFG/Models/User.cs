@@ -23,12 +23,12 @@ namespace LFG.Models
     public string Email { get; set; }
 
     [Length(1, 20)]
-    [RegularExpression(@"[A-Za-z]")]
+    [RegularExpression(@"[A-Za-z]+")]
     [Display(Name = "First Name")]
     public string? FirstName { get; set; }
 
     [Length(1, 20)]
-    [RegularExpression(@"[A-Za-z]")]
+    [RegularExpression(@"[A-Za-z]+")]
     [Display(Name = "Last Name")]
     public string? LastName { get; set; }
 
@@ -40,7 +40,9 @@ namespace LFG.Models
     public int? Score { get; set; }
 
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:M dd, yyyy}")]
     public DateTime Created { get; set; }
 
     [Required]

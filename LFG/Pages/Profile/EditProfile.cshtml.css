@@ -20,6 +20,10 @@ h3 {
   font-size: 1.3rem;
 }
 
+p {
+  margin: 0;
+}
+
 .profile-heading {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -29,11 +33,6 @@ h3 {
   grid-column: 2;
 }
 
-.edit-button {
-  grid-column: 3;
-  justify-self: end;
-}
-
 .user-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;
@@ -41,50 +40,86 @@ h3 {
 }
 
 .user-info {
+  display: flex;
+  flex-flow: column;
+  width: 20rem;
   margin-left: 5%;
 }
 
-.score {
+.update-message {
   display: flex;
+  justify-content: center;
   align-items: center;
-}
-
-.score-icon {
-  height: 1.4rem;
-  width: 1.7rem;
-  margin-bottom: .5rem;
-}
-
-.shift {
-  position: absolute;
-  transform: scale(1.6);
-  background: linear-gradient(#0000ff 0%, #6328D5 50%);
-  background-clip: text;
-  color: transparent;
-}
-
-.dpad {
-  position: absolute;
-  color: white;
-  transform: scale(.75);
-}
-
-.user-groups {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-  margin-bottom: 50px;
-}
-
-.group-card {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  margin-bottom: .5rem;
-}
-
-.group-name {
-  margin: .5rem;
+  align-self: center;
+  width: 10rem;
+  height: 2rem;
+  margin: -3rem 0 1rem 0;
   font-weight: bold;
+  border-radius: 1rem;
+  background-color: lightgreen;
+}
+
+.invalid-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  width: 20rem;
+  height: 2rem;
+  margin: -3rem 0 1rem 0;
+  font-weight: bold;
+  border-radius: 1rem;
+  background-color: lightcoral;
+}
+
+.platform-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.platform {
+  display: flex;
+  align-items: center;
+  margin: .5rem 0;
+}
+
+.platform-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: flex-start;
+  height: 2rem;
+}
+
+.platform-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0 0 .5rem;
+  text-decoration: none;
+}
+
+.platform-button::before {
+  transform: scale(.5);
+}
+
+  .platform-button:hover {
+    box-shadow: 1px 1px 4px;
+  }
+
+.platform-remove-button {
+  width: 1rem;
+  height: 1rem;
+  background: red;
+}
+
+.platform-remove-button::before {
+  transform: scale(.35);
+}
+
+.save {
+  height: 2rem;
+  width: 5rem;
+  font-size: 1.5rem;
+  margin: .5rem 0 5rem;
 }

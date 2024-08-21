@@ -8,7 +8,7 @@ namespace LFG.Pages.Account
   {
     public async Task<IActionResult> OnPostAsync()
     {
-      HttpContext.SignOutAsync("CookieAuth");
+      await HttpContext.SignOutAsync("CookieAuth");
       return RedirectToPage("/Index");
     }
   }

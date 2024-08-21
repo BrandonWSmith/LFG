@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using LFG.Data;
 using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -31,41 +32,60 @@ namespace LFG.Pages.Profile
     public SelectList AllPlatformsList { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public string SelectedPlatform { get; set; }
+    public string? SelectedPlatform { get; set; }
+
+    [BindProperty]
+    public string? PlatformToRemove { get; set; }
+
+    [ViewData]
+    public string UpdateMessage { get; set; }
+
+    [ViewData]
+    public string InvalidMessage { get; set; }
+
+    [ViewData]
+    public string PlatformExists { get; set; }
 
     public async Task OnGetAsync()
     {
       User = await _context.Users.FirstOrDefaultAsync(u => u.Username == RouteData.Values["username"]);
 
-      UserPlatforms = await _context.UsersPlatforms
-        .Where(p => p.UserId == User.Id)
-        .Include(p => p.Platform)
-        .Select(p => new Platform
-        {
-          Name = p.Platform.Name
-        })
-        .ToListAsync();
-
-      UserPlatformNames = UserPlatforms.Select(p => p.Name).ToList();
-
-      var allPlatforms = _context.Platforms.Select(p => p.Name);
-
-      AllPlatformsList = new SelectList(await allPlatforms.ToListAsync());
+      RepopulateSelectList();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task OnPostAsync()
     {
+      //Update User Info
+      if (!ModelState.IsValid)
+      {
+        InvalidMessage = "Invalid fields. Please try again.";
+        RepopulateSelectList();
+        return;
+      }
+      _context.Users.Attach(User).State = EntityState.Modified;
+      await _context.SaveChangesAsync();
+
+      UpdateMessage = "Profile Updated";
+
+      //Repopulate SelectList
+      RepopulateSelectList();
+    }
+
+    public void OnPostAddPlatform()
+    {
+      //Add Platform
       if (string.IsNullOrEmpty(SelectedPlatform))
       {
-        return Page();
+        RepopulateSelectList();
+        return;
       }
 
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      User = _context.Users.FirstOrDefault(u => u.Username == HttpContext.User.Identity.Name);
 
-      var platformId = await _context.Platforms
+      var platformId = _context.Platforms
         .Where(p => p.Name == SelectedPlatform)
         .Select(p => p.Id)
-        .SingleAsync();
+        .Single();
 
       var platformToAdd = new UserPlatform
       {
@@ -73,10 +93,75 @@ namespace LFG.Pages.Profile
         PlatformId = platformId
       };
 
-      await _context.UsersPlatforms.AddAsync(platformToAdd);
+      if (!_context.UsersPlatforms.Contains(platformToAdd))
+      {
+        _context.UsersPlatforms.Add(platformToAdd);
+        _context.SaveChanges();
+      }
+      else
+      {
+        PlatformExists = "Platform already added";
+      }
 
-      await _context.SaveChangesAsync();
-      return Page();
+      //Repopulate SelectList
+      RepopulateSelectList();
+    }
+
+    public void OnPostRemovePlatform()
+    {
+      //Remove Platform
+      if (string.IsNullOrEmpty(PlatformToRemove))
+      {
+        RepopulateSelectList();
+        return;
+      }
+
+      User = _context.Users.FirstOrDefault(u => u.Username == HttpContext.User.Identity.Name);
+
+      var platformToRemoveName = Request.Form["PlatformToRemove"].ToString();
+
+      var platformId = _context.Platforms
+        .Where(p => p.Name == platformToRemoveName)
+        .Select(p => p.Id)
+        .Single();
+
+      var platformToRemove = new UserPlatform
+      {
+        UserId = User.Id,
+        PlatformId = platformId
+      };
+
+      if (_context.UsersPlatforms.Contains(platformToRemove))
+      {
+        _context.UsersPlatforms.Remove(platformToRemove);
+        _context.SaveChanges();
+      }
+      else
+      {
+        PlatformExists = "Platform has not been added";
+      }
+
+      //Repopulate SelectList
+      RepopulateSelectList();
+    }
+
+    private void RepopulateSelectList()
+    {
+      //Get User's Platforms as Platform objects
+      UserPlatforms = _context.UsersPlatforms
+        .Where(p => p.UserId == User.Id)
+        .Include(p => p.Platform)
+        .Select(p => new Platform
+        {
+          Name = p.Platform.Name
+        })
+        .ToList();
+
+      //Get names of Platforms in UserPlatforms
+      UserPlatformNames = UserPlatforms.Select(p => p.Name).ToList();
+
+      //Get names of all Platforms
+      AllPlatformsList = new SelectList(_context.Platforms.Select(p => p.Name).ToList());
     }
   }
 }

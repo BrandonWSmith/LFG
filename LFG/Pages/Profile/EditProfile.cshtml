@@ -7,6 +7,9 @@
 
 <div class="profile-heading">
   <h1>Profile</h1>
+  <div class="buttons back-button">
+    <a asp-page="/Profile/Profile" asp-route-username="@RouteData.Values["username"]">&#60; Back</a>
+  </div>
 </div>
 <div class="user-card">
   <partial name="Shared/_DefaultUserAvatarPartial"/>
@@ -21,13 +24,6 @@
     }
     <h2>@Model.User.Username</h2>
     <form id="profile-form" class="profile-form" method="post" asp-page-handler="OnPostAsync">
-      <input type="hidden" asp-for="User.Id"/>
-      <input type="hidden" asp-for="User.Username"/>
-      <input type="hidden" asp-for="User.Password"/>
-      <input type="hidden" asp-for="User.AvatarId"/>
-      <input type="hidden" asp-for="User.Score"/>
-      <input type="hidden" asp-for="User.Created"/>
-      <input type="hidden" asp-for="User.Persistent"/>
       <div class="profile-form-item">
         <label asp-for="User.Email"></label>
         <input asp-for="User.Email" type="text"/>

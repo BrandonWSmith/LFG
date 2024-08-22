@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LFG.Data;
+using LFG.Validation;
+using Newtonsoft.Json.Linq;
 
 namespace LFG.Models
 {
@@ -10,6 +13,7 @@ namespace LFG.Models
     public int Id { get; set; }
 
     [Required]
+    [UniqueUsername]
     [Length(3, 20)]
     [RegularExpression(@"^[A-Za-z]+\w+")]
     public string Username { get; set; }
@@ -19,6 +23,7 @@ namespace LFG.Models
     public string Password { get; set; }
 
     [Required]
+    [UniqueEmail]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
@@ -41,7 +46,6 @@ namespace LFG.Models
 
     [Required]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:M dd, yyyy}")]
     public DateTime Created { get; set; }
 
     [Required]

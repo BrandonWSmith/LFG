@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LFG.Migrations
 {
     [DbContext(typeof(LFGContext))]
-    [Migration("20240822033855_InitialDatabase")]
+    [Migration("20240822152946_InitialDatabase")]
     partial class InitialDatabase
     {
         /// <inheritdoc />
@@ -360,7 +360,6 @@ namespace LFG.Migrations
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")

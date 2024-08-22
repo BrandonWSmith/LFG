@@ -58,7 +58,7 @@ h3 {
 .shift {
   position: absolute;
   transform: scale(1.6);
-  background: linear-gradient(#0000ff 0%, #6328D5 50%);
+  background: linear-gradient(#0000ff 0%, #6328D5 75%);
   background-clip: text;
   color: transparent;
 }

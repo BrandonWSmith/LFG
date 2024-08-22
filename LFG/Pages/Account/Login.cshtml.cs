@@ -47,10 +47,10 @@ namespace LFG.Pages.Account
       }
 
       var claims = new List<Claim>
-            {
-                new (ClaimTypes.Name, foundUser.Username),
-                new (ClaimTypes.Email, foundUser.Email)
-            };
+      {
+        new (ClaimTypes.Name, foundUser.Username),
+        new (ClaimTypes.Email, foundUser.Email)
+      };
       var identity = new ClaimsIdentity(claims, "CookieAuth");
       var claimsPrincipal = new ClaimsPrincipal(identity);
 

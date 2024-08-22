@@ -33,7 +33,7 @@
     {
       <p><b>Name: </b>@Model.User.FirstName</p>
     }
-    <p><b>Joined: </b>@Model.User.Created</p>
+    <p><b>Joined: </b>@Model.User.Created.ToString("MMMM d, yyyy")</p>
     @if(@Model.User.Bio != null)
     {
       <p><b>Bio: </b>@Model.User.Bio</p>

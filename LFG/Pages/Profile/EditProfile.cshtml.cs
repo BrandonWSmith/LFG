@@ -55,13 +55,22 @@ namespace LFG.Pages.Profile
 
     public async Task OnPostAsync()
     {
-      //Update User Info
-      if (!ModelState.IsValid)
+      if (User.Email == null)
       {
-        InvalidMessage = "Invalid fields. Please try again.";
+        InvalidMessage = "Email is required.";
         RepopulateSelectList();
         return;
       }
+
+      //Populate Non-Editable Fields
+      User.Id = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Id).SingleAsync();
+      User.Username = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Username).SingleAsync();
+      User.Password = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Password).SingleAsync();
+      User.Score = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Score).SingleAsync();
+      User.Created = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Created).SingleAsync();
+      User.Persistent = await _context.Users.Where(u => u.Username == RouteData.Values["username"]).Select(u => u.Persistent).SingleAsync();
+
+      //Update User Info
       _context.Users.Attach(User).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 

@@ -33,6 +33,11 @@ p {
   grid-column: 2;
 }
 
+.back-button {
+  grid-column: 3;
+  justify-self: end;
+}
+
 .user-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;

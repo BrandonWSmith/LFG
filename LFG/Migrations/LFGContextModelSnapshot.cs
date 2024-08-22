@@ -357,7 +357,6 @@ namespace LFG.Migrations
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")

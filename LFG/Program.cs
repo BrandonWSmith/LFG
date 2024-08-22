@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", o =>
   {
     o.Cookie.Name = "CookieAuth";
+    o.LoginPath = "/Login";
+    o.AccessDeniedPath = "/AccessDenied";
   }
 );
 builder.Services.AddAuthorization(o =>

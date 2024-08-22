@@ -10,7 +10,7 @@ using NuGet.Versioning;
 
 namespace LFG.Pages.Profile
 {
-  [Authorize(Policy = "Registered")]
+  [Authorize(Policy = "ProfileOwner")]
   public class EditProfileModel : PageModel
   {
     private readonly LFGContext _context;
@@ -153,6 +153,7 @@ namespace LFG.Pages.Profile
         .Include(p => p.Platform)
         .Select(p => new Platform
         {
+          Id = p.PlatformId,
           Name = p.Platform.Name
         })
         .ToList();

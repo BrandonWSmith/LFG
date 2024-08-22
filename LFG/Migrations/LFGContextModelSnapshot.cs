@@ -357,6 +357,7 @@ namespace LFG.Migrations
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -441,15 +442,15 @@ namespace LFG.Migrations
 
             modelBuilder.Entity("LFG.Models.UserPlatform", b =>
                 {
-                    b.Property<int>("PlatformId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasIndex("PlatformId");
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("UserId", "PlatformId");
+
+                    b.HasIndex("PlatformId");
 
                     b.ToTable("UsersPlatforms");
                 });

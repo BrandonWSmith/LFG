@@ -40,7 +40,6 @@ namespace LFG.Models
     public int? Score { get; set; }
 
     [Required]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:M dd, yyyy}")]
     public DateTime Created { get; set; }

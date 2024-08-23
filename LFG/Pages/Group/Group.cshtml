@@ -1,0 +1,59 @@
+﻿@page "/Group/{groupname}"
+
+@model GroupModel
+@{
+  ViewData["Title"] = "Group";
+}
+
+<div class="profile-heading">
+  <h1>@Model.Group.Name</h1>
+  @if (@Model.Owner.Username == User.Identity.Name)
+  {
+    <div class="buttons edit-button">
+      <a asp-page="/Group/EditGroup" asp-route-username="@RouteData.Values["groupname"]">Edit</a>
+    </div>
+  }
+</div>
+<div class="group-card">
+  <partial name="Shared/_DefaultGroupAvatarPartial" />
+  <div class="group-info">
+    <h2>@Model.Group.Name</h2>
+    <p><b>Owner: </b>@Model.Owner.Username</p>
+    <p><b>Created: </b>@Model.Group.Created.ToString("MMMM d, yyyy")</p>
+    @if (@Model.Group.Description != null)
+    {
+      <p><b>Bio: </b>@Model.Group.Description</p>
+    }
+    <p><b>Status: </b>@Model.Group.Status</p>
+  </div>
+</div>
+@if (@Model.GroupGames.Count > 0)
+{
+  @if (@Model.ShowGames == false)
+  {
+    <form asp-page-handler="ToggleGames" method="post">
+      <button class="toggle-games">Show Games</button>
+    </form>
+  }
+  else
+  {
+    <form asp-page-handler="ToggleGames" method="post">
+      <input type="hidden" asp-for="ShowGames" value="true"/>
+      <button class="toggle-games">Hide Games</button>
+    </form>
+    <div class="toggle-hidden">
+      <h1>Games</h1>
+      <div class="group_games">
+        @foreach (var game in @Model.GroupGames)
+        {
+          <a asp-page="/Game/@game.Name">
+            <div class="game-card">
+              <partial name="Shared/_DefaultGameCoverPartial"/>
+              <h3 class="game-name">@game.Name</h3>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  }
+}

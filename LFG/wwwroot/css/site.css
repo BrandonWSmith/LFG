@@ -245,35 +245,47 @@ button:active {
   width: 5.5rem;
 }
 
-/* Avatars */
-.default-avatar-container {
+/* Avatars/Game Covers */
+.default-avatar-container,
+.default-cover-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 12.5rem;
-  height: 12.5rem;
   background-color: #555555;
 }
 
-.default-avatar-icon i::before {
+.default-avatar-icon i::before,
+.default-cover-icon i::before {
   transform: scale(6);
   color: black;
 }
 
-/* Groups */
-.user-groups a {
+.default-avatar-container {
+  height: 12.5rem;
+}
+
+.default-cover-container {
+  height: 18.75rem;
+}
+
+/* Groups/Games */
+.user-groups a,
+.group_games a {
   text-decoration: none;
   color: white;
   transition: all 100ms ease-out;
 }
 
-.user-groups a:hover {
-  text-decoration: underline;
-  transform: scale(1.1);
-  transition: all 100ms ease-out;
-}
+  .user-groups a:hover,
+  .group_games a:hover {
+    text-decoration: underline;
+    transform: scale(1.1);
+    transition: all 100ms ease-out;
+  }
 
-.user-groups a:active {
-  transform: scale(1);
-  transition: all 100ms ease-out;
-}
+  .user-groups a:active,
+  .group_games a:active {
+    transform: scale(1);
+    transition: all 100ms ease-out;
+  }

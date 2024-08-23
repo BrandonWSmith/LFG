@@ -20,7 +20,7 @@ namespace LFG.Pages.Profile
     public User User { get; set; }
     public List<Platform> UserPlatforms { get; set; }
     public List<string> UserPlatformNames { get; set; }
-    public List<Group> UserGroups { get; set; }
+    public List<Models.Group> UserGroups { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -40,7 +40,7 @@ namespace LFG.Pages.Profile
       UserGroups = await _context.UsersGroups
         .Where(g => g.UserId == User.Id)
         .Include(g => g.Group)
-        .Select(g => new Group
+        .Select(g => new Models.Group
         {
           Name = g.Group.Name,
           AvatarId = g.Group.AvatarId

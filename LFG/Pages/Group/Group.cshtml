@@ -45,6 +45,36 @@
       </div>
     </div>
 }
+<div class="threads">
+  @foreach (var thread in @Model.GroupThreads)
+  {
+    <div class="thread-block">
+      @if (@thread.Pinned)
+      {
+        <p class="thread-pinned"><b>Pinned</b></p>
+      }
+      <h2 class="thread-title">@thread.Title</h2>
+      <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
+      <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
+      <p>@thread.Body</p>
+      <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
+      <div id="comments-@thread.Id" class="thread-comments">
+        @{
+          var comments = @Model.GetThreadComments(@thread.Id);
+          foreach (var comment in await comments)
+          {
+            <div class="comment-block">
+              <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
+              <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
+              <p>@comment.Body</p>
+              <hr/>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>
 
 @section Scripts
 {
@@ -59,6 +89,16 @@
       } else {
         gamesList.style.display = "block";
         toggleGames.innerHTML = "Hide Games";
+      }
+    }
+
+    function showComments(threadId) {
+      const threadComments = document.getElementById(`comments-${threadId}`);
+
+      if (threadComments.style.display === "block") {
+        threadComments.style.display = "none";
+      } else {
+        threadComments.style.display = "block";
       }
     }
   </script>

@@ -16,8 +16,16 @@ p {
   font-family: 'IBM Plex Mono', monospace, sans-serif;
 }
 
+h2 {
+  font-weight: bold;
+}
+
 h3 {
   font-size: 1.3rem;
+}
+
+hr {
+  color: white;
 }
 
 .profile-heading {
@@ -72,4 +80,53 @@ h3 {
 .game-name {
   margin: .5rem;
   font-weight: bold;
+}
+
+.threads {
+  margin-bottom: 5rem;
+}
+
+.thread-block {
+  display: flex;
+  flex-flow: column;
+  padding: 2rem;
+  margin-bottom: 1rem;
+  background-color: #555555;
+  border-radius: 25px;
+}
+
+.thread-pinned {
+  align-self: flex-end;
+  margin: 0;
+}
+
+.thread-title {
+  margin: 0;
+}
+
+.thread-created,
+.comment-created {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.show-comments {
+  align-self: flex-end;
+  margin: 0;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 10px;
+}
+
+.show-comments::before {
+  transform: scale(.5);
+}
+
+.show-comments:hover {
+  text-decoration: none;
+  box-shadow: 1px 1px 5px;
+}
+
+.thread-comments {
+  display: none;
 }

@@ -245,6 +245,36 @@ button:active {
   width: 5.5rem;
 }
 
+.thread-block a {
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(#0000ff 0%, #6328D5 86%);
+  background-clip: text;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 100ms ease-out;
+}
+
+  .thread-block a:hover {
+    transform: scale(1.1);
+    background: linear-gradient(#6328D5 0%, #0000ff 100%);
+    background-clip: text;
+    transition: all 100ms ease-out;
+  }
+
+  .thread-block a:active {
+    transform: scale(1);
+    background: linear-gradient(#6328D580 0%, #0000ff80 100%);
+    background-clip: text;
+    transition: all 100ms ease-out;
+  }
+
+.comment-block a {
+  font-size: 1rem;
+}
+
 /* Avatars/Game Covers */
 .default-avatar-container,
 .default-cover-container {

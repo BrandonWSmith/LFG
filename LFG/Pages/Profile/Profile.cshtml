@@ -50,7 +50,7 @@
   <div class="user-groups">
     @foreach (var group in @Model.UserGroups)
     {
-      <a asp-page="/Group/@group.Name">
+      <a asp-page="/Group/Group" asp-route-groupname="@group.Name">
         <div class="group-card">
           <partial name="Shared/_DefaultGroupAvatarPartial" />
           <h3 class="group-name">@group.Name</h3>

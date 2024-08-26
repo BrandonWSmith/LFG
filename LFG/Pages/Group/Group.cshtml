@@ -29,19 +29,8 @@
 </div>
 @if (@Model.GroupGames.Count > 0)
 {
-  @if (@Model.ShowGames == false)
-  {
-    <form asp-page-handler="ToggleGames" method="post">
-      <button class="toggle-games">Show Games</button>
-    </form>
-  }
-  else
-  {
-    <form asp-page-handler="ToggleGames" method="post">
-      <input type="hidden" asp-for="ShowGames" value="true"/>
-      <button class="toggle-games">Hide Games</button>
-    </form>
-    <div class="toggle-hidden">
+    <button id="toggle-games" onclick="toggleGames()">Show Games</button>
+    <div id="games-list">
       <h1>Games</h1>
       <div class="group_games">
         @foreach (var game in @Model.GroupGames)
@@ -55,5 +44,22 @@
         }
       </div>
     </div>
-  }
+}
+
+@section Scripts
+{
+  <script type="text/javascript">
+    function toggleGames() {
+      const gamesList = document.getElementById("games-list");
+      const toggleGames = document.getElementById("toggle-games");
+
+      if (gamesList.style.display === "block") {
+        gamesList.style.display = "none";
+        toggleGames.innerHTML = "Show Games";
+      } else {
+        gamesList.style.display = "block";
+        toggleGames.innerHTML = "Hide Games";
+      }
+    }
+  </script>
 }

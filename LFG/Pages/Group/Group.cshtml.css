@@ -44,7 +44,11 @@ h3 {
   margin-left: 5%;
 }
 
-.toggle-games {
+#games-list {
+  display: none;
+}
+
+#toggle-games {
   height: 3rem;
   width: 10rem;
   font-size: 1.5rem;

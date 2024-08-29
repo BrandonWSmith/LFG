@@ -27,7 +27,7 @@ public class Thread
   [MaxLength(40000)]
   public string Body { get; set; }
 
-  public float? Rating { get; set; }
+  public int Rating { get; set; } = 0;
 
   [Required]
   public bool Pinned { get; set; }

@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LFG.Data;
 using LFG.Validation;
-using Newtonsoft.Json.Linq;
 
 namespace LFG.Models
 {

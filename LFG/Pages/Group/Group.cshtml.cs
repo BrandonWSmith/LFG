@@ -1,5 +1,7 @@
 using LFG.Data;
+using LFG.Hubs;
 using LFG.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,16 +11,27 @@ namespace LFG.Pages.Group
   public class GroupModel : PageModel
   {
     private readonly LFGContext _context;
+    private readonly IHubContext<VoteHub> _hubContext;
 
-    public GroupModel(LFGContext context)
+    public GroupModel(LFGContext context, IHubContext<VoteHub> hubContext)
     {
       _context = context;
+      _hubContext = hubContext;
     }
 
+    [BindProperty(SupportsGet = true)]
     public Models.Group Group { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public User Owner { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public List<Game> GroupGames { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public List<Models.Thread> GroupThreads { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public List<Comment> ThreadComments { get; set; }
 
     public async Task OnGetAsync()
@@ -36,7 +49,7 @@ namespace LFG.Pages.Group
         })
         .ToListAsync();
 
-      GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).ToListAsync();
+      GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ToListAsync();
     }
 
     public async Task<List<Comment>> GetThreadComments(int threadId)
@@ -46,7 +59,33 @@ namespace LFG.Pages.Group
       return ThreadComments;
     }
 
-    public string GetPrettyDate(DateTime d)
+    public async Task OnPostUpvote(int threadId)
+    {
+      var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
+      thread.Rating++;
+
+      var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
+      user.Score++;
+
+      await _context.SaveChangesAsync();
+
+      await _hubContext.Clients.All.SendAsync("updateRating", thread.Rating, thread.Id);
+    }
+
+    public async Task OnPostDownvote(int threadId)
+    {
+      var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
+      thread.Rating--;
+
+      var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
+      user.Score--;
+
+      await _context.SaveChangesAsync();
+
+      await _hubContext.Clients.All.SendAsync("updateRating", thread.Rating, thread.Id);
+    }
+
+        public string GetPrettyDate(DateTime d)
     {
       // 1.
       // Get time span elapsed since the date.

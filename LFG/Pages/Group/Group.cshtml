@@ -13,6 +13,12 @@
       <a asp-page="/Group/EditGroup" asp-route-username="@RouteData.Values["groupname"]">Edit</a>
     </div>
   }
+  @* @if (!@User.HasClaim("Member", @Model.Group.Name) && @Model.Group.Public)
+  {
+    <div class="buttons join-button">
+      Join
+    </div>
+  } *@
 </div>
 <div class="group-card">
   <partial name="Shared/_DefaultGroupAvatarPartial" />
@@ -45,39 +51,59 @@
       </div>
     </div>
 }
-<div class="threads">
-  @foreach (var thread in @Model.GroupThreads)
-  {
-    <div class="thread-block">
-      @if (@thread.Pinned)
-      {
-        <p class="thread-pinned"><b>Pinned</b></p>
-      }
-      <h2 class="thread-title">@thread.Title</h2>
-      <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
-      <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
-      <p>@thread.Body</p>
-      <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
-      <div id="comments-@thread.Id" class="thread-comments">
-        @{
-          var comments = @Model.GetThreadComments(@thread.Id);
-          foreach (var comment in await comments)
+@* @if (@User.HasClaim("Member", @Model.Group.Name))
+{ *@
+  <div class="threads">
+    @foreach (var thread in @Model.GroupThreads)
+    {
+      <div class="thread-group">
+        <div class="vote-block">
+          <button class="bi bi-caret-up-fill vote-option up-vote" onclick="upvote(@thread.Id)"></button>
+          <h2 id="thread-rating-@thread.Id">@thread.Rating</h2>
+          <button class="bi bi-caret-down-fill vote-option down-vote" onclick="downvote(@thread.Id)"></button>
+        </div>
+        <div class="thread-block">
+          @if (@thread.Pinned)
           {
-            <div class="comment-block">
-              <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
-              <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
-              <p>@comment.Body</p>
-              <hr/>
-            </div>
+            <p class="thread-pinned"><b>Pinned</b></p>
           }
-        }
+          <h2 class="thread-title">@thread.Title</h2>
+          <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
+          <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
+          <p>@thread.Body</p>
+          <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
+          <div id="comments-@thread.Id" class="thread-comments">
+            @{
+              var comments = @Model.GetThreadComments(@thread.Id);
+              foreach (var comment in await comments)
+              {
+                <div class="comment-group">
+                  <div class="vote-block comment-vote-block">
+                    <button class="bi bi-caret-up-fill vote-option up-vote comment-vote-option" onclick=""></button>
+                    <h2 id="comment-rating">@comment.Rating</h2>
+                    <button class="bi bi-caret-down-fill vote-option down-vote comment-vote-option" onclick=""></button>
+                  </div>
+                  <div class="comment-block">
+                    <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
+                    <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
+                    <p>@comment.Body</p>
+                    <hr/>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
       </div>
-    </div>
-  }
-</div>
+    }
+  </div>
+@* } *@
 
 @section Scripts
 {
+  <script src="~/lib/jquery/dist/jquery.js"></script>
+  <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+  <script src="~/js/rating.js"></script>
   <script type="text/javascript">
     function toggleGames() {
       const gamesList = document.getElementById("games-list");
@@ -100,6 +126,28 @@
       } else {
         threadComments.style.display = "block";
       }
+    }
+
+    function upvote(threadId) {
+      var token = $('input[name="__RequestVerificationToken"]').val();
+      $.ajax({
+        url: `?threadId=${threadId}&handler=Upvote`,
+        type: 'POST',
+        data: {
+          __RequestVerificationToken: token
+        }
+      });
+    }
+
+    function downvote(threadId) {
+      var token = $('input[name="__RequestVerificationToken"]').val();
+      $.ajax({
+        url: `?threadId=${threadId}&handler=Downvote`,
+        type: 'POST',
+        data: {
+          __RequestVerificationToken: token
+        }
+      });
     }
   </script>
 }

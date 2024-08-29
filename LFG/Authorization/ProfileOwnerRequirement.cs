@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace LFG.Authorization;
 
 public class ProfileOwnerRequirement : IAuthorizationRequirement
 {
-  //private readonly IActionContextAccessor _actionContextAccessor;
   private readonly IHttpContextAccessor _httpContextAccessor;
 
   public ProfileOwnerRequirement(IHttpContextAccessor httpContextAccessor)

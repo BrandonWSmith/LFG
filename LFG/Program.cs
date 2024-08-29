@@ -1,10 +1,9 @@
 using System.Security.Claims;
 using LFG.Authorization;
 using LFG.Data;
+using LFG.Hubs;
 using LFG.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +41,7 @@ builder.Services.AddDbContext<LFGContext>(o =>
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAuthorizationHandler, ProfileOwnerRequirementHandler>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -63,5 +63,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapHub<VoteHub>("/hubs/rating");
 
 app.Run();

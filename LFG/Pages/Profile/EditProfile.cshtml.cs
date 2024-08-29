@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using LFG.Data;
 using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Versioning;
 
 namespace LFG.Pages.Profile
 {

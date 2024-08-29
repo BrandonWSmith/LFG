@@ -35,4 +35,8 @@ public class Thread
   [Required]
   [DataType(DataType.DateTime)]
   public DateTime Created { get; set; }
+
+  public List<int> HasUpVoted { get; set; } = [];
+
+  public List<int> HasDownVoted { get; set; } = [];
 }

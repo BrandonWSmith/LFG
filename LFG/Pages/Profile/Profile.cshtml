@@ -18,7 +18,7 @@
   <partial name="Shared/_DefaultUserAvatarPartial"/>
   <div class="user-info">
     <h2>@Model.User.Username</h2>
-    @if (@Model.User.Score != null)
+    @if (@Model.User.Score > 0)
     {
       <div class="score">
         <div class="score-icon"><i class="bi bi-shift-fill shift"></i><i class="bi bi-dpad-fill dpad"></i></div>

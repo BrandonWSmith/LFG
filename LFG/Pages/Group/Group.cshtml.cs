@@ -20,6 +20,9 @@ namespace LFG.Pages.Group
     }
 
     [BindProperty(SupportsGet = true)]
+    public User User { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public Models.Group Group { get; set; }
 
     [BindProperty(SupportsGet = true)]
@@ -36,6 +39,7 @@ namespace LFG.Pages.Group
 
     public async Task OnGetAsync()
     {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
       Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == Group.Owner);
 
@@ -61,28 +65,54 @@ namespace LFG.Pages.Group
 
     public async Task OnPostUpvote(int threadId)
     {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
-      thread.Rating++;
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
 
-      var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
-      user.Score++;
+      if (thread.HasUpVoted.Contains(User.Id))
+      {
+        return;
+      }
+      if (thread.HasDownVoted.Contains(User.Id))
+      {
+        thread.HasDownVoted.Remove(User.Id);
+        thread.Rating++;
+        poster.Score++;
+      }
+
+      thread.Rating++;
+      poster.Score++;
+      thread.HasUpVoted.Add(User.Id);
 
       await _context.SaveChangesAsync();
 
-      await _hubContext.Clients.All.SendAsync("updateRating", thread.Rating, thread.Id);
+      await _hubContext.Clients.All.SendAsync("upvote", thread.Rating, thread.Id);
     }
 
     public async Task OnPostDownvote(int threadId)
     {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
-      thread.Rating--;
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
 
-      var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
-      user.Score--;
+      if (thread.HasDownVoted.Contains(User.Id))
+      {
+        return;
+      }
+      if (thread.HasUpVoted.Contains(User.Id))
+      {
+        thread.HasUpVoted.Remove(User.Id);
+        thread.Rating--;
+        poster.Score--;
+      }
+
+      thread.Rating--;
+      poster.Score--;
+      thread.HasDownVoted.Add(User.Id);
 
       await _context.SaveChangesAsync();
 
-      await _hubContext.Clients.All.SendAsync("updateRating", thread.Rating, thread.Id);
+      await _hubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
     }
 
         public string GetPrettyDate(DateTime d)

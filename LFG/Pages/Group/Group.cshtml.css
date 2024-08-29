@@ -126,6 +126,19 @@ hr {
   background: linear-gradient(#6328D5 0%, #0000ff 86%);
 }
 
+.up-vote:disabled,
+.down-vote:disabled {
+  background: #555555;
+  opacity: .5;
+}
+
+.up-vote:disabled:hover,
+.down-vote:disabled:hover {
+  transform: none;
+  border: none;
+  box-shadow: none;
+}
+
 .thread-block {
   display: flex;
   flex-flow: column;

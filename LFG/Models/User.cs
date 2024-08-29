@@ -40,7 +40,7 @@ namespace LFG.Models
 
     public int? AvatarId { get; set; }
 
-    public int? Score { get; set; }
+    public int Score { get; set; } = 0;
 
     [Required]
     [DataType(DataType.Date)]

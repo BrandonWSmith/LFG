@@ -58,9 +58,9 @@
     {
       <div class="thread-group">
         <div class="vote-block">
-          <button class="bi bi-caret-up-fill vote-option up-vote" onclick="upvote(@thread.Id)"></button>
+          <button id="thread-upvote-@thread.Id" class="bi bi-caret-up-fill vote-option up-vote" onclick="upvote(@thread.Id)"></button>
           <h2 id="thread-rating-@thread.Id">@thread.Rating</h2>
-          <button class="bi bi-caret-down-fill vote-option down-vote" onclick="downvote(@thread.Id)"></button>
+          <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvote(@thread.Id)"></button>
         </div>
         <div class="thread-block">
           @if (@thread.Pinned)

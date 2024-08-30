@@ -165,6 +165,42 @@ hr {
   font-style: italic;
 }
 
+.delete-block {
+  width: 20%;
+}
+
+.delete b:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #6E1A23 !important;
+}
+
+.confirm-delete {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+}
+
+.confirm-delete-button-group {
+  display: flex;
+  flex-flow: row;
+}
+
+.confirm-delete-button-group button {
+  height: 2rem;
+  width: 5rem;
+  margin: .5rem;
+  font-size: 1.2rem;
+}
+
+.confirm-delete-button {
+  background: linear-gradient(#DC3545 0%, #6E1A23 86%);
+}
+
+.confirm-delete-button:active {
+  background: linear-gradient(#DC354580 0%, #6E1A2380 86%);
+}
+
 .show-comments {
   align-self: flex-end;
   margin: 0;

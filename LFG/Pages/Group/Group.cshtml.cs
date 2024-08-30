@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
 {
@@ -149,6 +150,24 @@ namespace LFG.Pages.Group
       await _context.SaveChangesAsync();
 
       await _hubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
+    }
+
+    public async Task<IActionResult> OnPostDeleteThread(int threadId)
+    {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
+
+      if (poster != User)
+      {
+        return Page();
+      }
+
+      _context.Threads.Remove(thread);
+
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
     }
 
     public string GetPrettyDate(DateTime d)

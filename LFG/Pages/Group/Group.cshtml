@@ -7,19 +7,18 @@
 
 <div class="profile-heading">
   <h1>@Model.Group.Name</h1>
-  @if (@Model.Owner.Username == User.Identity.Name)
+  @if (Model.Owner.Username == User.Identity.Name)
   {
     <div class="buttons edit-button">
       <a asp-page="/Group/EditGroup" asp-route-username="@RouteData.Values["groupname"]">Edit</a>
     </div>
   }
-  @if (@Model.UserGroup == null && @Model.Group.Public)
+  @if (Model.UserGroup == null && Model.Group.Public)
   {
     <form id="join-form" method="post" asp-page-handler="Join"></form>
-      <button class="buttons join-button" form="join-form">
-        Join
-      </button>
-    
+    <button class="buttons join-button" form="join-form">
+      Join
+    </button>
   }
 </div>
 <div class="group-card">
@@ -28,7 +27,7 @@
     <h2>@Model.Group.Name</h2>
     <p><b>Owner: </b>@Model.Owner.Username</p>
     <p><b>Created: </b>@Model.Group.Created.ToString("MMMM d, yyyy")</p>
-    @if (@Model.Group.Description != null)
+    @if (Model.Group.Description != null)
     {
       <p><b>Bio: </b>@Model.Group.Description</p>
     }
@@ -41,7 +40,7 @@
   <div id="games-list">
     <h1>Games</h1>
     <div class="group_games">
-      @foreach (var game in @Model.GroupGames)
+      @foreach (var game in Model.GroupGames)
       {
         <a asp-page="/Game/@game.Name">
           <div class="game-card">
@@ -56,7 +55,7 @@
 @if (@Model.UserGroup != null)
 {
   <div class="threads">
-    @foreach (var thread in @Model.GroupThreads)
+    @foreach (var thread in Model.GroupThreads)
     {
       <div class="thread-group">
         <div class="vote-block">
@@ -73,6 +72,20 @@
           <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
           <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
           <p>@thread.Body</p>
+          @if (@thread.UserId == Model.User.Id)
+          {
+            <div class="delete-block">
+              <p class="text-danger delete" onclick="showConfirmDelete(@thread.Id)"><b>Delete</b></p>
+              <div id="confirm-delete-@thread.Id" class="confirm-delete">
+                <p class="text-center"><b>Are you sure you want to delete this thread?</b></p>
+                <div class="confirm-delete-button-group">
+                  <form id="delete-form" method="post" asp-page-handler="DeleteThread" asp-route-threadId="@thread.Id"></form>
+                  <button class="confirm-delete-button" form="delete-form">Yes</button>
+                  <button class="cancel-delete-button" onclick="hideConfirmDelete(@thread.Id)">No</button>
+                </div>
+              </div>
+            </div>
+          }
           <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
           <div id="comments-@thread.Id" class="thread-comments">
             @{
@@ -150,6 +163,18 @@
           __RequestVerificationToken: token
         }
       });
+    }
+
+    function showConfirmDelete(threadId) {
+      const confirmDelete = document.getElementById(`confirm-delete-${threadId}`);
+
+      confirmDelete.style.display = "flex";
+    }
+
+    function hideConfirmDelete(threadId) {
+      const confirmDelete = document.getElementById(`confirm-delete-${threadId}`);
+
+      confirmDelete.style.display = "none";
     }
   </script>
 }

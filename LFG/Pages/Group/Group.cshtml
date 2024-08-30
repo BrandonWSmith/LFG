@@ -13,12 +13,14 @@
       <a asp-page="/Group/EditGroup" asp-route-username="@RouteData.Values["groupname"]">Edit</a>
     </div>
   }
-  @* @if (!@User.HasClaim("Member", @Model.Group.Name) && @Model.Group.Public)
+  @if (@Model.UserGroup == null && @Model.Group.Public)
   {
-    <div class="buttons join-button">
-      Join
-    </div>
-  } *@
+    <form id="join-form" method="post" asp-page-handler="Join"></form>
+      <button class="buttons join-button" form="join-form">
+        Join
+      </button>
+    
+  }
 </div>
 <div class="group-card">
   <partial name="Shared/_DefaultGroupAvatarPartial" />
@@ -35,24 +37,24 @@
 </div>
 @if (@Model.GroupGames.Count > 0)
 {
-    <button id="toggle-games" onclick="toggleGames()">Show Games</button>
-    <div id="games-list">
-      <h1>Games</h1>
-      <div class="group_games">
-        @foreach (var game in @Model.GroupGames)
-        {
-          <a asp-page="/Game/@game.Name">
-            <div class="game-card">
-              <partial name="Shared/_DefaultGameCoverPartial"/>
-              <h3 class="game-name">@game.Name</h3>
-            </div>
-          </a>
-        }
-      </div>
+  <button id="toggle-games" onclick="toggleGames()">Show Games</button>
+  <div id="games-list">
+    <h1>Games</h1>
+    <div class="group_games">
+      @foreach (var game in @Model.GroupGames)
+      {
+        <a asp-page="/Game/@game.Name">
+          <div class="game-card">
+            <partial name="Shared/_DefaultGameCoverPartial"/>
+            <h3 class="game-name">@game.Name</h3>
+          </div>
+        </a>
+      }
     </div>
+  </div>
 }
-@* @if (@User.HasClaim("Member", @Model.Group.Name))
-{ *@
+@if (@Model.UserGroup != null)
+{
   <div class="threads">
     @foreach (var thread in @Model.GroupThreads)
     {
@@ -97,7 +99,7 @@
       </div>
     }
   </div>
-@* } *@
+}
 
 @section Scripts
 {

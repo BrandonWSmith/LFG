@@ -59,7 +59,7 @@ public class LFGContext : DbContext
     modelBuilder.Entity<UserGroup>(
         eb =>
         {
-          eb.HasNoKey();
+          eb.HasKey(x => new { x.UserId, x.GroupId });
         }
     );
     modelBuilder.Entity<UserPlatform>(

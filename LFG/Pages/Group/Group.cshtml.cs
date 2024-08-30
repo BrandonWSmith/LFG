@@ -1,6 +1,8 @@
 using LFG.Data;
+using LFG.Enums;
 using LFG.Hubs;
 using LFG.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LFG.Pages.Group
 {
+  [Authorize(Policy = "Registered")]
   public class GroupModel : PageModel
   {
     private readonly LFGContext _context;
@@ -21,6 +24,12 @@ namespace LFG.Pages.Group
 
     [BindProperty(SupportsGet = true)]
     public User User { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public UserGroup? UserGroup { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public GroupRole UserRole { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public Models.Group Group { get; set; }
@@ -39,9 +48,15 @@ namespace LFG.Pages.Group
 
     public async Task OnGetAsync()
     {
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
       Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == Group.Owner);
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      UserGroup = await _context.UsersGroups.FirstOrDefaultAsync(u => u.UserId == User.Id && u.GroupId == Group.Id);
+
+      if (UserGroup != null)
+      {
+        UserRole = UserGroup.Role;
+      }
 
       GroupGames = await _context.GroupsGames
         .Where(g => g.GroupId == Group.Id)
@@ -54,6 +69,27 @@ namespace LFG.Pages.Group
         .ToListAsync();
 
       GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ToListAsync();
+    }
+
+    public async Task<IActionResult> OnPostJoin()
+    {
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      UserGroup = await _context.UsersGroups.FirstOrDefaultAsync(u => u.UserId == User.Id && u.GroupId == Group.Id);
+
+      if (UserGroup != null) return Page();
+      
+      await _context.UsersGroups.AddAsync(new UserGroup
+      {
+        UserId = User.Id,
+        GroupId = Group.Id,
+        Rank = 1,
+        Role = GroupRole.Member
+      });
+
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
     }
 
     public async Task<List<Comment>> GetThreadComments(int threadId)
@@ -115,7 +151,7 @@ namespace LFG.Pages.Group
       await _hubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
     }
 
-        public string GetPrettyDate(DateTime d)
+    public string GetPrettyDate(DateTime d)
     {
       // 1.
       // Get time span elapsed since the date.

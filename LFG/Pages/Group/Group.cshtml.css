@@ -37,7 +37,9 @@ hr {
   grid-column: 2;
 }
 
-.edit-button {
+.edit-button,
+.join-button {
+  grid-row: 1;
   grid-column: 3;
   justify-self: end;
 }

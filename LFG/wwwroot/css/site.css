@@ -229,7 +229,8 @@ button:active {
 }
 
 .edit-button a,
-.back-button a {
+.back-button a,
+.join-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,12 +238,17 @@ button:active {
   font-size: 1.2rem;
 }
 
-.edit-button a {
+.edit-button a,
+.join-button {
   width: 5rem;
 }
 
 .back-button a {
   width: 5.5rem;
+}
+
+.join-button {
+  margin: 20px;
 }
 
 .thread-block a {

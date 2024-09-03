@@ -15,12 +15,12 @@ namespace LFG.Pages.Group
   public class GroupModel : PageModel
   {
     private readonly LFGContext _context;
-    private readonly IHubContext<VoteHub> _hubContext;
+    private readonly IHubContext<ThreadVoteHub> _threadVotehubContext;
 
-    public GroupModel(LFGContext context, IHubContext<VoteHub> hubContext)
+    public GroupModel(LFGContext context, IHubContext<ThreadVoteHub> threadVoteHubContext)
     {
       _context = context;
-      _hubContext = hubContext;
+      _threadVotehubContext = threadVoteHubContext;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -123,7 +123,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _hubContext.Clients.All.SendAsync("upvote", thread.Rating, thread.Id);
+      await _threadVotehubContext.Clients.All.SendAsync("upvote", thread.Rating, thread.Id);
     }
 
     public async Task OnPostDownvote(int threadId)
@@ -149,7 +149,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _hubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
+      await _threadVotehubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
     }
 
     public async Task<IActionResult> OnPostDeleteThread(int threadId)

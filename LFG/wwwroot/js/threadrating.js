@@ -1,13 +1,15 @@
 ﻿//Create connection
-var connection = new signalR.HubConnectionBuilder().withUrl("/hubs/rating").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/hubs/thread-rating").build();
 
 //Connect to hub method
 connection.on("upvote",
   (rating, threadId) => {
     var threadRating = document.getElementById(`thread-rating-${threadId}`);
     threadRating.innerText = rating;
-    connection.invoke("DisableUpvoteButton", threadId)
-    .then(connection.invoke("EnableDownvoteButton", threadId));
+    var upvoteButton = document.getElementById(`thread-upvote-${threadId}`);
+    upvoteButton.disabled = true;
+    var downvoteButton = document.getElementById(`thread-downvote-${threadId}`);
+    downvoteButton.disabled = false;
   }
 );
 
@@ -15,8 +17,10 @@ connection.on("downvote",
   (rating, threadId) => {
     var threadRating = document.getElementById(`thread-rating-${threadId}`);
     threadRating.innerText = rating;
-    connection.invoke("DisableDownvoteButton", threadId)
-    .then(connection.invoke("EnableUpvoteButton", threadId));
+    var downvoteButton = document.getElementById(`thread-downvote-${threadId}`);
+    downvoteButton.disabled = true;
+    var upvoteButton = document.getElementById(`thread-upvote-${threadId}`);
+    upvoteButton.disabled = false;
   }
 );
 

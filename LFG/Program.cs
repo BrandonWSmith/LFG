@@ -63,6 +63,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
-app.MapHub<VoteHub>("/hubs/rating");
+app.MapHub<ThreadVoteHub>("/hubs/thread-rating");
 
 app.Run();

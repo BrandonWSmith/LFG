@@ -64,5 +64,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapHub<ThreadVoteHub>("/hubs/thread-rating");
+app.MapHub<CommentVoteHub>("/hubs/comment-rating");
 
 app.Run();

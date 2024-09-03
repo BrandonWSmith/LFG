@@ -128,18 +128,31 @@ hr {
   background: linear-gradient(#6328D5 0%, #0000ff 86%);
 }
 
-.up-vote:disabled,
-.down-vote:disabled {
-  background: #555555;
-  opacity: .5;
-}
+  .up-vote:disabled,
+  .down-vote:disabled,
+  .comment-up-vote:disabled,
+  .comment-down-vote:disabled {
+    opacity: .5;
+  }
 
-.up-vote:disabled:hover,
-.down-vote:disabled:hover {
-  transform: none;
-  border: none;
-  box-shadow: none;
-}
+  .up-vote:disabled,
+  .down-vote:disabled {
+    background: #555555;
+  }
+
+  .comment-up-vote:disabled,
+  .comment-down-vote:disabled {
+    background: #3F3F3F;
+  }
+
+    .up-vote:disabled:hover,
+    .down-vote:disabled:hover,
+    .comment-up-vote:disabled:hover,
+    .comment-down-vote:disabled:hover {
+      transform: none;
+      border: none;
+      box-shadow: none;
+    }
 
 .thread-block {
   display: flex;

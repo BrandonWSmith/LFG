@@ -54,7 +54,7 @@ connection.on("enableDownvoteButton",
 
 //Start connection
 function fulfilled() {
-  console.log("Connection to Vote Hub successful");
+  console.log("Connection to Thread Vote Hub successful");
 }
 
 function rejected() {

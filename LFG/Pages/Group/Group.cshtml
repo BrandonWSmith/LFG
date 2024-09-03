@@ -59,9 +59,9 @@
     {
       <div class="thread-group">
         <div class="vote-block">
-          <button id="thread-upvote-@thread.Id" class="bi bi-caret-up-fill vote-option up-vote" onclick="upvote(@thread.Id)"></button>
+          <button id="thread-upvote-@thread.Id" class="bi bi-caret-up-fill vote-option up-vote" onclick="upvoteThread(@thread.Id)"></button>
           <h2 id="thread-rating-@thread.Id">@thread.Rating</h2>
-          <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvote(@thread.Id)"></button>
+          <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvoteThread(@thread.Id)"></button>
         </div>
         <div class="thread-block">
           @if (@thread.Pinned)
@@ -94,9 +94,9 @@
               {
                 <div class="comment-group">
                   <div class="vote-block comment-vote-block">
-                    <button class="bi bi-caret-up-fill vote-option up-vote comment-vote-option" onclick=""></button>
-                    <h2 id="comment-rating">@comment.Rating</h2>
-                    <button class="bi bi-caret-down-fill vote-option down-vote comment-vote-option" onclick=""></button>
+                    <button id="comment-upvote-@comment.Id" class="bi bi-caret-up-fill vote-option comment-up-vote comment-vote-option" onclick="upvoteComment(@comment.Id)"></button>
+                    <h2 id="comment-rating-@comment.Id">@comment.Rating</h2>
+                    <button id="comment-downvote-@comment.Id" class="bi bi-caret-down-fill vote-option comment-down-vote comment-vote-option" onclick="downvoteComment(@comment.Id)"></button>
                   </div>
                   <div class="comment-block">
                     <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
@@ -119,6 +119,7 @@
   <script src="~/lib/jquery/dist/jquery.js"></script>
   <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
   <script src="~/js/threadrating.js"></script>
+  <script src="~/js/commentrating.js"></script>
   <script type="text/javascript">
     function toggleGames() {
       const gamesList = document.getElementById("games-list");
@@ -143,10 +144,10 @@
       }
     }
 
-    function upvote(threadId) {
+    function upvoteThread(threadId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
-        url: `?threadId=${threadId}&handler=Upvote`,
+        url: `?threadId=${threadId}&handler=UpvoteThread`,
         type: 'POST',
         data: {
           __RequestVerificationToken: token
@@ -154,10 +155,32 @@
       });
     }
 
-    function downvote(threadId) {
+    function downvoteThread(threadId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
-        url: `?threadId=${threadId}&handler=Downvote`,
+        url: `?threadId=${threadId}&handler=DownvoteThread`,
+        type: 'POST',
+        data: {
+          __RequestVerificationToken: token
+        }
+      });
+    }
+
+    function upvoteComment(commentId) {
+      var token = $('input[name="__RequestVerificationToken"]').val();
+      $.ajax({
+        url: `?commentId=${commentId}&handler=UpvoteComment`,
+        type: 'POST',
+        data: {
+          __RequestVerificationToken: token
+        }
+      });
+    }
+
+    function downvoteComment(commentId) {
+      var token = $('input[name="__RequestVerificationToken"]').val();
+      $.ajax({
+        url: `?commentId=${commentId}&handler=DownvoteComment`,
         type: 'POST',
         data: {
           __RequestVerificationToken: token

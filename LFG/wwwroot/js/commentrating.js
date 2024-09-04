@@ -1,52 +1,48 @@
 ﻿//Create connection
-var connection = new signalR.HubConnectionBuilder().withUrl("/hubs/comment-rating").build();
+var commentRatingConnection = new signalR.HubConnectionBuilder().withUrl("/hubs/comment-rating").configureLogging(signalR.LogLevel.Debug).build();
 
 //Connect to hub method
-connection.on("upvote",
-  (rating, commentId) => {
+commentRatingConnection.on("upvoteComment",
+  async (rating, commentId) => {
     var commentRating = document.getElementById(`comment-rating-${commentId}`);
     commentRating.innerText = rating;
-    var upvoteButton = document.getElementById(`comment-upvote-${commentId}`);
-    upvoteButton.disabled = true;
-    var downvoteButton = document.getElementById(`comment-downvote-${commentId}`);
-    downvoteButton.disabled = false;
+    await commentRatingConnection.invoke("DisableCommentUpvoteButton", commentId)
+      .then(await commentRatingConnection.invoke("EnableCommentDownvoteButton", commentId));
   }
 );
 
-connection.on("downvote",
-  (rating, commentId) => {
+commentRatingConnection.on("downvoteComment",
+  async (rating, commentId) => {
     var commentRating = document.getElementById(`comment-rating-${commentId}`);
     commentRating.innerText = rating;
-    var downvoteButton = document.getElementById(`comment-downvote-${commentId}`);
-    downvoteButton.disabled = true;
-    var upvoteButton = document.getElementById(`comment-upvote-${commentId}`);
-    upvoteButton.disabled = false;
+    await commentRatingConnection.invoke("DisableCommentDownvoteButton", commentId)
+      .then(await commentRatingConnection.invoke("EnableCommentUpvoteButton", commentId));
   }
 );
 
-connection.on("disableUpvoteButton",
-  commentId => {
+commentRatingConnection.on("disableCommentUpvoteButton",
+  (commentId) => {
     var button = document.getElementById(`comment-upvote-${commentId}`);
     button.disabled = true;
   }
 );
 
-connection.on("disableDownvoteButton",
-  commentId => {
+commentRatingConnection.on("disableCommentDownvoteButton",
+  (commentId) => {
     var button = document.getElementById(`comment-downvote-${commentId}`);
     button.disabled = true;
   }
 );
 
-connection.on("enableUpvoteButton",
-  commentId => {
+commentRatingConnection.on("enableCommentUpvoteButton",
+  (commentId) => {
     var button = document.getElementById(`comment-upvote-${commentId}`);
     button.disabled = false;
   }
 );
 
-connection.on("enableDownvoteButton",
-  commentId => {
+commentRatingConnection.on("enableCommentDownvoteButton",
+  (commentId) => {
     var button = document.getElementById(`comment-downvote-${commentId}`);
     button.disabled = false;
   }
@@ -61,4 +57,4 @@ function rejected() {
 
 }
 
-connection.start().then(fulfilled, rejected);
+commentRatingConnection.start().then(fulfilled, rejected);

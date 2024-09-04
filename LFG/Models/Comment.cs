@@ -23,7 +23,7 @@ public class Comment
   [Length(1, 500)]
   public string Body { get; set; }
 
-  public float? Rating { get; set; }
+  public int Rating { get; set; } = 0;
 
   [Required]
   [DataType(DataType.DateTime)]

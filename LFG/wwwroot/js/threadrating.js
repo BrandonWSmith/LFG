@@ -1,52 +1,48 @@
 ﻿//Create connection
-var connection = new signalR.HubConnectionBuilder().withUrl("/hubs/thread-rating").build();
+var threadRatingConnection = new signalR.HubConnectionBuilder().withUrl("/hubs/thread-rating").configureLogging(signalR.LogLevel.Debug).build();
 
 //Connect to hub method
-connection.on("upvote",
-  (rating, threadId) => {
+threadRatingConnection.on("upvoteThread",
+  async (rating, threadId) => {
     var threadRating = document.getElementById(`thread-rating-${threadId}`);
     threadRating.innerText = rating;
-    var upvoteButton = document.getElementById(`thread-upvote-${threadId}`);
-    upvoteButton.disabled = true;
-    var downvoteButton = document.getElementById(`thread-downvote-${threadId}`);
-    downvoteButton.disabled = false;
+    await threadRatingConnection.invoke("DisableThreadUpvoteButton", threadId)
+      .then(await threadRatingConnection.invoke("EnableThreadDownvoteButton", threadId));
   }
 );
 
-connection.on("downvote",
-  (rating, threadId) => {
+threadRatingConnection.on("downvoteThread",
+  async (rating, threadId) => {
     var threadRating = document.getElementById(`thread-rating-${threadId}`);
     threadRating.innerText = rating;
-    var downvoteButton = document.getElementById(`thread-downvote-${threadId}`);
-    downvoteButton.disabled = true;
-    var upvoteButton = document.getElementById(`thread-upvote-${threadId}`);
-    upvoteButton.disabled = false;
+    await threadRatingConnection.invoke("DisableThreadDownvoteButton", threadId)
+      .then(await threadRatingConnection.invoke("EnableThreadUpvoteButton", threadId));
   }
 );
 
-connection.on("disableUpvoteButton",
-  threadId => {
+threadRatingConnection.on("disableThreadUpvoteButton",
+  (threadId) => {
     var button = document.getElementById(`thread-upvote-${threadId}`);
     button.disabled = true;
   }
 );
 
-connection.on("disableDownvoteButton",
-  threadId => {
+threadRatingConnection.on("disableThreadDownvoteButton",
+  (threadId) => {
     var button = document.getElementById(`thread-downvote-${threadId}`);
     button.disabled = true;
   }
 );
 
-connection.on("enableUpvoteButton",
-  threadId => {
+threadRatingConnection.on("enableThreadUpvoteButton",
+  (threadId) => {
     var button = document.getElementById(`thread-upvote-${threadId}`);
     button.disabled = false;
   }
 );
 
-connection.on("enableDownvoteButton",
-  threadId => {
+threadRatingConnection.on("enableThreadDownvoteButton",
+  (threadId) => {
     var button = document.getElementById(`thread-downvote-${threadId}`);
     button.disabled = false;
   }
@@ -61,4 +57,4 @@ function rejected() {
 
 }
 
-connection.start().then(fulfilled, rejected);
+threadRatingConnection.start().then(fulfilled, rejected);

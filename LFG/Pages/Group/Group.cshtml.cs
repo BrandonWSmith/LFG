@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
 {
@@ -71,7 +70,7 @@ namespace LFG.Pages.Group
         })
         .ToListAsync();
 
-      GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ToListAsync();
+      GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ThenBy(t => t.Id).ToListAsync();
     }
 
     public async Task<IActionResult> OnPostJoin()
@@ -97,7 +96,7 @@ namespace LFG.Pages.Group
 
     public async Task<List<Comment>> GetThreadComments(int threadId)
     {
-      ThreadComments = await _context.Comments.Where(c => c.ThreadId == threadId).ToListAsync();
+      ThreadComments = await _context.Comments.Where(c => c.ThreadId == threadId).OrderByDescending(c => c.Created).ThenBy(c => c.Id).ToListAsync();
 
       return ThreadComments;
     }
@@ -110,7 +109,7 @@ namespace LFG.Pages.Group
 
       if (thread.HasUpVoted.Contains(User.Id))
       {
-        await _threadVoteHubContext.Clients.All.SendAsync("upvote", thread.Rating, thread.Id);
+        await _threadVoteHubContext.Clients.All.SendAsync("upvoteThread", thread.Rating, thread.Id);
         return;
       }
       if (thread.HasDownVoted.Contains(User.Id))
@@ -126,7 +125,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _threadVoteHubContext.Clients.All.SendAsync("upvote", thread.Rating, thread.Id);
+      await _threadVoteHubContext.Clients.All.SendAsync("upvoteThread", thread.Rating, thread.Id);
     }
 
     public async Task OnPostDownvoteThread(int threadId)
@@ -137,7 +136,7 @@ namespace LFG.Pages.Group
 
       if (thread.HasDownVoted.Contains(User.Id))
       {
-        await _threadVoteHubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
+        await _threadVoteHubContext.Clients.All.SendAsync("downvoteThread", thread.Rating, thread.Id);
         return;
       }
       if (thread.HasUpVoted.Contains(User.Id))
@@ -153,7 +152,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _threadVoteHubContext.Clients.All.SendAsync("downvote", thread.Rating, thread.Id);
+      await _threadVoteHubContext.Clients.All.SendAsync("downvoteThread", thread.Rating, thread.Id);
     }
 
     public async Task OnPostUpvoteComment(int commentId)
@@ -164,7 +163,7 @@ namespace LFG.Pages.Group
 
       if (comment.HasUpVoted.Contains(User.Id))
       {
-        await _commentVoteHubContext.Clients.All.SendAsync("upvote", comment.Rating, comment.Id);
+        await _commentVoteHubContext.Clients.All.SendAsync("upvoteComment", comment.Rating, comment.Id);
         return;
       }
       if (comment.HasDownVoted.Contains(User.Id))
@@ -180,7 +179,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _commentVoteHubContext.Clients.All.SendAsync("upvote", comment.Rating, comment.Id);
+      await _commentVoteHubContext.Clients.All.SendAsync("upvoteComment", comment.Rating, comment.Id);
     }
 
     public async Task OnPostDownvoteComment(int commentId)
@@ -191,7 +190,7 @@ namespace LFG.Pages.Group
 
       if (comment.HasDownVoted.Contains(User.Id))
       {
-        await _commentVoteHubContext.Clients.All.SendAsync("downvote", comment.Rating, comment.Id);
+        await _commentVoteHubContext.Clients.All.SendAsync("downvoteComment", comment.Rating, comment.Id);
         return;
       }
       if (comment.HasUpVoted.Contains(User.Id))
@@ -207,7 +206,7 @@ namespace LFG.Pages.Group
 
       await _context.SaveChangesAsync();
 
-      await _commentVoteHubContext.Clients.All.SendAsync("downvote", comment.Rating, comment.Id);
+      await _commentVoteHubContext.Clients.All.SendAsync("downvoteComment", comment.Rating, comment.Id);
     }
 
     public async Task<IActionResult> OnPostDeleteThread(int threadId)
@@ -222,6 +221,24 @@ namespace LFG.Pages.Group
       }
 
       _context.Threads.Remove(thread);
+
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteComment(int commentId)
+    {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == comment.UserId);
+
+      if (poster != User)
+      {
+        return Page();
+      }
+
+      _context.Comments.Remove(comment);
 
       await _context.SaveChangesAsync();
 

@@ -7,34 +7,56 @@ namespace LFG.Hubs;
 
 public class CommentVoteHub : Hub
 {
-    private readonly LFGContext _context;
+  private readonly LFGContext _context;
 
-    public CommentVoteHub(LFGContext context)
+  public CommentVoteHub(LFGContext context)
+  {
+    _context = context;
+  }
+
+  public List<Comment> Comments { get; set; }
+  public User User { get; set; }
+
+  public override async Task OnConnectedAsync()
+  {
+    Comments = await _context.Comments.ToListAsync();
+    User = await _context.Users.FirstOrDefaultAsync(u => u.Username == Context.User.Identity.Name);
+
+    Console.WriteLine("Connected to hub");
+
+    Comments.ForEach(async comment =>
     {
-        _context = context;
-    }
+      if (comment.HasUpVoted.Contains(User.Id))
+      {
+        await Clients.Caller.SendAsync("disableCommentUpvoteButton", comment.Id);
+      }
 
-    public List<Comment> Comments { get; set; }
-    public User User { get;  set; }
+      if (comment.HasDownVoted.Contains(User.Id))
+      {
+        await Clients.Caller.SendAsync("disableCommentDownvoteButton", comment.Id);
+      }
+    });
 
-    public override async Task OnConnectedAsync()
-    {
-        Comments =  await _context.Comments.ToListAsync();
-        User = await _context.Users.FirstOrDefaultAsync(u => u.Username == Context.User.Identity.Name);
+    await base.OnConnectedAsync();
+  }
 
-        Comments.ForEach(async comment =>
-        {
-            if (comment.HasUpVoted.Contains(User.Id))
-            {
-                await Clients.Caller.SendAsync("disableUpvoteButton", comment.Id);
-            }
+  public async Task DisableCommentUpvoteButton(int commentId)
+  {
+    await Clients.Caller.SendAsync("disableCommentUpvoteButton", commentId);
+  }
 
-            if (comment.HasDownVoted.Contains(User.Id))
-            {
-                await Clients.Caller.SendAsync("disableDownvoteButton", comment.Id);
-            }
-        });
+  public async Task DisableCommentDownvoteButton(int commentId)
+  {
+    await Clients.Caller.SendAsync("disableCommentDownvoteButton", commentId);
+  }
 
-        await base.OnConnectedAsync();
-    }
+  public async Task EnableCommentUpvoteButton(int commentId)
+  {
+    await Clients.Caller.SendAsync("enableCommentUpvoteButton", commentId);
+  }
+
+  public async Task EnableCommentDownvoteButton(int commentId)
+  {
+    await Clients.Caller.SendAsync("enableCommentDownvoteButton", commentId);
+  }
 }

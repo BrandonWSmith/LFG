@@ -52,6 +52,9 @@ namespace LFG.Pages.Group
     [BindProperty]
     public Thread Thread { get; set; }
 
+    [BindProperty]
+    public Comment Comment { get; set; }
+
     public async Task OnGetAsync()
     {
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
@@ -100,12 +103,6 @@ namespace LFG.Pages.Group
 
     public async Task<IActionResult> OnPostCreateThread()
     {
-      //Check Inputs
-      if (Thread.Title == null)
-      {
-
-      }
-
       //Populate Non-Editable Fields
       Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
         .SingleAsync();
@@ -115,6 +112,22 @@ namespace LFG.Pages.Group
 
       //Create Thread
       await _context.Threads.AddAsync(Thread);
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostCreateComment(int threadId)
+    {
+      //Populate Non-Editable Fields
+      Comment.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
+        .SingleAsync();
+      Comment.ThreadId = await _context.Threads.Where(t => t.Id == threadId).Select(t => t.Id)
+        .SingleAsync();
+      Comment.Created = DateTime.Now;
+
+      //Create Thread
+      await _context.Comments.AddAsync(Comment);
       await _context.SaveChangesAsync();
 
       return RedirectToPage();

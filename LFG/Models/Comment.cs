@@ -21,6 +21,7 @@ public class Comment
 
   [Required]
   [Length(1, 500)]
+  [Display(Name = "Comment")]
   public string Body { get; set; }
 
   public int Rating { get; set; } = 0;

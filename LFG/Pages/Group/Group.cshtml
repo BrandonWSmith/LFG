@@ -110,8 +110,20 @@
           }
           <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
           <div id="comments-@thread.Id" class="thread-comments">
+            <div class="comment-form-group">
+              <form id="comment-form" method="post" asp-page-handler="CreateComment" asp-route-threadId="@thread.Id">
+                <textarea class="comment-form-body" asp-for="Comment.Body" placeholder="Leave a comment"></textarea>
+                <button class="bi bi-arrow-right-short" type="submit"></button>
+              </form>
+            </div>
             @{
               var comments = @Model.GetThreadComments(@thread.Id);
+              if (comments.Result.Count == 0)
+              {
+                <p class="no-comments">No comments yet</p>
+                <hr/>
+              }
+
               foreach (var comment in await comments)
               {
                 <div class="comment-group">

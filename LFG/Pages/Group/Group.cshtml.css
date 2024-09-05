@@ -273,6 +273,27 @@ hr {
   display: none;
 }
 
+.comment-form-group {
+  margin: 1rem 0;
+}
+
+.comment-form-group button {
+  align-self: flex-start;
+  height: 2rem;
+  width: 2rem;
+  margin: 0 0 0 1rem;
+  border-radius: 10px;
+}
+
+.comment-form-group button:hover {
+  text-decoration: none;
+}
+
+  .no-comments {
+    font-style: italic;
+    color: #2F2F2F;
+  }
+
 .comment-group {
   display: flex;
   justify-content: flex-start;

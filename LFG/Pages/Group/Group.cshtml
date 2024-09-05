@@ -57,15 +57,15 @@
   <div id="start-a-thread" style="height: 0rem;">
     <div class="start-a-thread-block">
       <form id="start-a-thread-form" method="post" asp-page-handler="CreateThread">
-        <div class="start-a-thread-item">
+        <div class="thread-form-item">
           <label asp-for="Thread.Title"></label>
           <input type="text" asp-for="Thread.Title" required/>
         </div>
-        <div class="start-a-thread-item">
+        <div class="thread-form-item">
           <label asp-for="Thread.Body"></label>
-          <textarea class="start-a-thread-body" asp-for="Thread.Body" maxlength="40000" required></textarea>
+          <textarea class="thread-form-body" asp-for="Thread.Body" maxlength="40000" required></textarea>
         </div>
-        <div class="start-a-thread-item">
+        <div class="thread-form-item">
           <label asp-for="Thread.Pinned"></label>
           <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned"/>
         </div>
@@ -98,15 +98,15 @@
           </div>
           <div id="edit-@thread.Id" class="edit-thread-block" style="display: none">
             <form id="thread-edit-form" method="post" asp-page-handler="UpdateGroupThread" asp-route-threadId="@thread.Id">
-              <div class="start-a-thread-item">
+              <div class="thread-form-item">
                 <label asp-for="Thread.Title"></label>
                 <input type="text" asp-for="Thread.Title" value="@thread.Title" required/>
               </div>
-              <div class="start-a-thread-item">
+              <div class="thread-form-item">
                 <label asp-for="Thread.Body"></label>
-                <textarea class="start-a-thread-body" name="@Html.NameFor(n => n.Thread.Body)" maxlength="40000" required>@thread.Body</textarea>
+                <textarea class="thread-form-body" name="@Html.NameFor(n => n.Thread.Body)" maxlength="40000" required>@thread.Body</textarea>
               </div>
-              <div class="start-a-thread-item">
+              <div class="thread-form-item">
                 <label asp-for="Thread.Pinned"></label>
                 <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned" checked="@thread.Pinned"/>
               </div>

@@ -110,7 +110,7 @@ hr {
   width: 100%;
 }
 
-.start-a-thread-item {
+.thread-form-item {
   display: flex;
   flex-flow: column;
   width: 100%;

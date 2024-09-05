@@ -84,6 +84,42 @@ hr {
   font-weight: bold;
 }
 
+.start-a-thread-group {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+}
+
+#start-a-thread-button,
+.start-a-thread-block button {
+  height: 3rem;
+  width: auto;
+  padding: 0 1rem;
+  font-size: 1.5rem;
+  float: left;
+}
+
+#start-a-thread {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  transition: height ease-out 500ms;
+}
+
+.start-a-thread-block {
+  width: 100%;
+}
+
+.start-a-thread-item {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.start-a-thread-block button {
+  margin: 0;
+}
+
 .threads {
   margin-bottom: 5rem;
 }
@@ -154,9 +190,11 @@ hr {
       box-shadow: none;
     }
 
-.thread-block {
+.thread-block,
+.start-a-thread-block {
   display: flex;
   flex-flow: column;
+  width: 100%;
   padding: 2rem;
   margin-bottom: 1rem;
   background-color: #555555;

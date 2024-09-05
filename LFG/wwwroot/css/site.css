@@ -124,12 +124,21 @@ textarea {
   border-radius: 6px;
 }
 
+.start-a-thread-body {
+  width: 100%;
+}
+
 .persist-check {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 120px;
   margin-top: 15px;
+}
+
+.pinned-checkbox {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
 .logout-form {
@@ -149,6 +158,11 @@ textarea {
 .login-form-checkbox {
   height: 1rem;
   width: 1rem;
+}
+
+#start-a-thread-form {
+  opacity: 1;
+  transition: opacity ease-in-out 500ms;
 }
 
 /* Buttons/Links */

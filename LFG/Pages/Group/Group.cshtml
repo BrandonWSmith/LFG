@@ -52,6 +52,28 @@
     </div>
   </div>
 }
+<div class="start-a-thread-group">
+  <button id="start-a-thread-button" onclick="toggleStartAThread()">Start A Thread</button>
+  <div id="start-a-thread" style="height: 0rem;">
+    <div class="start-a-thread-block">
+      <form id="start-a-thread-form" method="post" asp-page-handler="CreateThread">
+        <div class="start-a-thread-item">
+          <label asp-for="Thread.Title"></label>
+          <input type="text" asp-for="Thread.Title"/>
+        </div>
+        <div class="start-a-thread-item">
+          <label asp-for="Thread.Body"></label>
+          <textarea class="start-a-thread-body" asp-for="Thread.Body" maxlength="40000"></textarea>
+        </div>
+        <div class="start-a-thread-item">
+          <label asp-for="Thread.Pinned"></label>
+          <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned"/>
+        </div>
+        <button type="submit">Create</button>
+      </form>
+    </div>
+  </div>
+</div>
 @if (@Model.UserGroup != null)
 {
   <div class="threads">
@@ -145,6 +167,19 @@
       } else {
         gamesList.style.display = "block";
         toggleGames.innerHTML = "Hide Games";
+      }
+    }
+
+    function toggleStartAThread() {
+      const startAThread = document.getElementById("start-a-thread");
+      const startAThreadForm = document.getElementById("start-a-thread-form");
+
+      if (startAThread.style.height === "0rem") {
+        startAThread.style.height = "27rem";
+        startAThreadForm.style.opacity = "1";
+      } else {
+        startAThread.style.height = "0rem";
+        startAThreadForm.style.opacity = "0";
       }
     }
 

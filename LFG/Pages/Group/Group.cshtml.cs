@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
 {
@@ -43,10 +44,13 @@ namespace LFG.Pages.Group
     public List<Game> GroupGames { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public List<Models.Thread> GroupThreads { get; set; }
+    public List<Thread> GroupThreads { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public List<Comment> ThreadComments { get; set; }
+
+    [BindProperty]
+    public Thread Thread { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -89,6 +93,22 @@ namespace LFG.Pages.Group
         Role = GroupRole.Member
       });
 
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostCreateThread()
+    {
+      //Populate Non-Editable Fields
+      Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
+        .SingleAsync();
+      Thread.GroupId = await _context.Groups.Where(g => g.Name == RouteData.Values["groupname"]).Select(g => g.Id)
+        .SingleAsync();
+      Thread.Created = DateTime.Now;
+
+      //Create Thread
+      await _context.Threads.AddAsync(Thread);
       await _context.SaveChangesAsync();
 
       return RedirectToPage();

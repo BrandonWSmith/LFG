@@ -236,11 +236,13 @@ hr {
   font-style: italic;
 }
 
-.thread-options-block {
+.thread-options-block,
+.comment-options-block {
   display: flex;
 }
 
-.thread-options-block p {
+.thread-options-block p,
+.comment-options-block p {
   margin-bottom: 0;
 }
 
@@ -352,6 +354,19 @@ hr {
   transform: scale(.55);
 }
 
-.comment-block {
+.comment-block,
+.comment-block-content {
   width: 100%;
+}
+
+.edit-comment-block button {
+  align-self: flex-start;
+  height: 2rem;
+  width: 2rem;
+  margin: 0 0 0 1rem;
+  border-radius: 10px;
+}
+
+.edit-comment-block button:hover {
+  text-decoration: none;
 }

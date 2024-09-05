@@ -86,7 +86,7 @@
           <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvoteThread(@thread.Id)"></button>
         </div>
         <div class="thread-block">
-          <div id="@thread.Id" class="thread-block-content" style="display: flex">
+          <div id="thread-@thread.Id" class="thread-block-content" style="display: flex">
             @if (@thread.Pinned)
             {
               <p class="thread-pinned"><b>Pinned</b></p>
@@ -96,8 +96,8 @@
             <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
             <p>@thread.Body</p>
           </div>
-          <div id="edit-@thread.Id" class="edit-thread-block" style="display: none">
-            <form id="thread-edit-form" method="post" asp-page-handler="UpdateGroupThread" asp-route-threadId="@thread.Id">
+          <div id="edit-thread-@thread.Id" class="edit-thread-block" style="display: none">
+            <form method="post" asp-page-handler="UpdateGroupThread" asp-route-threadId="@thread.Id">
               <div class="thread-form-item">
                 <label asp-for="Thread.Title"></label>
                 <input type="text" asp-for="Thread.Title" value="@thread.Title" required/>
@@ -155,19 +155,30 @@
                     <button id="comment-downvote-@comment.Id" class="bi bi-caret-down-fill vote-option comment-down-vote comment-vote-option" onclick="downvoteComment(@comment.Id)"></button>
                   </div>
                   <div class="comment-block">
-                    <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
-                    <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
-                    <p>@comment.Body</p>
+                    <div id="comment-@comment.Id" class="comment-block-content" style="display: block">
+                      <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
+                      <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
+                      <p>@comment.Body</p>
+                    </div>
+                    <div id="edit-comment-@comment.Id" class="edit-comment-block" style="display: none">
+                      <form id="edit-comment-form" method="post" asp-page-handler="UpdateComment" asp-route-threadId="@thread.Id" asp-route-commentId="@comment.Id">
+                        <textarea class="edit-comment-form-body" name="@Html.NameFor(n => n.Comment.Body)">@comment.Body</textarea>
+                        <button class="bi bi-arrow-right-short" type="submit"></button>
+                      </form>
+                    </div>
                     @if (@comment.UserId == Model.User.Id)
                     {
-                      <div class="delete-block">
-                        <p class="text-danger delete" onclick="showConfirmDeleteComment(@comment.Id)"><b>Delete</b></p>
-                        <div id="confirm-delete-comment-@comment.Id" class="confirm-delete">
-                          <p class="text-center"><b>Are you sure you want to delete this comment?</b></p>
-                          <div class="confirm-delete-button-group">
-                            <form id="comment-delete-form" method="post" asp-page-handler="DeleteComment" asp-route-commentId="@comment.Id"></form>
-                            <button class="confirm-delete-button" form="comment-delete-form">Yes</button>
-                            <button class="cancel-delete-button" onclick="hideConfirmDeleteComment(@comment.Id)">No</button>
+                      <div class="comment-options-block">
+                        <p class="edit" onclick="commentEditMode(@comment.Id)"><b>Edit</b></p>
+                        <div class="delete-block">
+                          <p class="text-danger delete" onclick="showConfirmDeleteComment(@comment.Id)"><b>Delete</b></p>
+                          <div id="confirm-delete-comment-@comment.Id" class="confirm-delete">
+                            <p class="text-center"><b>Are you sure you want to delete this comment?</b></p>
+                            <div class="confirm-delete-button-group">
+                              <form id="comment-delete-form" method="post" asp-page-handler="DeleteComment" asp-route-commentId="@comment.Id"></form>
+                              <button class="confirm-delete-button" form="comment-delete-form">Yes</button>
+                              <button class="cancel-delete-button" onclick="hideConfirmDeleteComment(@comment.Id)">No</button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -272,8 +283,8 @@
     }
 
     function threadEditMode(threadId) {
-      const thread = document.getElementById(`${threadId}`);
-      const threadEdit = document.getElementById(`edit-${threadId}`);
+      const thread = document.getElementById(`thread-${threadId}`);
+      const threadEdit = document.getElementById(`edit-thread-${threadId}`);
 
       if (thread.style.display === "flex") {
         thread.style.display = "none";
@@ -281,6 +292,19 @@
       } else {
         thread.style.display = "flex";
         threadEdit.style.display = "none";
+      }
+    }
+
+    function commentEditMode(commentId) {
+      const comment = document.getElementById(`comment-${commentId}`);
+      const commentEdit = document.getElementById(`edit-comment-${commentId}`);
+
+      if (comment.style.display === "block") {
+        comment.style.display = "none";
+        commentEdit.style.display = "block";
+      } else {
+        comment.style.display = "block";
+        commentEdit.style.display = "none";
       }
     }
 

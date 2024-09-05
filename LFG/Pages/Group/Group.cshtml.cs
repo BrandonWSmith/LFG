@@ -120,14 +120,12 @@ namespace LFG.Pages.Group
     public async Task<IActionResult> OnPostUpdateGroupThread(int threadId)
     {
       //Populate Non-Editable Fields
-      Thread.Id = threadId;
-      Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
-        .SingleAsync();
-      Thread.GroupId = await _context.Groups.Where(g => g.Name == RouteData.Values["groupname"]).Select(g => g.Id)
-        .SingleAsync();
-      Thread.Created = await _context.Threads.Where(t => t.Id == threadId).Select(t => t.Created).SingleAsync();
+      Thread = await _context.Threads.FindAsync(threadId);
+      Thread.Title = Request.Form["Thread.Title"].ToString();
+      Thread.Body = Request.Form["Thread.Body"].ToString();
+      Thread.Pinned = Request.Form["Thread.Pinned"].Contains("true");
 
-      //Create Thread
+      //Update Thread
       _context.Threads.Attach(Thread).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
@@ -143,8 +141,21 @@ namespace LFG.Pages.Group
         .SingleAsync();
       Comment.Created = DateTime.Now;
 
-      //Create Thread
+      //Create Comment
       await _context.Comments.AddAsync(Comment);
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostUpdateComment(int threadId, int commentId)
+    {
+      //Populate Non-Editable Fields
+      Comment = await _context.Comments.FindAsync(commentId);
+      Comment.Body = Request.Form["Comment.Body"].ToString();
+
+      //Update Comment
+      _context.Comments.Attach(Comment).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
       return RedirectToPage();

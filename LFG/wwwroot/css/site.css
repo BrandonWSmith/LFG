@@ -165,12 +165,14 @@ textarea {
   height: 1.3rem;
 }
 
-#comment-form {
+#comment-form,
+#edit-comment-form {
   display: flex;
   flex-flow: row;
 }
 
-.comment-form-body {
+.comment-form-body,
+.edit-comment-form-body {
   width: 100%;
   height: 4rem;
 }

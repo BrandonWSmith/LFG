@@ -100,6 +100,12 @@ namespace LFG.Pages.Group
 
     public async Task<IActionResult> OnPostCreateThread()
     {
+      //Check Inputs
+      if (Thread.Title == null)
+      {
+
+      }
+
       //Populate Non-Editable Fields
       Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
         .SingleAsync();

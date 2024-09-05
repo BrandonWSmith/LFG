@@ -117,6 +117,23 @@ namespace LFG.Pages.Group
       return RedirectToPage();
     }
 
+    public async Task<IActionResult> OnPostUpdateGroupThread(int threadId)
+    {
+      //Populate Non-Editable Fields
+      Thread.Id = threadId;
+      Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
+        .SingleAsync();
+      Thread.GroupId = await _context.Groups.Where(g => g.Name == RouteData.Values["groupname"]).Select(g => g.Id)
+        .SingleAsync();
+      Thread.Created = await _context.Threads.Where(t => t.Id == threadId).Select(t => t.Created).SingleAsync();
+
+      //Create Thread
+      _context.Threads.Attach(Thread).State = EntityState.Modified;
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage();
+    }
+
     public async Task<IActionResult> OnPostCreateComment(int threadId)
     {
       //Populate Non-Editable Fields

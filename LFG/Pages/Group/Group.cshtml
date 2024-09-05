@@ -86,24 +86,46 @@
           <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvoteThread(@thread.Id)"></button>
         </div>
         <div class="thread-block">
-          @if (@thread.Pinned)
-          {
-            <p class="thread-pinned"><b>Pinned</b></p>
-          }
-          <h2 class="thread-title">@thread.Title</h2>
-          <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
-          <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
-          <p>@thread.Body</p>
+          <div id="@thread.Id" class="thread-block-content" style="display: flex">
+            @if (@thread.Pinned)
+            {
+              <p class="thread-pinned"><b>Pinned</b></p>
+            }
+            <h2 class="thread-title">@thread.Title</h2>
+            <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
+            <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
+            <p>@thread.Body</p>
+          </div>
+          <div id="edit-@thread.Id" class="edit-thread-block" style="display: none">
+            <form id="thread-edit-form" method="post" asp-page-handler="UpdateGroupThread" asp-route-threadId="@thread.Id">
+              <div class="start-a-thread-item">
+                <label asp-for="Thread.Title"></label>
+                <input type="text" asp-for="Thread.Title" value="@thread.Title" required/>
+              </div>
+              <div class="start-a-thread-item">
+                <label asp-for="Thread.Body"></label>
+                <textarea class="start-a-thread-body" name="@Html.NameFor(n => n.Thread.Body)" maxlength="40000" required>@thread.Body</textarea>
+              </div>
+              <div class="start-a-thread-item">
+                <label asp-for="Thread.Pinned"></label>
+                <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned" checked="@thread.Pinned"/>
+              </div>
+              <button type="submit">Update</button>
+            </form>
+          </div>
           @if (@thread.UserId == Model.User.Id)
           {
-            <div class="delete-block">
-              <p class="text-danger delete" onclick="showConfirmDelete(@thread.Id)"><b>Delete</b></p>
-              <div id="confirm-delete-@thread.Id" class="confirm-delete">
-                <p class="text-center"><b>Are you sure you want to delete this thread?</b></p>
-                <div class="confirm-delete-button-group">
-                  <form id="delete-form" method="post" asp-page-handler="DeleteThread" asp-route-threadId="@thread.Id"></form>
-                  <button class="confirm-delete-button" form="delete-form">Yes</button>
-                  <button class="cancel-delete-button" onclick="hideConfirmDelete(@thread.Id)">No</button>
+            <div class="thread-options-block">
+              <p class="edit" onclick="threadEditMode(@thread.Id)"><b>Edit</b></p>
+              <div class="delete-block">
+                <p class="text-danger delete" onclick="showConfirmDelete(@thread.Id)"><b>Delete</b></p>
+                <div id="confirm-delete-@thread.Id" class="confirm-delete">
+                  <p class="text-center"><b>Are you sure you want to delete this thread?</b></p>
+                  <div class="confirm-delete-button-group">
+                    <form id="delete-form" method="post" asp-page-handler="DeleteThread" asp-route-threadId="@thread.Id"></form>
+                    <button class="confirm-delete-button" form="delete-form">Yes</button>
+                    <button class="cancel-delete-button" onclick="hideConfirmDelete(@thread.Id)">No</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,6 +269,19 @@
           __RequestVerificationToken: token
         }
       });
+    }
+
+    function threadEditMode(threadId) {
+      const thread = document.getElementById(`${threadId}`);
+      const threadEdit = document.getElementById(`edit-${threadId}`);
+
+      if (thread.style.display === "flex") {
+        thread.style.display = "none";
+        threadEdit.style.display = "flex";
+      } else {
+        thread.style.display = "flex";
+        threadEdit.style.display = "none";
+      }
     }
 
     function showConfirmDelete(threadId) {

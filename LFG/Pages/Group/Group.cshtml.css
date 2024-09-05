@@ -201,6 +201,26 @@ hr {
   border-radius: 25px;
 }
 
+.thread-block-content {
+  display: flex;
+  flex-flow: column;
+}
+
+.edit-thread-block {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+  .edit-thread-block button {
+    align-self: flex-start;
+    height: 3rem;
+    width: auto;
+    margin: 1rem 0;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+  }
+
 .thread-pinned {
   align-self: flex-end;
   margin: 0;
@@ -214,6 +234,25 @@ hr {
 .comment-created {
   font-size: .8rem;
   font-style: italic;
+}
+
+.thread-options-block {
+  display: flex;
+}
+
+.thread-options-block p {
+  margin-bottom: 0;
+}
+
+.edit {
+  color: #3f3f3f;
+  margin-right: 1rem
+}
+
+.edit b:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #1F1F1F !important;
 }
 
 .delete-block {

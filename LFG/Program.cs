@@ -1,10 +1,12 @@
-using System.Security.Claims;
 using LFG.Authorization;
 using LFG.Data;
 using LFG.Hubs;
+using LFG.Interface;
+using LFG.Service;
 using LFG.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,7 @@ builder.Services.AddDbContext<LFGContext>(o =>
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAuthorizationHandler, ProfileOwnerRequirementHandler>();
+builder.Services.AddTransient<IRazorPartialToStringRenderer, RazorPartialToStringRenderer>();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -65,5 +68,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapHub<ThreadVoteHub>("/hubs/thread-rating");
 app.MapHub<CommentVoteHub>("/hubs/comment-rating");
+app.MapHub<GroupPageHub>("/hubs/group-page");
 
 app.Run();

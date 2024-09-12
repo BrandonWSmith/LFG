@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LFG.Hubs;
 
 public class CommentVoteHub : Hub
-{
+{ 
   private readonly LFGContext _context;
 
   public CommentVoteHub(LFGContext context)
@@ -21,8 +21,6 @@ public class CommentVoteHub : Hub
   {
     Comments = await _context.Comments.ToListAsync();
     User = await _context.Users.FirstOrDefaultAsync(u => u.Username == Context.User.Identity.Name);
-
-    Console.WriteLine("Connected to hub");
 
     Comments.ForEach(async comment =>
     {

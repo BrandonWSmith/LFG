@@ -3,10 +3,11 @@ using LFG.Enums;
 using LFG.Hubs;
 using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
@@ -17,12 +18,14 @@ namespace LFG.Pages.Group
     private readonly LFGContext _context;
     private readonly IHubContext<ThreadVoteHub> _threadVoteHubContext;
     private readonly IHubContext<CommentVoteHub> _commentVoteHubContext;
+    private readonly IHubContext<GroupPageHub> _groupPageHubContext;
 
-    public GroupModel(LFGContext context, IHubContext<ThreadVoteHub> threadVoteHubContext, IHubContext<CommentVoteHub> commentVoteHubContext)
+    public GroupModel(LFGContext context, IHubContext<ThreadVoteHub> threadVoteHubContext, IHubContext<CommentVoteHub> commentVoteHubContext, IHubContext<GroupPageHub>? groupPageHubContext)
     {
       _context = context;
       _threadVoteHubContext = threadVoteHubContext;
       _commentVoteHubContext = commentVoteHubContext;
+      if (groupPageHubContext != null) _groupPageHubContext = groupPageHubContext;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -87,7 +90,7 @@ namespace LFG.Pages.Group
       UserGroup = await _context.UsersGroups.FirstOrDefaultAsync(u => u.UserId == User.Id && u.GroupId == Group.Id);
 
       if (UserGroup != null) return Page();
-      
+
       await _context.UsersGroups.AddAsync(new UserGroup
       {
         UserId = User.Id,
@@ -101,7 +104,7 @@ namespace LFG.Pages.Group
       return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostCreateThread()
+    public async Task OnPostCreateThread()
     {
       //Populate Non-Editable Fields
       Thread.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
@@ -114,10 +117,10 @@ namespace LFG.Pages.Group
       await _context.Threads.AddAsync(Thread);
       await _context.SaveChangesAsync();
 
-      return RedirectToPage();
+      await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
     }
 
-    public async Task<IActionResult> OnPostUpdateGroupThread(int threadId)
+    public async Task OnPostUpdateGroupThread(int threadId)
     {
       //Populate Non-Editable Fields
       Thread = await _context.Threads.FindAsync(threadId);
@@ -129,10 +132,27 @@ namespace LFG.Pages.Group
       _context.Threads.Attach(Thread).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
-      return RedirectToPage();
+      await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
     }
 
-    public async Task<IActionResult> OnPostCreateComment(int threadId)
+    public async Task OnPostDeleteThread(int threadId)
+    {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      Thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == Thread.UserId);
+
+      if (poster != User)
+      {
+        return;
+      }
+
+      _context.Threads.Remove(Thread);
+      await _context.SaveChangesAsync();
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
+    }
+
+    public async Task OnPostCreateComment(int threadId)
     {
       //Populate Non-Editable Fields
       Comment.UserId = await _context.Users.Where(u => u.Username == HttpContext.User.Identity.Name).Select(u => u.Id)
@@ -145,10 +165,10 @@ namespace LFG.Pages.Group
       await _context.Comments.AddAsync(Comment);
       await _context.SaveChangesAsync();
 
-      return RedirectToPage();
+      await _groupPageHubContext.Clients.All.SendAsync("updateComments", threadId);
     }
 
-    public async Task<IActionResult> OnPostUpdateComment(int threadId, int commentId)
+    public async Task OnPostUpdateComment(int threadId, int commentId)
     {
       //Populate Non-Editable Fields
       Comment = await _context.Comments.FindAsync(commentId);
@@ -158,7 +178,24 @@ namespace LFG.Pages.Group
       _context.Comments.Attach(Comment).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
-      return RedirectToPage();
+      await _groupPageHubContext.Clients.All.SendAsync("updateComments", threadId);
+    }
+
+    public async Task OnPostDeleteComment(int commentId)
+    {
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      Comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == Comment.UserId);
+
+      if (poster != User)
+      {
+        return;
+      }
+
+      _context.Comments.Remove(Comment);
+      await _context.SaveChangesAsync();
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateComments", Comment.ThreadId);
     }
 
     public async Task<List<Comment>> GetThreadComments(int threadId)
@@ -274,42 +311,6 @@ namespace LFG.Pages.Group
       await _context.SaveChangesAsync();
 
       await _commentVoteHubContext.Clients.All.SendAsync("downvoteComment", comment.Rating, comment.Id);
-    }
-
-    public async Task<IActionResult> OnPostDeleteThread(int threadId)
-    {
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
-      var thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
-      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == thread.UserId);
-
-      if (poster != User)
-      {
-        return Page();
-      }
-
-      _context.Threads.Remove(thread);
-
-      await _context.SaveChangesAsync();
-
-      return RedirectToPage();
-    }
-
-    public async Task<IActionResult> OnPostDeleteComment(int commentId)
-    {
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
-      var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-      var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == comment.UserId);
-
-      if (poster != User)
-      {
-        return Page();
-      }
-
-      _context.Comments.Remove(comment);
-
-      await _context.SaveChangesAsync();
-
-      return RedirectToPage();
     }
 
     public string GetPrettyDate(DateTime d)

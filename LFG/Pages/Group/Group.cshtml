@@ -1,5 +1,7 @@
 ﻿@page "/Group/{groupname}"
 
+@using System.Collections
+@using LFG.Models
 @model GroupModel
 @{
   ViewData["Title"] = "Group";
@@ -34,7 +36,7 @@
     <p><b>Status: </b>@Model.Group.Status</p>
   </div>
 </div>
-@if (@Model.GroupGames.Count > 0)
+@if (Model.GroupGames.Count > 0)
 {
   <button id="toggle-games" onclick="toggleGames()">Show Games</button>
   <div id="games-list">
@@ -56,7 +58,8 @@
   <button id="start-a-thread-button" onclick="toggleStartAThread()">Start A Thread</button>
   <div id="start-a-thread" style="height: 0rem;">
     <div class="start-a-thread-block">
-      <form id="start-a-thread-form" method="post" asp-page-handler="CreateThread">
+      <form id="start-a-thread-form">
+        @Html.AntiForgeryToken()
         <div class="thread-form-item">
           <label asp-for="Thread.Title"></label>
           <input type="text" asp-for="Thread.Title" required/>
@@ -69,129 +72,15 @@
           <label asp-for="Thread.Pinned"></label>
           <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned"/>
         </div>
-        <button type="submit">Create</button>
+        <button type="submit" onclick="toggleStartAThread()">Create</button>
       </form>
     </div>
   </div>
 </div>
-@if (@Model.UserGroup != null)
+@if (Model.UserGroup != null)
 {
-  <div class="threads">
-    @foreach (var thread in Model.GroupThreads)
-    {
-      <div class="thread-group">
-        <div class="vote-block">
-          <button id="thread-upvote-@thread.Id" class="bi bi-caret-up-fill vote-option up-vote" onclick="upvoteThread(@thread.Id)"></button>
-          <h2 id="thread-rating-@thread.Id">@thread.Rating</h2>
-          <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvoteThread(@thread.Id)"></button>
-        </div>
-        <div class="thread-block">
-          <div id="thread-@thread.Id" class="thread-block-content" style="display: flex">
-            @if (@thread.Pinned)
-            {
-              <p class="thread-pinned"><b>Pinned</b></p>
-            }
-            <h2 class="thread-title">@thread.Title</h2>
-            <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
-            <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
-            <p>@thread.Body</p>
-          </div>
-          <div id="edit-thread-@thread.Id" class="edit-thread-block" style="display: none">
-            <form method="post" asp-page-handler="UpdateGroupThread" asp-route-threadId="@thread.Id">
-              <div class="thread-form-item">
-                <label asp-for="Thread.Title"></label>
-                <input type="text" asp-for="Thread.Title" value="@thread.Title" required/>
-              </div>
-              <div class="thread-form-item">
-                <label asp-for="Thread.Body"></label>
-                <textarea class="thread-form-body" name="@Html.NameFor(n => n.Thread.Body)" maxlength="40000" required>@thread.Body</textarea>
-              </div>
-              <div class="thread-form-item">
-                <label asp-for="Thread.Pinned"></label>
-                <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned" checked="@thread.Pinned"/>
-              </div>
-              <button type="submit">Update</button>
-            </form>
-          </div>
-          @if (@thread.UserId == Model.User.Id)
-          {
-            <div class="thread-options-block">
-              <p class="edit" onclick="threadEditMode(@thread.Id)"><b>Edit</b></p>
-              <div class="delete-block">
-                <p class="text-danger delete" onclick="showConfirmDelete(@thread.Id)"><b>Delete</b></p>
-                <div id="confirm-delete-@thread.Id" class="confirm-delete">
-                  <p class="text-center"><b>Are you sure you want to delete this thread?</b></p>
-                  <div class="confirm-delete-button-group">
-                    <form id="delete-form" method="post" asp-page-handler="DeleteThread" asp-route-threadId="@thread.Id"></form>
-                    <button class="confirm-delete-button" form="delete-form">Yes</button>
-                    <button class="cancel-delete-button" onclick="hideConfirmDelete(@thread.Id)">No</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
-          <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
-          <div id="comments-@thread.Id" class="thread-comments">
-            <div class="comment-form-group">
-              <form id="comment-form" method="post" asp-page-handler="CreateComment" asp-route-threadId="@thread.Id">
-                <textarea class="comment-form-body" asp-for="Comment.Body" placeholder="Leave a comment"></textarea>
-                <button class="bi bi-arrow-right-short" type="submit"></button>
-              </form>
-            </div>
-            @{
-              var comments = @Model.GetThreadComments(@thread.Id);
-              if (comments.Result.Count == 0)
-              {
-                <p class="no-comments">No comments yet</p>
-                <hr/>
-              }
-
-              foreach (var comment in await comments)
-              {
-                <div class="comment-group">
-                  <div class="vote-block comment-vote-block">
-                    <button id="comment-upvote-@comment.Id" class="bi bi-caret-up-fill vote-option comment-up-vote comment-vote-option" onclick="upvoteComment(@comment.Id)"></button>
-                    <h2 id="comment-rating-@comment.Id">@comment.Rating</h2>
-                    <button id="comment-downvote-@comment.Id" class="bi bi-caret-down-fill vote-option comment-down-vote comment-vote-option" onclick="downvoteComment(@comment.Id)"></button>
-                  </div>
-                  <div class="comment-block">
-                    <div id="comment-@comment.Id" class="comment-block-content" style="display: block">
-                      <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
-                      <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
-                      <p>@comment.Body</p>
-                    </div>
-                    <div id="edit-comment-@comment.Id" class="edit-comment-block" style="display: none">
-                      <form id="edit-comment-form" method="post" asp-page-handler="UpdateComment" asp-route-threadId="@thread.Id" asp-route-commentId="@comment.Id">
-                        <textarea class="edit-comment-form-body" name="@Html.NameFor(n => n.Comment.Body)">@comment.Body</textarea>
-                        <button class="bi bi-arrow-right-short" type="submit"></button>
-                      </form>
-                    </div>
-                    @if (@comment.UserId == Model.User.Id)
-                    {
-                      <div class="comment-options-block">
-                        <p class="edit" onclick="commentEditMode(@comment.Id)"><b>Edit</b></p>
-                        <div class="delete-block">
-                          <p class="text-danger delete" onclick="showConfirmDeleteComment(@comment.Id)"><b>Delete</b></p>
-                          <div id="confirm-delete-comment-@comment.Id" class="confirm-delete">
-                            <p class="text-center"><b>Are you sure you want to delete this comment?</b></p>
-                            <div class="confirm-delete-button-group">
-                              <form id="comment-delete-form" method="post" asp-page-handler="DeleteComment" asp-route-commentId="@comment.Id"></form>
-                              <button class="confirm-delete-button" form="comment-delete-form">Yes</button>
-                              <button class="cancel-delete-button" onclick="hideConfirmDeleteComment(@comment.Id)">No</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    <hr/>
-                  </div>
-                </div>
-              }
-            }
-          </div>
-        </div>
-      </div>
-    }
+  <div id="threads" class="threads">
+    <partial name="Shared/_GroupThreadsPartial" model="Model"/>
   </div>
 }
 
@@ -201,7 +90,10 @@
   <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
   <script src="~/js/threadrating.js"></script>
   <script src="~/js/commentrating.js"></script>
+  <script src="~/js/grouppage.js"></script>
   <script type="text/javascript">
+
+    @* Toggle Group Games List *@
     function toggleGames() {
       const gamesList = document.getElementById("games-list");
       const toggleGames = document.getElementById("toggle-games");
@@ -215,6 +107,7 @@
       }
     }
 
+    @* Toggle Create Thread Form *@
     function toggleStartAThread() {
       const startAThread = document.getElementById("start-a-thread");
       const startAThreadForm = document.getElementById("start-a-thread-form");
@@ -228,6 +121,86 @@
       }
     }
 
+    @* Create Thread *@
+    $(document).on("submit", "#start-a-thread-form", function(e) {
+      e.preventDefault();
+      var form = $(this);
+        
+      $.ajax({
+        url: `?handler=CreateThread`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Edit Thread *@
+    $(document).on("submit", "#edit-thread-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var threadId = form.find("#threadId").val();
+
+      $.ajax({
+        url: `?threadId=${threadId}&handler=UpdateGroupThread`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Delete Thread *@
+    $(document).on("submit", "#delete-thread-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var threadId = form.find("#threadId").val();
+
+      $.ajax({
+        url: `?threadId=${threadId}&handler=DeleteThread`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Create Comment *@
+    $(document).on("submit", "#comment-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var threadId = form.find("#threadId").val();
+
+      $.ajax({
+        url: `?threadId=${threadId}&handler=CreateComment`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Edit Comment *@
+    $(document).on("submit", "#edit-comment-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      console.log(form);
+      var threadId = form.find("#threadId").val();
+      var commentId = form.find("#commentId").val();
+
+      $.ajax({
+        url: `?threadId=${threadId}&commentId=${commentId}&handler=UpdateComment`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Delete Comment *@
+    $(document).on("submit", "#comment-delete-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var commentId = form.find("#commentId").val();
+
+      $.ajax({
+        url: `?commentId=${commentId}&handler=DeleteComment`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Toggle Thread Comments List *@
     function showComments(threadId) {
       const threadComments = document.getElementById(`comments-${threadId}`);
 
@@ -238,6 +211,7 @@
       }
     }
 
+    @* Upvote Thread *@
     function upvoteThread(threadId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
@@ -249,6 +223,7 @@
       });
     }
 
+    @* Downvote Thread *@
     function downvoteThread(threadId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
@@ -260,6 +235,7 @@
       });
     }
 
+    @* Upvote Comment *@
     function upvoteComment(commentId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
@@ -271,6 +247,7 @@
       });
     }
 
+    @* Downvote Comment *@
     function downvoteComment(commentId) {
       var token = $('input[name="__RequestVerificationToken"]').val();
       $.ajax({
@@ -282,6 +259,7 @@
       });
     }
 
+    @* Toggle Edit Thread Form *@
     function threadEditMode(threadId) {
       const thread = document.getElementById(`thread-${threadId}`);
       const threadEdit = document.getElementById(`edit-thread-${threadId}`);
@@ -295,6 +273,7 @@
       }
     }
 
+    @* Toggle Edit Comment Form *@
     function commentEditMode(commentId) {
       const comment = document.getElementById(`comment-${commentId}`);
       const commentEdit = document.getElementById(`edit-comment-${commentId}`);
@@ -308,24 +287,28 @@
       }
     }
 
+    @* Show Delete Thread Prompt *@
     function showConfirmDelete(threadId) {
       const confirmDelete = document.getElementById(`confirm-delete-${threadId}`);
 
       confirmDelete.style.display = "flex";
     }
 
+    @* Hide Delete Thread Prompt *@
     function hideConfirmDelete(threadId) {
       const confirmDelete = document.getElementById(`confirm-delete-${threadId}`);
 
       confirmDelete.style.display = "none";
     }
 
+    @* Show Delete Comment Prompt *@
     function showConfirmDeleteComment(commentId) {
       const confirmDelete = document.getElementById(`confirm-delete-comment-${commentId}`);
 
       confirmDelete.style.display = "flex";
     }
 
+    @* Hide Delete Comment Prompt *@
     function hideConfirmDeleteComment(commentId) {
       const confirmDelete = document.getElementById(`confirm-delete-comment-${commentId}`);
 

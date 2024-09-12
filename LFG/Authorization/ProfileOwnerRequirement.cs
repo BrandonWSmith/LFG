@@ -30,7 +30,7 @@ public class ProfileOwnerRequirementHandler : AuthorizationHandler<ProfileOwnerR
     {
       context.Succeed(requirement);
     }
-    
+
     return Task.CompletedTask;
   }
 }

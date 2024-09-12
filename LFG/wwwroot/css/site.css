@@ -177,6 +177,12 @@ textarea {
   height: 4rem;
 }
 
+#delete-thread-form,
+#comment-delete-form {
+  display: flex;
+  flex-flow: row;
+}
+
 /* Buttons/Links */
 .buttons {
   display: flex;

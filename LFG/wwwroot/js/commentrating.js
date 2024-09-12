@@ -1,7 +1,10 @@
-﻿//Create connection
-var commentRatingConnection = new signalR.HubConnectionBuilder().withUrl("/hubs/comment-rating").configureLogging(signalR.LogLevel.Debug).build();
+﻿//Create Connection
+var commentRatingConnection = new signalR.HubConnectionBuilder()
+  .withUrl("/hubs/comment-rating")
+  .configureLogging(signalR.LogLevel.Debug)
+  .build();
 
-//Connect to hub method
+//Invoke Hub Methods
 commentRatingConnection.on("upvoteComment",
   async (rating, commentId) => {
     var commentRating = document.getElementById(`comment-rating-${commentId}`);
@@ -20,6 +23,7 @@ commentRatingConnection.on("downvoteComment",
   }
 );
 
+//Client Methods
 commentRatingConnection.on("disableCommentUpvoteButton",
   (commentId) => {
     var button = document.getElementById(`comment-upvote-${commentId}`);
@@ -47,6 +51,12 @@ commentRatingConnection.on("enableCommentDownvoteButton",
     button.disabled = false;
   }
 );
+
+commentRatingConnection.on("restartCommentRatingConnection",
+  async () => {
+    await commentRatingConnection.stop();
+    commentRatingConnection.onclose(await commentRatingConnection.start());
+  });
 
 //Start connection
 function fulfilled() {

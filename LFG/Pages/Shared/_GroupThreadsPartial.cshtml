@@ -1,0 +1,68 @@
+﻿@model LFG.Pages.Group.GroupModel
+
+@foreach (var thread in Model.GroupThreads)
+{
+  <div class="thread-group">
+    <div class="vote-block">
+      <button id="thread-upvote-@thread.Id" class="bi bi-caret-up-fill vote-option up-vote" onclick="upvoteThread(@thread.Id)"></button>
+      <h2 id="thread-rating-@thread.Id">@thread.Rating</h2>
+      <button id="thread-downvote-@thread.Id" class="bi bi-caret-down-fill vote-option down-vote" onclick="downvoteThread(@thread.Id)"></button>
+    </div>
+    <div class="thread-block">
+      <div id="thread-@thread.Id" class="thread-block-content" style="display: flex">
+        @if (thread.Pinned)
+        {
+          <p class="thread-pinned"><b>Pinned</b></p>
+        }
+        <h2 class="thread-title">@thread.Title</h2>
+        <a asp-page="/Profile/Profile" asp-route-username="@thread.User.Username">@thread.User.Username</a>
+        <p class="thread-created">@Model.GetPrettyDate(thread.Created)</p>
+        <p>@thread.Body</p>
+      </div>
+      <div id="edit-thread-@thread.Id" class="edit-thread-block" style="display: none">
+        <form id="edit-thread-form" method="post">
+          <input id="threadId" type="hidden" value="@thread.Id"/>
+          <div class="thread-form-item">
+            <label asp-for="Thread.Title"></label>
+            <input type="text" asp-for="Thread.Title" value="@thread.Title" required />
+          </div>
+          <div class="thread-form-item">
+            <label asp-for="Thread.Body"></label>
+            <textarea class="thread-form-body" name="@Html.NameFor(n => n.Thread.Body)" maxlength="40000" required>@thread.Body</textarea>
+          </div>
+          <div class="thread-form-item">
+            <label asp-for="Thread.Pinned"></label>
+            <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned" checked="@thread.Pinned" />
+          </div>
+          <button type="submit">Update</button>
+        </form>
+      </div>
+      @if (@thread.User.Username == User.Identity.Name)
+      {
+        <div class="thread-options-block">
+          <p class="edit" onclick="threadEditMode(@thread.Id)"><b>Edit</b></p>
+          <p class="text-danger delete" onclick="showConfirmDelete(@thread.Id)"><b>Delete</b></p>
+          <div id="confirm-delete-@thread.Id" class="confirm-delete">
+            <p class="text-center"><b>Are you sure you want to delete this thread?</b></p>
+            <div class="confirm-delete-button-group">
+              <form id="delete-thread-form" method="post">
+                <input id="threadId" type="hidden" value="@thread.Id" />
+                <button class="confirm-delete-button" type="submit">Yes</button>
+                <button class="cancel-delete-button" type="button" onclick="hideConfirmDelete(@thread.Id)">No</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      }
+      <button class="show-comments bi bi-chat-left" onclick="showComments(@thread.Id)"></button>
+      @{
+        var comments = @Model.GetThreadComments(@thread.Id);
+        ViewData["Thread"] = thread;
+        ViewData["ThreadComments"] = await comments;
+      }
+      <div id="comments-@thread.Id" class="thread-comments">
+        <partial name="_ThreadCommentsPartial" model="Model" view-data="ViewData" />
+      </div>
+    </div>
+  </div>
+}

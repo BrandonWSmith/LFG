@@ -1,7 +1,10 @@
-﻿//Create connection
-var threadRatingConnection = new signalR.HubConnectionBuilder().withUrl("/hubs/thread-rating").configureLogging(signalR.LogLevel.Debug).build();
+﻿//Create Connection
+var threadRatingConnection = new signalR.HubConnectionBuilder()
+  .withUrl("/hubs/thread-rating")
+  .configureLogging(signalR.LogLevel.Debug)
+  .build();
 
-//Connect to hub method
+//Invoke Hub Methods
 threadRatingConnection.on("upvoteThread",
   async (rating, threadId) => {
     var threadRating = document.getElementById(`thread-rating-${threadId}`);
@@ -20,6 +23,8 @@ threadRatingConnection.on("downvoteThread",
   }
 );
 
+
+//Client Methods
 threadRatingConnection.on("disableThreadUpvoteButton",
   (threadId) => {
     var button = document.getElementById(`thread-upvote-${threadId}`);
@@ -47,6 +52,12 @@ threadRatingConnection.on("enableThreadDownvoteButton",
     button.disabled = false;
   }
 );
+
+threadRatingConnection.on("restartThreadRatingConnection",
+  async () => {
+    await threadRatingConnection.stop();
+    threadRatingConnection.onclose(await threadRatingConnection.start());
+});
 
 //Start connection
 function fulfilled() {

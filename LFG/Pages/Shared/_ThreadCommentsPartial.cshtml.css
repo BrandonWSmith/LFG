@@ -1,0 +1,167 @@
+﻿h2,
+p {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.vote-block {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: 1rem 2rem 0 0;
+}
+
+  .vote-block h2 {
+    margin: 0;
+  }
+
+.vote-option {
+  height: 2rem;
+  width: 2rem;
+  margin: 0;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+  .vote-option::before {
+    transform: scale(.8);
+  }
+
+  .vote-option:hover {
+    box-shadow: 1px 1px 5px;
+  }
+
+.up-vote {
+  background: linear-gradient(#0000ff 0%, #6328D5 86%);
+}
+
+.down-vote {
+  background: linear-gradient(#6328D5 0%, #0000ff 86%);
+}
+
+  .comment-up-vote:disabled,
+  .comment-down-vote:disabled {
+    opacity: .5;
+    background: #3F3F3F;
+  }
+
+    .comment-up-vote:disabled:hover,
+    .comment-down-vote:disabled:hover {
+      transform: none;
+      border: none;
+      box-shadow: none;
+    }
+
+.comment-created {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.comment-options-block {
+  display: flex;
+  flex-wrap: wrap;
+  width: 20%;
+}
+
+  .comment-options-block p {
+    margin-bottom: 0;
+  }
+
+.edit {
+  color: #3f3f3f;
+  margin-right: 1rem
+}
+
+  .edit b:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #1F1F1F !important;
+  }
+
+.delete b:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #6E1A23 !important;
+}
+
+.confirm-delete {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+}
+
+#comment-delete-form button {
+  height: 2rem;
+  width: 5rem;
+  margin: .5rem;
+  font-size: 1.2rem;
+}
+
+.confirm-delete-button {
+  background: linear-gradient(#DC3545 0%, #6E1A23 86%);
+}
+
+  .confirm-delete-button:active {
+    background: linear-gradient(#DC354580 0%, #6E1A2380 86%);
+  }
+
+.comment-form-group {
+  margin: 1rem 0;
+}
+
+  .comment-form-group button {
+    align-self: flex-start;
+    height: 2rem;
+    width: 2rem;
+    margin: 0 0 0 1rem;
+    border-radius: 10px;
+  }
+
+    .comment-form-group button:hover {
+      text-decoration: none;
+    }
+
+.no-comments {
+  font-style: italic;
+  color: #2F2F2F;
+}
+
+.comment-group {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.comment-vote-block h2 {
+  font-size: 1.5rem;
+}
+
+.comment-vote-option {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 8px;
+}
+
+  .comment-vote-option::before {
+    transform: scale(.55);
+  }
+
+.comment-block,
+.comment-block-content {
+  width: 100%;
+}
+
+.edit-comment-block button {
+  align-self: flex-start;
+  height: 2rem;
+  width: 2rem;
+  margin: 0 0 0 1rem;
+  border-radius: 10px;
+}
+
+  .edit-comment-block button:hover {
+    text-decoration: none;
+  }

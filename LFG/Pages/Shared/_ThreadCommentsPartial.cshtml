@@ -1,0 +1,61 @@
+﻿@model LFG.Pages.Group.GroupModel
+@{
+  var Thread = (Models.Thread)ViewData["Thread"];
+  var Comments = (List<Models.Comment>)ViewData["ThreadComments"];
+}
+
+<div class="comment-form-group">
+  <form id="comment-form" method="post">
+    <input id="threadId" type="hidden" value="@Thread.Id" />
+    <textarea class="comment-form-body" asp-for="Comment.Body" placeholder="Leave a comment" required></textarea>
+    <button class="bi bi-arrow-right-short" type="submit"></button>
+  </form>
+</div>
+
+@if (Comments.Count == 0)
+{
+  <p class="no-comments">No comments yet</p>
+  <hr />
+}
+
+ @foreach (var comment in Comments)
+{
+  <div class="comment-group">
+    <div class="vote-block comment-vote-block">
+      <button id="comment-upvote-@comment.Id" class="bi bi-caret-up-fill vote-option comment-up-vote comment-vote-option" onclick="upvoteComment(@comment.Id)"></button>
+      <h2 id="comment-rating-@comment.Id">@comment.Rating</h2>
+      <button id="comment-downvote-@comment.Id" class="bi bi-caret-down-fill vote-option comment-down-vote comment-vote-option" onclick="downvoteComment(@comment.Id)"></button>
+    </div>
+    <div class="comment-block">
+      <div id="comment-@comment.Id" class="comment-block-content" style="display: block">
+        <a asp-page="/Profile/Profile" asp-route-username="@comment.User.Username">@comment.User.Username</a>
+        <p class="comment-created">@Model.GetPrettyDate(comment.Created)</p>
+        <p>@comment.Body</p>
+      </div>
+      <div id="edit-comment-@comment.Id" class="edit-comment-block" style="display: none">
+        <form id="edit-comment-form" method="post">
+          <input id="threadId" type="hidden" value="@Thread.Id" />
+          <input id="commentId" type="hidden" value="@comment.Id" />
+          <textarea class="edit-comment-form-body" name="@Html.NameFor(n => n.Comment.Body)" required>@comment.Body</textarea>
+          <button class="bi bi-arrow-right-short" type="submit"></button>
+        </form>
+      </div>
+      @if (comment.User.Username == User.Identity.Name)
+      {
+        <div class="comment-options-block">
+          <p class="edit" onclick="commentEditMode(@comment.Id)"><b>Edit</b></p>
+          <p class="text-danger delete" onclick="showConfirmDeleteComment(@comment.Id)"><b>Delete</b></p>
+          <div id="confirm-delete-comment-@comment.Id" class="confirm-delete">
+            <p class="text-center"><b>Are you sure you want to delete this comment?</b></p>
+            <form id="comment-delete-form" method="post">
+              <input id="commentId" type="hidden" value="@comment.Id" />
+              <button class="confirm-delete-button" type="submit">Yes</button>
+              <button class="cancel-delete-button" type="button" onclick="hideConfirmDeleteComment(@comment.Id)">No</button>
+            </form>
+          </div>
+        </div>
+      }
+      <hr />
+    </div>
+  </div>
+}

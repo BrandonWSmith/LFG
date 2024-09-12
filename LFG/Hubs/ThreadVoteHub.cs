@@ -2,6 +2,7 @@
 using LFG.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Thread = LFG.Models.Thread;
 
 namespace LFG.Hubs;
 
@@ -14,7 +15,7 @@ public class ThreadVoteHub : Hub
     _context = context;
   }
 
-  public List<Models.Thread> Threads { get; set; }
+  public List<Thread> Threads { get; set; }
   public User User { get; set; }
 
   public override async Task OnConnectedAsync()

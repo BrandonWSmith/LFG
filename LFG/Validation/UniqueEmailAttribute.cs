@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using LFG.Data;
+﻿using LFG.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace LFG.Validation;
 

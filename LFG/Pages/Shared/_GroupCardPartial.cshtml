@@ -1,0 +1,13 @@
+﻿@model LFG.Pages.Group.GroupModel
+
+<partial name="_DefaultGroupAvatarPartial" />
+<div class="group-info">
+  <h2>@Model.Group.Name</h2>
+  <p><b>Owner: </b>@Model.Owner.Username</p>
+  <p><b>Created: </b>@Model.Group.Created.ToString("MMMM d, yyyy")</p>
+  @if (Model.Group.Description != null)
+  {
+    <p><b>Bio: </b>@Model.Group.Description</p>
+  }
+  <p><b>Status: </b>@Model.Group.Status</p>
+</div>

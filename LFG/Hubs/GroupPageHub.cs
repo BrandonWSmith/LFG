@@ -65,4 +65,16 @@ public class GroupPageHub : Hub
     await _threadVoteHubContext.Clients.All.SendAsync("restartThreadRatingConnection");
     await _commentVoteHubContext.Clients.All.SendAsync("restartCommentRatingConnection");
   }
+
+  public async Task UpdateGroupInfo(int groupId)
+  {
+    GroupModel = new GroupModel(_context, _threadVoteHubContext, _commentVoteHubContext, null);
+    GroupModel.Group = await _context.Groups.FindAsync(groupId);
+    GroupModel.Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == GroupModel.Group.Owner);
+
+    var groupCardPartial =
+      await _renderer.RenderPartialToStringAsync("_GroupCardPartial", GroupModel);
+
+    await Clients.All.SendAsync("refreshGroupInfo", groupCardPartial);
+  }
 }

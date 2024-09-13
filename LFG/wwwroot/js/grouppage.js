@@ -18,6 +18,12 @@ groupPageConnection.on("updateComments",
   }
 );
 
+groupPageConnection.on("updateGroupInfo",
+  async (groupId) => {
+    await groupPageConnection.invoke("UpdateGroupInfo", groupId);
+  }
+);
+
 //Client Methods
 groupPageConnection.on("refreshThreads",
   (groupThreadsPartial) => {
@@ -30,6 +36,13 @@ groupPageConnection.on("refreshComments",
   (threadId, threadCommentsPartial) => {
     var comments = document.getElementById(`comments-${threadId}`);
     comments.innerHTML = threadCommentsPartial;
+  }
+);
+
+groupPageConnection.on("refreshGroupInfo",
+  (groupInfoPartial) => {
+    var groupCard = document.getElementById("group-card");
+    groupCard.innerHTML = groupInfoPartial;
   }
 );
 

@@ -1,0 +1,18 @@
+﻿h2,
+p {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.group-info-form-item {
+  display: flex;
+  flex-flow: column;
+}
+
+.save-changes {
+  align-self: center;
+}

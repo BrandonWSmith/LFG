@@ -44,14 +44,17 @@ hr {
   justify-self: end;
 }
 
-.group-card {
+#group-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;
   margin-top: 3rem;
 }
 
-.group-info {
-  margin-left: 5%;
+#edit-group-card {
+  display: grid;
+  grid-template-columns: 12.5rem 1fr;
+  margin-top: 3rem;
+  justify-items: start;
 }
 
 #games-list {

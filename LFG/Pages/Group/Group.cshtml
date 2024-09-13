@@ -11,8 +11,8 @@
   <h1>@Model.Group.Name</h1>
   @if (Model.Owner.Username == User.Identity.Name)
   {
-    <div class="buttons edit-button">
-      <a asp-page="/Group/EditGroup" asp-route-username="@RouteData.Values["groupname"]">Edit</a>
+    <div class="edit-button">
+      <button onclick="toggleEditGroupInfo()">Edit</button>>
     </div>
   }
   @if (Model.UserGroup == null && Model.Group.Public)
@@ -23,18 +23,11 @@
     </button>
   }
 </div>
-<div class="group-card">
-  <partial name="Shared/_DefaultGroupAvatarPartial" />
-  <div class="group-info">
-    <h2>@Model.Group.Name</h2>
-    <p><b>Owner: </b>@Model.Owner.Username</p>
-    <p><b>Created: </b>@Model.Group.Created.ToString("MMMM d, yyyy")</p>
-    @if (Model.Group.Description != null)
-    {
-      <p><b>Bio: </b>@Model.Group.Description</p>
-    }
-    <p><b>Status: </b>@Model.Group.Status</p>
-  </div>
+<div id="group-card" style="display:grid">
+  <partial id="group-card-partial" name="Shared/_GroupCardPartial" />
+</div>
+<div id="edit-group-card" style="display:none">
+  <partial id="group-card-partial" name="Shared/_EditGroupCardPartial" />
 </div>
 @if (Model.GroupGames.Count > 0)
 {
@@ -46,7 +39,7 @@
       {
         <a asp-page="/Game/@game.Name">
           <div class="game-card">
-            <partial name="Shared/_DefaultGameCoverPartial"/>
+            <partial name="Shared/_DefaultGameCoverPartial" />
             <h3 class="game-name">@game.Name</h3>
           </div>
         </a>
@@ -92,6 +85,35 @@
   <script src="~/js/commentrating.js"></script>
   <script src="~/js/grouppage.js"></script>
   <script type="text/javascript">
+
+    @* Toggle Edit Group Info *@
+    function toggleEditGroupInfo() {
+      const groupCard = document.getElementById("group-card");
+      const editGroupCard = document.getElementById("edit-group-card");
+
+      if (groupCard.style.display === "grid") {
+        groupCard.style.display = "none";
+        editGroupCard.style.display = "grid";
+      } else {
+          groupCard.style.display = "grid";
+          editGroupCard.style.display = "none";
+      }
+    }
+
+    @* Edit Group Info *@
+    $(document).on("submit", "#group-info-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var groupId = form.find("#groupId").val();
+
+      $.ajax({
+        url: `?groupId=${groupId}&handler=UpdateGroupInfo`,
+        type: 'POST',
+        data: form.serialize()
+      });
+
+      toggleEditGroupInfo();
+    });
 
     @* Toggle Group Games List *@
     function toggleGames() {

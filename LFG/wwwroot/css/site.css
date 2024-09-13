@@ -151,6 +151,18 @@ textarea {
   width: 1rem;
 }
 
+#group-info-form {
+  margin-left: 5%;
+  grid-row: 1;
+  grid-column: 2;
+  align-items: flex-start;
+}
+
+.group-public-checkbox {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
 #start-a-thread-form {
   opacity: 1;
   transition: opacity ease-in-out 500ms;
@@ -260,23 +272,18 @@ button:active {
   font-size: 20px;
 }
 
+.edit-button button,
 .edit-button a,
 .back-button a,
-.join-button {
+.join-button,
+.save-changes {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 2rem;
+  width: auto;
+  padding: 1rem;
   font-size: 1.2rem;
-}
-
-.edit-button a,
-.join-button {
-  width: 5rem;
-}
-
-.back-button a {
-  width: 5.5rem;
 }
 
 .join-button {

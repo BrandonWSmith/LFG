@@ -5,6 +5,7 @@ using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -83,14 +84,36 @@ namespace LFG.Pages.Group
       GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ThenBy(t => t.Id).ToListAsync();
     }
 
+    public async Task OnPostUpdateGroupInfo(int groupId)
+    {
+      //Get Group
+      Group = await _context.Groups.FindAsync(groupId);
+
+      //Set Values From Form
+      Group.Name = Request.Form["Group.Name"].ToString();
+      Group.Description = Request.Form["Group.Description"].ToString();
+      Group.Public = Request.Form["Group.Public"].Contains("true");
+      Group.Status = GroupStatus.Parse<GroupStatus>(Request.Form["Group.Status"].ToString());
+
+      //Update Group
+      _context.Groups.Attach(Group).State = EntityState.Modified;
+      await _context.SaveChangesAsync();
+
+      //Call SignalR Method To Refresh Group Info
+      _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", groupId);
+    }
+
     public async Task<IActionResult> OnPostJoin()
     {
+      //Get Group and User Info
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
       User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       UserGroup = await _context.UsersGroups.FirstOrDefaultAsync(u => u.UserId == User.Id && u.GroupId == Group.Id);
 
+      //Check If User Is Already A Member
       if (UserGroup != null) return Page();
 
+      //Add User To Group
       await _context.UsersGroups.AddAsync(new UserGroup
       {
         UserId = User.Id,
@@ -98,7 +121,6 @@ namespace LFG.Pages.Group
         Rank = 1,
         Role = GroupRole.Member
       });
-
       await _context.SaveChangesAsync();
 
       return RedirectToPage();
@@ -117,6 +139,7 @@ namespace LFG.Pages.Group
       await _context.Threads.AddAsync(Thread);
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Threads
       await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
     }
 
@@ -132,23 +155,28 @@ namespace LFG.Pages.Group
       _context.Threads.Attach(Thread).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Threads
       await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
     }
 
     public async Task OnPostDeleteThread(int threadId)
     {
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      //Get Thread And User Info
       Thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadId);
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == Thread.UserId);
 
+      //Check User Created Thread
       if (poster != User)
       {
         return;
       }
 
+      //Delete Thread
       _context.Threads.Remove(Thread);
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Threads
       await _groupPageHubContext.Clients.All.SendAsync("updateThreads", Thread.GroupId);
     }
 
@@ -165,6 +193,7 @@ namespace LFG.Pages.Group
       await _context.Comments.AddAsync(Comment);
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Comments
       await _groupPageHubContext.Clients.All.SendAsync("updateComments", threadId);
     }
 
@@ -178,23 +207,28 @@ namespace LFG.Pages.Group
       _context.Comments.Attach(Comment).State = EntityState.Modified;
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Comments
       await _groupPageHubContext.Clients.All.SendAsync("updateComments", threadId);
     }
 
     public async Task OnPostDeleteComment(int commentId)
     {
-      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
+      //Get Comment and User Info
       Comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+      User = await _context.Users.FirstOrDefaultAsync(u => u.Username == HttpContext.User.Identity.Name);
       var poster = await _context.Users.FirstOrDefaultAsync(u => u.Id == Comment.UserId);
 
+      //Check User Created Comment
       if (poster != User)
       {
         return;
       }
 
+      //Delete Comment
       _context.Comments.Remove(Comment);
       await _context.SaveChangesAsync();
 
+      //Call SignalR Method To Refresh Comments
       await _groupPageHubContext.Clients.All.SendAsync("updateComments", Comment.ThreadId);
     }
 

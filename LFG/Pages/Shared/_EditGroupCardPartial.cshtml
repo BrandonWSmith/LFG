@@ -19,5 +19,42 @@
     <label asp-for="Group.Status"></label>
     <select asp-for="Group.Status" asp-items="Html.GetEnumSelectList<Enums.GroupStatus>()"></select>
   </div>
-  <button class="save-changes" type="submit">Save Changes</button>
+  <button class="save-changes" type="submit" form="group-info-form">Save Changes</button>
 </form>
+<div class="edit-games">
+  <label class="game-label" asp-for="SelectedGame" form="game-form">
+    Games
+    <ul class="game-list">
+      @foreach (var game in @Model.GroupGameNames)
+      {
+        <li>
+          <div class="game">
+            @game
+            <form id="remove-game-form" method="post" asp-page-handler="RemoveGame">
+              <input type="hidden" asp-for="GameToRemove" value="@game" />
+              <button class="bi bi-dash-lg game-button game-remove-button" type="submit" form="remove-game-form"></button>
+            </form>
+          </div>
+        </li>
+      }
+    </ul>
+  </label>
+  @if (@Model.GameExists != null)
+  {
+    <p class="text-danger">@Model.GameExists</p>
+  }
+  <div class="game-search">
+    <label asp-for="SelectedGame" form="game-form">Add A Game</label>
+    <div class="search-bar-group">
+      <input type="search" list="all-games-list" asp-for="SelectedGame" form="game-form" />
+      <datalist id="all-games-list">
+        @foreach (var game in Model.AllGamesList)
+        {
+          <option value="@game"></option>
+        }
+      </datalist>
+      <button class="bi bi-plus-lg game-button" type="submit" form="game-form"></button>
+    </div>
+  </div>
+  <form id="game-form" class="game-form" method="post"></form>
+</div>

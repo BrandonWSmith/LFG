@@ -24,6 +24,18 @@ groupPageConnection.on("updateGroupInfo",
   }
 );
 
+groupPageConnection.on("updateEditGroupInfo",
+  async (groupId) => {
+    await groupPageConnection.invoke("UpdateEditGroupInfo", groupId);
+  }
+);
+
+groupPageConnection.on("updateGroupGames",
+  async (groupId) => {
+    await groupPageConnection.invoke("UpdateGroupGames", groupId);
+  }
+);
+
 //Client Methods
 groupPageConnection.on("refreshThreads",
   (groupThreadsPartial) => {
@@ -43,6 +55,20 @@ groupPageConnection.on("refreshGroupInfo",
   (groupInfoPartial) => {
     var groupCard = document.getElementById("group-card");
     groupCard.innerHTML = groupInfoPartial;
+  }
+);
+
+groupPageConnection.on("refreshEditGroupInfo",
+  (editGroupInfoPartial) => {
+    var editGroupCard = document.getElementById("edit-group-card");
+    editGroupCard.innerHTML = editGroupInfoPartial;
+  }
+);
+
+groupPageConnection.on("refreshGroupGames",
+  (gamesListPartial) => {
+    var gamesList = document.getElementById("games-list");
+    gamesList.innerHTML = gamesListPartial;
   }
 );
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
+using System.Text.RegularExpressions;
 using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
@@ -48,6 +48,18 @@ namespace LFG.Pages.Group
     public List<Game> GroupGames { get; set; }
 
     [BindProperty(SupportsGet = true)]
+    public List<string> GroupGameNames { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public List<string> AllGamesList { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string? SelectedGame { get; set; }
+
+    [BindProperty]
+    public string? GameToRemove { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public List<Thread> GroupThreads { get; set; }
 
     [BindProperty(SupportsGet = true)]
@@ -58,6 +70,9 @@ namespace LFG.Pages.Group
 
     [BindProperty]
     public Comment Comment { get; set; }
+
+    [ViewData]
+    public string GameExists { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -74,12 +89,16 @@ namespace LFG.Pages.Group
       GroupGames = await _context.GroupsGames
         .Where(g => g.GroupId == Group.Id)
         .Include(g => g.Game)
-        .Select(g => new Models.Game
+        .Select(g => new Game
         {
           Name = g.Game.Name,
           CoverId = g.Game.CoverId
         })
         .ToListAsync();
+
+      GroupGameNames = GroupGames.Select(g => g.Name).ToList();
+
+      AllGamesList = await _context.Games.Select(g => g.Name).ToListAsync();
 
       GroupThreads = await _context.Threads.Where(t => t.GroupId == Group.Id).OrderByDescending(t => t.Pinned == true).ThenByDescending(t => t.Created).ThenBy(t => t.Id).ToListAsync();
     }
@@ -100,7 +119,77 @@ namespace LFG.Pages.Group
       await _context.SaveChangesAsync();
 
       //Call SignalR Method To Refresh Group Info
-      _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", groupId);
+      await _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", groupId);
+    }
+
+    public async Task OnPostAddGame()
+    {
+      if (string.IsNullOrEmpty(SelectedGame))
+      {
+        return;
+      }
+
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+
+      var gameId = await _context.Games
+        .Where(g => g.Name == SelectedGame)
+        .Select(g => g.Id)
+        .SingleAsync();
+
+      var gameToAdd = new GroupGame
+      {
+        GroupId = Group.Id,
+        GameId = gameId
+      };
+
+      if (!_context.GroupsGames.Contains(gameToAdd))
+      {
+        await _context.GroupsGames.AddAsync(gameToAdd);
+        await _context.SaveChangesAsync();
+      }
+      else
+      {
+        GameExists = "Game already added";
+      }
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
+      await _groupPageHubContext.Clients.All.SendAsync("updateGroupGames", Group.Id);
+    }
+
+    public async Task OnPostRemoveGame()
+    {
+      if (string.IsNullOrEmpty(GameToRemove))
+      {
+        return;
+      }
+
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+
+      var gameToRemoveName = Request.Form["GameToRemove"].ToString();
+
+      var gameId = await _context.Games
+        .Where(g => g.Name == gameToRemoveName)
+        .Select(g => g.Id)
+        .SingleAsync();
+
+      var gameToRemove = new GroupGame
+      {
+        GroupId = Group.Id,
+        GameId = gameId
+      };
+
+      if (_context.GroupsGames.Contains(gameToRemove))
+      {
+        _context.GroupsGames.Remove(gameToRemove);
+        await _context.SaveChangesAsync();
+      }
+      else
+      {
+        GameExists = "Game has not been added";
+      }
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
+      await _groupPageHubContext.Clients.All.SendAsync("updateGroupGames", Group.Id);
     }
 
     public async Task<IActionResult> OnPostJoin()

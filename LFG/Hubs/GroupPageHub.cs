@@ -1,5 +1,6 @@
 ﻿using LFG.Data;
 using LFG.Interface;
+using LFG.Models;
 using LFG.Pages.Group;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -76,5 +77,47 @@ public class GroupPageHub : Hub
       await _renderer.RenderPartialToStringAsync("_GroupCardPartial", GroupModel);
 
     await Clients.All.SendAsync("refreshGroupInfo", groupCardPartial);
+  }
+  public async Task UpdateEditGroupInfo(int groupId)
+  {
+    GroupModel = new GroupModel(_context, _threadVoteHubContext, _commentVoteHubContext, null);
+    GroupModel.Group = await _context.Groups.FindAsync(groupId);
+    GroupModel.Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == GroupModel.Group.Owner);
+    GroupModel.GroupGames = await _context.GroupsGames
+        .Where(g => g.GroupId == GroupModel.Group.Id)
+        .Include(g => g.Game)
+        .Select(g => new Game
+        {
+          Name = g.Game.Name,
+          CoverId = g.Game.CoverId
+        })
+        .ToListAsync();
+    GroupModel.GroupGameNames = GroupModel.GroupGames.Select(g => g.Name).ToList();
+    GroupModel.AllGamesList = await _context.Games.Select(g => g.Name).ToListAsync();
+
+    var editGroupCardPartial =
+      await _renderer.RenderPartialToStringAsync("_EditGroupCardPartial", GroupModel);
+
+    await Clients.All.SendAsync("refreshEditGroupInfo", editGroupCardPartial);
+  }
+
+  public async Task UpdateGroupGames(int groupId)
+  {
+    GroupModel = new GroupModel(_context, _threadVoteHubContext, _commentVoteHubContext, null);
+    GroupModel.Group = await _context.Groups.FindAsync(groupId);
+    GroupModel.GroupGames = await _context.GroupsGames
+        .Where(g => g.GroupId == GroupModel.Group.Id)
+        .Include(g => g.Game)
+        .Select(g => new Game
+        {
+          Name = g.Game.Name,
+          CoverId = g.Game.CoverId
+        })
+        .ToListAsync();
+
+    var gamesListPartial =
+      await _renderer.RenderPartialToStringAsync("_GamesListPartial", GroupModel);
+
+    await Clients.All.SendAsync("refreshGroupGames", gamesListPartial);
   }
 }

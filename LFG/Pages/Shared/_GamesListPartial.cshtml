@@ -1,0 +1,12 @@
+﻿<h1>Games</h1>
+<div class="group-games">
+  @foreach (var game in Model.GroupGames)
+  {
+    <a asp-page="/Game/@game.Name">
+      <div class="game-card">
+        <partial name="_DefaultGameCoverPartial" />
+        <h3 class="game-name">@game.Name</h3>
+      </div>
+    </a>
+  }
+</div>

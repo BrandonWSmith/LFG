@@ -35,7 +35,7 @@ public class LFGContext : DbContext
     modelBuilder.Entity<GroupGame>(
         eb =>
         {
-          eb.HasNoKey();
+          eb.HasKey(x => new { x.GameId, x.GroupId });
         }
     );
     modelBuilder.Entity<GroupLink>(

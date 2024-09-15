@@ -346,21 +346,21 @@ button:active {
 
 /* Groups/Games */
 .user-groups a,
-.group_games a {
+.group-games a {
   text-decoration: none;
   color: white;
   transition: all 100ms ease-out;
 }
 
   .user-groups a:hover,
-  .group_games a:hover {
+  .group-games a:hover {
     text-decoration: underline;
     transform: scale(1.1);
     transition: all 100ms ease-out;
   }
 
   .user-groups a:active,
-  .group_games a:active {
+  .group-games a:active {
     transform: scale(1);
     transition: all 100ms ease-out;
   }

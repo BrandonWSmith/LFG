@@ -67,26 +67,6 @@ hr {
   font-size: 1.5rem;
 }
 
-.group_games {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-  margin-bottom: 50px;
-}
-
-.game-card {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  margin-bottom: .5rem;
-}
-
-.game-name {
-  margin: .5rem;
-  font-weight: bold;
-}
-
 .start-a-thread-group {
   display: flex;
   flex-flow: column;

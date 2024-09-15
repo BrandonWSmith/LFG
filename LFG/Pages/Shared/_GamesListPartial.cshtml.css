@@ -1,0 +1,35 @@
+﻿h1 {
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  font-weight: bold;
+  height: 64px;
+  background: linear-gradient(#0000ff 0%, #6328D5 86%);
+  background-clip: text;
+  color: transparent;
+}
+
+h3 {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+}
+
+.group-games {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  margin-bottom: 50px;
+}
+
+.game-card {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.game-name {
+  margin: .5rem;
+  font-weight: bold;
+}

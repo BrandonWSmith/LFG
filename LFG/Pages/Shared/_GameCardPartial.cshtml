@@ -1,0 +1,10 @@
+﻿@model LFG.Pages.Group.GameGroupsModel
+
+<partial name="_DefaultGameCoverPartial" />
+<div class="game-info">
+  <h2>@Model.Game.Name</h2>
+  <p><b>Developer: </b>@Model.GameDeveloper.Name</p>
+  <p><b>Publisher: </b>@Model.GamePublisher.Name</p>
+  <p><b>Released: </b>@Model.Game.ReleaseDate.ToString("MMMM d, yyyy")</p>
+  <p><b>Platforms: </b>@string.Join(", ", @Model.GamePlatformNames)</p>
+</div>

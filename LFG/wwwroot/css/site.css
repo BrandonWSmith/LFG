@@ -195,6 +195,10 @@ textarea {
   flex-flow: row;
 }
 
+#group-search-form {
+  flex-flow: row;
+}
+
 /* Buttons/Links */
 .buttons {
   display: flex;
@@ -319,6 +323,27 @@ button:active {
 .comment-block a {
   font-size: 1rem;
 }
+
+.game-group-card {
+  display: flex;
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #555555;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: all 100ms ease-out;
+}
+
+  .game-group-card:hover {
+    transform: scale(1.1);
+    transition: all 100ms ease-out;
+  }
+
+  .game-group-card:active {
+    transform: scale(1);
+    transition: all 100ms ease-out;
+  }
 
 /* Avatars/Game Covers */
 .default-avatar-container,

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LFG.Hubs;
 
 public class CommentVoteHub : Hub
-{ 
+{
   private readonly LFGContext _context;
 
   public CommentVoteHub(LFGContext context)

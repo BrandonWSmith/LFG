@@ -1,0 +1,22 @@
+﻿@model LFG.Pages.Group.GameGroupsModel
+
+@foreach (var group in Model.GameGroups)
+{
+  if (group.Public)
+  {
+    <a class="game-group-card" asp-page="/Group/Group" asp-route-groupname="@group.Name">
+      <partial name="_DefaultGroupAvatarPartial" />
+      <div class="group-info">
+        @if (group.Public)
+        {
+          <p class="group-public"><b>Public</b></p>
+        }
+        <h2>@group.Name</h2>
+        @if (group.Description != null)
+        {
+          <p>@group.Description</p>
+        }
+      </div>
+    </a>
+  }
+}

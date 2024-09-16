@@ -2,7 +2,7 @@
 <div class="group-games">
   @foreach (var game in Model.GroupGames)
   {
-    <a asp-page="/Game/@game.Name">
+    <a asp-page="/Group/GameGroups" asp-route-game="@game.Name">
       <div class="game-card">
         <partial name="_DefaultGameCoverPartial" />
         <h3 class="game-name">@game.Name</h3>

@@ -5,10 +5,8 @@ using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
@@ -190,6 +188,7 @@ namespace LFG.Pages.Group
 
       await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
       await _groupPageHubContext.Clients.All.SendAsync("updateGroupGames", Group.Id);
+
     }
 
     public async Task<IActionResult> OnPostJoin()

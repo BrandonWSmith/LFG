@@ -69,5 +69,6 @@ app.MapRazorPages();
 app.MapHub<ThreadVoteHub>("/hubs/thread-rating");
 app.MapHub<CommentVoteHub>("/hubs/comment-rating");
 app.MapHub<GroupPageHub>("/hubs/group-page");
+app.MapHub<GroupSearchHub>("/hubs/group-search");
 
 app.Run();

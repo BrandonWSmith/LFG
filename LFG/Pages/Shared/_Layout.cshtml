@@ -28,10 +28,10 @@
     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style="width:100%">
       <ul class="side-nav">
         <li class="side-nav-item">
-          <a class="side-nav-link" asp-area="" asp-page="/Index">Home</a>
+          <a class="side-nav-link" asp-area="" asp-page="/Games/Games">Games</a>
         </li>
         <li class="side-nav-item">
-          <a class="side-nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
+            <a class="side-nav-link" asp-area="" asp-page="/Profile/Profile" asp-route-username="@User.Identity.Name">Profile</a>
         </li>
       </ul>
     </div>

@@ -3,7 +3,6 @@ using LFG.Data;
 using LFG.Hubs;
 using LFG.Interface;
 using LFG.Service;
-using LFG.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -70,5 +69,6 @@ app.MapHub<ThreadVoteHub>("/hubs/thread-rating");
 app.MapHub<CommentVoteHub>("/hubs/comment-rating");
 app.MapHub<GroupPageHub>("/hubs/group-page");
 app.MapHub<GroupSearchHub>("/hubs/group-search");
+app.MapHub<GameSearchHub>("/hubs/game-search");
 
 app.Run();

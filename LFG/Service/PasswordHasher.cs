@@ -1,6 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using LFG.Interface;
+using System.Security.Cryptography;
 
-namespace LFG.Utility;
+namespace LFG.Service;
 
 public class PasswordHasher : IPasswordHasher
 {

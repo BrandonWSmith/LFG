@@ -1,0 +1,43 @@
+﻿@page "/Games"
+@model LFG.Pages.Games.GamesModel
+@{
+  ViewData["Title"] = "Games";
+}
+
+<div class="games-heading">
+  <h1>Games</h1>
+  <div class="search-bar-group">
+    <form id="game-search-form" method="post">
+      <input type="search" list="games-list" asp-for="SelectedGame" placeholder="Search" required />
+      <datalist id="games-list">
+        @foreach (var game in Model.Games)
+        {
+          <option value="@game.Name"></option>
+        }
+      </datalist>
+      <button type="submit" class="bi bi-arrow-right search-button"></button>
+    </form>
+  </div>
+</div>
+<div id="games">
+  <partial name="_GamesPartial" />
+</div>
+
+@section Scripts
+{
+  <script src="~/lib/jquery/dist/jquery.js"></script>
+  <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+  <script src="~/js/gamesearch.js"></script>
+  <script type="text/javascript">
+    $(document).on("submit", "#game-search-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=GameSearch`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+  </script>
+}

@@ -1,6 +1,6 @@
 using LFG.Data;
+using LFG.Interface;
 using LFG.Models;
-using LFG.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;

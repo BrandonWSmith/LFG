@@ -2,7 +2,6 @@
 using LFG.Interface;
 using LFG.Pages.Group;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 
 namespace LFG.Hubs;
 
@@ -19,7 +18,7 @@ public class GroupSearchHub : Hub
 
   public GameGroupsModel GameGroupsModel { get; set; }
 
-  public async Task GroupSearch(int gameId, List<Models.Group> gameGroups, string selectedGroup)
+  public async Task GroupSearch(List<Models.Group> gameGroups, string selectedGroup)
   {
     GameGroupsModel = new GameGroupsModel(_context, null);
     GameGroupsModel.GameGroups = gameGroups.Where(g => g.Name.Contains(selectedGroup, StringComparison.CurrentCultureIgnoreCase)).Select(g => g).ToList();

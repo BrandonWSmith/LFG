@@ -1,7 +1,7 @@
 ﻿@page "/{game}/Groups"
 @model GameGroupsModel
 @{
-  ViewData["Title"] = "Groups";
+  ViewData["Title"] = Model.Game.Name + " Groups";
 }
 
 <div class="groups-heading">

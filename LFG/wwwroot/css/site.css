@@ -195,7 +195,8 @@ textarea {
   flex-flow: row;
 }
 
-#group-search-form {
+#group-search-form,
+#game-search-form {
   flex-flow: row;
 }
 
@@ -371,21 +372,33 @@ button:active {
 
 /* Groups/Games */
 .user-groups a,
-.group-games a {
+.group-games a,
+#games a {
   text-decoration: none;
   color: white;
   transition: all 100ms ease-out;
 }
 
   .user-groups a:hover,
-  .group-games a:hover {
+  .group-games a:hover,
+  #games a:hover {
     text-decoration: underline;
+    color: white;
     transform: scale(1.1);
     transition: all 100ms ease-out;
   }
 
   .user-groups a:active,
-  .group-games a:active {
+  .group-games a:active,
+  #games a:active {
     transform: scale(1);
     transition: all 100ms ease-out;
   }
+
+#games a {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-bottom: .5rem;
+  color: white;
+}

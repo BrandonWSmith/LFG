@@ -1,4 +1,4 @@
-﻿namespace LFG.Utility
+﻿namespace LFG.Interface
 {
   public interface IPasswordHasher
   {

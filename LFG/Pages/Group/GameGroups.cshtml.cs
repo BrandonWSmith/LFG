@@ -1,13 +1,15 @@
 using LFG.Data;
 using LFG.Hubs;
 using LFG.Models;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LFG.Pages.Group
 {
+  [Authorize(Policy = "Registered")]
   [BindProperties(SupportsGet = true)]
   public class GameGroupsModel : PageModel
   {
@@ -87,7 +89,7 @@ namespace LFG.Pages.Group
         })
         .ToListAsync();
 
-      await _groupSearchHubContext.Clients.All.SendAsync("groupSearch", Game.Id, GameGroups, SelectedGroup);
+      await _groupSearchHubContext.Clients.All.SendAsync("groupSearch", GameGroups, SelectedGroup);
     }
   }
 }

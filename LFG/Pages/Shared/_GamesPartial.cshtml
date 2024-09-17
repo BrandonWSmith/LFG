@@ -1,0 +1,18 @@
+﻿@model LFG.Pages.Games.GamesModel
+
+@foreach (var game in Model.Games)
+{
+  var groupCount = Model.GameGroupCount.Where(g => g.Key == game.Id).Select(g => g.Value).Single();
+  <a class="game-card" asp-page="/Group/GameGroups" asp-route-game="@game.Name">
+    <partial name="_DefaultGameCoverPartial" />
+    <p class="game-name"><b>@game.Name</b></p>
+    @if (groupCount == 1)
+    {
+      <p>1 Group</p>
+    }
+    else
+    {
+      <p>@groupCount Groups</p>
+    }
+  </a>
+}

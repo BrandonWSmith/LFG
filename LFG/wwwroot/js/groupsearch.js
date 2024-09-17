@@ -6,8 +6,8 @@ var groupSearchConnection = new signalR.HubConnectionBuilder()
 
 //Invoke Hub Methods
 groupSearchConnection.on("groupSearch",
-  async (gameId, gameGroups, selectedGroup) => {
-    await groupSearchConnection.invoke("GroupSearch", gameId, gameGroups, selectedGroup);
+  async (gameGroups, selectedGroup) => {
+    await groupSearchConnection.invoke("GroupSearch", gameGroups, selectedGroup);
   }
 );
 

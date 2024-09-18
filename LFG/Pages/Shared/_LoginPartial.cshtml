@@ -1,12 +1,12 @@
 ﻿@model LFG.Pages.IndexModel
 
-<form method="post" asp-page-handler="LoginAsync">
+<form method="post">
  <div class="text-danger" asp-validation-summary="ModelOnly"></div>
  <div class="text-danger">@Model.ErrorMessage</div>
+ <div class="text-success">@Model.RegisterSuccessMessage</div>
   <div class="form-item">
     <label class="login-form-label" asp-for="User.Username"></label>
     <input class="login-form-input" type="text" asp-for="User.Username" class="form-control"/>
-    <span class="text-danger" asp-validation-for="User.Username"></span>
     </div>
   <div class="form-item">
    <label class="login-form-label" asp-for="User.Password"></label>
@@ -18,6 +18,6 @@
    <input class="login-form-checkbox" type="checkbox" asp-for="User.Persistent"/>
   </div>
   <div class="buttons">
-    <button type="submit">Login</button>
+    <button type="submit" asp-page-handler="Login">Login</button>
   </div>
 </form>

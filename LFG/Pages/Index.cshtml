@@ -50,5 +50,20 @@
       backButton.style.display = "none";
       buttons.style.display = "block";
     }
+
+    @if (Model.ErrorMessage != null)
+    {
+      @:showLogin();
+    }
+
+    @if (Model.RegisterSuccessMessage != null)
+    {
+      @:showLogin();
+    }
+
+    @if (Model.RegisterErrorMessage != null)
+    {
+      @:showRegister();
+    }
   </script>
 }

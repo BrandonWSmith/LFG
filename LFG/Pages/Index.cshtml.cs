@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
@@ -29,6 +30,8 @@ namespace LFG.Pages
     public NewUser NewUser { get; set; }
 
     public string ErrorMessage;
+    public string RegisterErrorMessage { get; set; }
+    public string RegisterSuccessMessage { get; set; }
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -41,7 +44,7 @@ namespace LFG.Pages
       return RedirectToPage("/Profile/Profile", new { foundUser.Username });
     }
 
-    public async Task<IActionResult> OnPostLoginAsync()
+    public async Task<IActionResult> OnPostLogin()
     {
       var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Username);
 
@@ -75,10 +78,12 @@ namespace LFG.Pages
       return RedirectToPage("/Profile/Profile", new { foundUser.Username });
     }
 
-    public async Task<IActionResult> OnPostRegisterAsync()
+    public async Task<IActionResult> OnPostRegister()
     {
-      if (!ModelState.IsValid)
+      ModelState.MaxAllowedErrors = 4;
+      if (ModelState.HasReachedMaxErrors)
       {
+        RegisterErrorMessage = "Fields are invalid. Please try again.";
         return Page();
       }
 
@@ -88,7 +93,9 @@ namespace LFG.Pages
       _context.Users.Add(NewUser);
       await _context.SaveChangesAsync();
 
-      return RedirectToPage("./Login");
+      RegisterSuccessMessage = "Registration successful. Please log in.";
+
+      return Page();
     }
   }
 

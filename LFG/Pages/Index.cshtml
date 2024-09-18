@@ -5,7 +5,50 @@
     Layout = "Shared/_IndexLayout";
 }
 
-<div class="buttons">
-  <a asp-page="/Account/Login">Login</a>
-  <a asp-page="/Account/Register">Register</a>
+<div id="buttons" class="buttons">
+  <button onclick="showLogin()">Login</button>
+  <button onclick="showRegister()">Register</button>
 </div>
+<div id="login" style="display:none">
+  <partial name="_LoginPartial" />
+</div>
+<div id="register" style="display:none">
+  <partial name="_RegisterPartial" />
+</div>
+
+@section Scripts
+{
+  <script type="text/javascript">
+    function showLogin() {
+      const login = document.getElementById("login");
+      const backButton = document.getElementById("back-button");
+      const buttons = document.getElementById("buttons");
+
+      buttons.style.display = "none";
+      login.style.display = "block";
+      backButton.style.display = "block";
+    }
+
+    function showRegister() {
+      const register = document.getElementById("register");
+      const backButton = document.getElementById("back-button");
+      const buttons = document.getElementById("buttons");
+
+      buttons.style.display = "none";
+      register.style.display = "block";
+      backButton.style.display = "block";
+    }
+
+    function goBack() {
+      const login = document.getElementById("login");
+      const register = document.getElementById("register");
+      const backButton = document.getElementById("back-button");
+      const buttons = document.getElementById("buttons");
+
+      login.style.display = "none";
+      register.style.display = "none";
+      backButton.style.display = "none";
+      buttons.style.display = "block";
+    }
+  </script>
+}

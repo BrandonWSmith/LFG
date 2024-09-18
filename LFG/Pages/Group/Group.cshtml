@@ -11,16 +11,18 @@
   <h1>@Model.Group.Name</h1>
   @if (Model.Owner.Username == User.Identity.Name)
   {
-    <div class="edit-button">
-      <button onclick="toggleEditGroupInfo()">Edit</button>>
+    <div class="small-button-block">
+      <button class="edit-button small-button" onclick="toggleEditGroupInfo()">Edit</button>>
     </div>
   }
   @if (Model.UserGroup == null && Model.Group.Public)
   {
-    <form id="join-form" method="post" asp-page-handler="Join"></form>
-    <button class="buttons join-button" form="join-form">
-      Join
-    </button>
+    <div class="small-button-block">
+      <form id="join-form" method="post" asp-page-handler="Join"></form>
+      <button class="join-button small-button" form="join-form">
+        Join
+      </button>
+    </div>
   }
 </div>
 <div id="group-card" style="display:grid">
@@ -42,15 +44,15 @@
     <div class="start-a-thread-block">
       <form id="start-a-thread-form">
         @Html.AntiForgeryToken()
-        <div class="thread-form-item">
+        <div class="form-item">
           <label asp-for="Thread.Title"></label>
           <input type="text" asp-for="Thread.Title" required/>
         </div>
-        <div class="thread-form-item">
+        <div class="form-item">
           <label asp-for="Thread.Body"></label>
           <textarea class="thread-form-body" asp-for="Thread.Body" maxlength="40000" required></textarea>
         </div>
-        <div class="thread-form-item">
+        <div class="form-item">
           <label asp-for="Thread.Pinned"></label>
           <input class="pinned-checkbox" type="checkbox" asp-for="Thread.Pinned"/>
         </div>

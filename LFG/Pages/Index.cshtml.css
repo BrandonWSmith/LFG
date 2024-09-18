@@ -1,3 +1,7 @@
 ﻿.buttons {
-  margin-top: 10px;
+  display: block;
+}
+
+.buttons button {
+  width: 18rem;
 }

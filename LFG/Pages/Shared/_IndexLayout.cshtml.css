@@ -45,12 +45,11 @@
       position: relative;
     }
 
-  .back-button {
+  .small-button-block {
     grid-column: 2;
     grid-row: 1;
     align-self: flex-start;
     align-items: flex-end;
-    width: 45rem;
   }
 
   .greeting {

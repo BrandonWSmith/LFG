@@ -1,0 +1,28 @@
+﻿@model LFG.Pages.IndexModel
+
+<form method="post" asp-page-handler="RegisterAsync">
+  <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+  <div class="form-item">
+    <label class="login-form-label" asp-for="NewUser.Email"></label>
+    <input class="login-form-input" type="text" asp-for="NewUser.Email" class="form-control"/>
+    <span class="text-danger" asp-validation-for="NewUser.Email"></span>
+  </div>
+  <div class="form-item">
+    <label class="login-form-label" asp-for="NewUser.Username"></label>
+    <input class="login-form-input" type="text" asp-for="NewUser.Username" class="form-control"/>
+    <span class="text-danger" asp-validation-for="NewUser.Username"></span>
+  </div>
+  <div class="form-item">
+    <label class="login-form-label" asp-for="NewUser.Password"></label>
+    <input class="login-form-input" type="password" asp-for="NewUser.Password" class="form-control"/>
+    <span class="text-danger" asp-validation-for="NewUser.Password"></span>
+  </div>
+  <div class="form-item">
+    <label class="login-form-label" asp-for="NewUser.ConfirmPassword"></label>
+    <input class="login-form-input" type="password" asp-for="NewUser.ConfirmPassword" class="form-control"/>
+    <span class="text-danger" asp-validation-for="NewUser.ConfirmPassword"></span>
+  </div>
+  <div class="buttons">
+    <button type="submit">Register</button>
+  </div>
+</form>

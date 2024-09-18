@@ -7,8 +7,8 @@
 
 <div class="profile-heading">
   <h1>Profile</h1>
-  <div class="buttons back-button">
-    <a asp-page="/Profile/Profile" asp-route-username="@RouteData.Values["username"]">&#60; Back</a>
+  <div class="buttons small-button-block">
+    <a class="back-button small-button" asp-page="/Profile/Profile" asp-route-username="@RouteData.Values["username"]">&#60; Back</a>
   </div>
 </div>
 <div class="user-card">
@@ -24,24 +24,24 @@
     }
     <h2>@Model.User.Username</h2>
     <form id="profile-form" class="profile-form" method="post" asp-page-handler="OnPostAsync">
-      <div class="profile-form-item">
+      <div class="form-item">
         <label asp-for="User.Email"></label>
         <input asp-for="User.Email" type="text"/>
       </div>
-      <div class="profile-form-item">
+      <div class="form-item">
         <label asp-for="User.FirstName"></label>
         <input asp-for="User.FirstName" type="text"/>
       </div>
-      <div class="profile-form-item">
+      <div class="form-item">
         <label asp-for="User.LastName"></label>
         <input asp-for="User.LastName" type="text"/>
       </div>
-      <div class="profile-form-item">
+      <div class="form-item">
         <label asp-for="User.Bio"></label>
         <textarea asp-for="User.Bio" maxlength="250"></textarea>
       </div>
     </form>
-    <div class="profile-form-item">
+    <div class="form-item">
       <label class="platform-label" asp-for="SelectedPlatform" form="platform-select-form">
         <p>Platforms: </p>
         <ul class="platform-list">
@@ -67,6 +67,6 @@
       </div>
       <form id="platform-select-form" class="platform-select-form" method="post" asp-page-handler="AddPlatform"></form>
     </div>
-    <button class="save" type="submit" form="profile-form">Save</button>
+    <button class="save-changes small-button" type="submit" form="profile-form">Save Changes</button>
   </div>
 </div>

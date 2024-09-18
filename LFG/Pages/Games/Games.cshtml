@@ -7,7 +7,7 @@
 <div class="games-heading">
   <h1>Games</h1>
   <div class="search-bar-group">
-    <form id="game-search-form" method="post">
+    <form id="game-search-form" class="row-form" method="post">
       <input type="search" list="games-list" asp-for="SelectedGame" placeholder="Search" required />
       <datalist id="games-list">
         @foreach (var game in Model.Games)

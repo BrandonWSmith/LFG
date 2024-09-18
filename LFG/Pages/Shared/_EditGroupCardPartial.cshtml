@@ -3,23 +3,23 @@
 <partial name="_DefaultGroupAvatarPartial" />
 <form id="group-info-form" method="post">
   <input id="groupId" type="hidden" asp-for="Group.Id" />
-  <div class="group-info-form-item">
+  <div class="form-item">
     <label asp-for="Group.Name"></label>
     <input asp-for="Group.Name" type="text" required />
   </div>
-  <div class="group-info-form-item">
+  <div class="form-item">
     <label asp-for="Group.Description"></label>
     <textarea asp-for="Group.Description" maxlength="250"></textarea>
   </div>
-  <div class="group-info-form-item">
+  <div class="form-item">
     <label asp-for="Group.Public"></label>
     <input class="group-public-checkbox" asp-for="Group.Public" type="checkbox" />
   </div>
-  <div class="group-info-form-item">
+  <div class="form-item">
     <label asp-for="Group.Status"></label>
     <select asp-for="Group.Status" asp-items="Html.GetEnumSelectList<Enums.GroupStatus>()"></select>
   </div>
-  <button class="save-changes" type="submit" form="group-info-form">Save Changes</button>
+  <button class="save-changes small-button" type="submit" form="group-info-form">Save Changes</button>
 </form>
 <div class="edit-games">
   <label class="game-label" asp-for="SelectedGame" form="game-form">

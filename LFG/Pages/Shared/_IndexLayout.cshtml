@@ -15,12 +15,9 @@
       <img class="logo" src="/images/LFG Icon Outlined.png" alt="logo"/>
       <img class="lfg" src="/images/LFG Letters TNR.png" alt="LFG"/>
     </div>
-    @if (@ViewContext.View.Path.Contains("Login") || @ViewContext.View.Path.Contains("Register"))
-    {
-      <div class="buttons back-button">
-        <a asp-page="/Index">&#60; Back</a>
-      </div>
-    }
+    <div id="back-button" class="buttons small-button-block" style="display:none">
+      <button class="back-button small-button" onclick="goBack()">&#60; Back</button>
+    </div>
     <div class="text-center greeting">
       <div class="welcome">
         <h1 class="display-4">Welcome to<br>Looking For Group</h1>

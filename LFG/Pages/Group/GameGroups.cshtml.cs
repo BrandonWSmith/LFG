@@ -28,6 +28,7 @@ namespace LFG.Pages.Group
     public List<Platform> GamePlatforms { get; set; }
     public List<string> GamePlatformNames { get; set; }
     public List<Models.Group> GameGroups { get; set; }
+    public Models.Group Group { get; set; }
     public string? SelectedGroup { get; set; }
 
     public async Task OnGetAsync()
@@ -90,6 +91,25 @@ namespace LFG.Pages.Group
         .ToListAsync();
 
       await _groupSearchHubContext.Clients.All.SendAsync("groupSearch", GameGroups, SelectedGroup);
+    }
+
+    public async Task OnPostCreateGroup()
+    {
+      Group.Owner = await _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.Id).SingleAsync();
+      Group.Created = DateTime.Now;
+
+      await _context.Groups.AddAsync(Group);
+      await _context.SaveChangesAsync();
+
+      var newGroup = await _context.Groups.FirstOrDefaultAsync(g => g.Name == Group.Name);
+      Game = await _context.Games.FirstOrDefaultAsync(g => g.Name == RouteData.Values["game"]);
+      var newGroupGame = new GroupGame{
+        GroupId = newGroup.Id,
+        GameId = Game.Id
+      };
+
+      await _context.GroupsGames.AddAsync(newGroupGame);
+      await _context.SaveChangesAsync();
     }
   }
 }

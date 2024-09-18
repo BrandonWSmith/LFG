@@ -12,6 +12,7 @@ using Thread = LFG.Models.Thread;
 namespace LFG.Pages.Group
 {
   [Authorize(Policy = "Registered")]
+  [BindProperties(SupportsGet = true)]
   public class GroupModel : PageModel
   {
     private readonly LFGContext _context;
@@ -27,46 +28,19 @@ namespace LFG.Pages.Group
       if (groupPageHubContext != null) _groupPageHubContext = groupPageHubContext;
     }
 
-    [BindProperty(SupportsGet = true)]
     public User User { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public UserGroup? UserGroup { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public GroupRole UserRole { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public Models.Group Group { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public User Owner { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public List<Game> GroupGames { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public List<string> GroupGameNames { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public List<string> AllGamesList { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public string? SelectedGame { get; set; }
-
-    [BindProperty]
     public string? GameToRemove { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public List<Thread> GroupThreads { get; set; }
-
-    [BindProperty(SupportsGet = true)]
     public List<Comment> ThreadComments { get; set; }
-
-    [BindProperty]
     public Thread Thread { get; set; }
-
-    [BindProperty]
     public Comment Comment { get; set; }
 
     [ViewData]

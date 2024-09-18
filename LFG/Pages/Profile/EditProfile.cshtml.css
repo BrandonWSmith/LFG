@@ -33,15 +33,10 @@ p {
   grid-column: 2;
 }
 
-.back-button {
-  grid-column: 3;
-  justify-self: end;
-}
-
 .user-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;
-  margin-top: 3rem;
+  margin: 3rem 0 5rem;
 }
 
 .user-info {
@@ -120,11 +115,4 @@ p {
 
 .platform-remove-button::before {
   transform: scale(.35);
-}
-
-.save {
-  height: 2rem;
-  width: 5rem;
-  font-size: 1.5rem;
-  margin: .5rem 0 5rem;
 }

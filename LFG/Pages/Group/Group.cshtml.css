@@ -37,13 +37,6 @@ hr {
   grid-column: 2;
 }
 
-.edit-button,
-.join-button {
-  grid-row: 1;
-  grid-column: 3;
-  justify-self: end;
-}
-
 #group-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;
@@ -99,9 +92,7 @@ hr {
   border-radius: 25px;
 }
 
-.thread-form-item {
-  display: flex;
-  flex-flow: column;
+.form-item {
   width: 100%;
 }
 

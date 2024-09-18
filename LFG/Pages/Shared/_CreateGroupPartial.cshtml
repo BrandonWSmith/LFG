@@ -1,0 +1,21 @@
+﻿@model LFG.Pages.Group.GameGroupsModel
+
+<form id="create-group-form" method="post">
+  <div class="form-item">
+    <label asp-for="Group.Name"></label>
+    <input asp-for="Group.Name" required />
+  </div>
+  <div class="form-item">
+    <label asp-for="Group.Description"></label>
+    <textarea asp-for="Group.Description" maxlength="250"></textarea>
+  </div>
+  <div class="form-item">
+    <label asp-for="Group.Public"></label>
+    <input class="group-public-checkbox" asp-for="Group.Public" type="checkbox" />
+  </div>
+  <div class="form-item">
+    <label asp-for="Group.Status"></label>
+    <select asp-for="Group.Status" asp-items="Html.GetEnumSelectList<Enums.GroupStatus>()"></select>
+  </div>
+  <button class="save-changes small-button" type="submit">Create Group</button>
+</form>

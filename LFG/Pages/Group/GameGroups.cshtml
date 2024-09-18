@@ -7,7 +7,7 @@
 <div class="groups-heading">
   <h1>@Model.Game.Name<br/>Groups</h1>
   <div class="search-bar-group">
-    <form id="group-search-form" method="post">
+    <form id="group-search-form" class="row-form" method="post">
       <input type="search" list="game-groups-list" asp-for="SelectedGroup" placeholder="Search" required />
       <datalist id="game-groups-list">
         @foreach (var group in Model.GameGroups)
@@ -22,6 +22,10 @@
 <div class="game-card">
   <partial name="_GameCardPartial" />
 </div>
+<button onclick="toggleCreateGroup()">Start A Group</button>
+<div id="create-group-block" style="display:none">
+  <partial name="_CreateGroupPartial" />
+</div>
 <div id="groups" class="game-groups">
   <partial name="_GameGroupCardsPartial" />
 </div>
@@ -32,12 +36,33 @@
   <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
   <script src="~/js/groupsearch.js"></script>
   <script type="text/javascript">
+    function toggleCreateGroup() {
+      const createGroup = document.getElementById("create-group-block");
+
+      if (createGroup.style.display === "none") {
+        createGroup.style.display = "flex";
+      } else {
+        createGroup.style.display = "none";
+      }
+    }
+
     $(document).on("submit", "#group-search-form", function (e) {
       e.preventDefault();
       var form = $(this);
 
       $.ajax({
         url: `?handler=GroupSearch`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    $(document).on("submit", "#create-group-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=CreateGroup`,
         type: 'POST',
         data: form.serialize()
       });

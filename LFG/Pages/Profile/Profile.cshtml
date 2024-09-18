@@ -9,8 +9,8 @@
   <h1>Profile</h1>
   @if (@RouteData.Values["username"].ToString() == User.Identity.Name)
   {
-    <div class="buttons edit-button">
-      <a asp-page="/Profile/EditProfile" asp-route-username="@RouteData.Values["username"]">Edit</a>
+    <div class="buttons small-button-block">
+      <a class="edit-button small-button" asp-page="/Profile/EditProfile" asp-route-username="@RouteData.Values["username"]">Edit</a>
     </div>
   }
 </div>

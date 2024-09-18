@@ -86,9 +86,7 @@ h2 {
   width: 100%;
 }
 
-.thread-form-item {
-  display: flex;
-  flex-flow: column;
+.form-item {
   width: 100%;
 }
 

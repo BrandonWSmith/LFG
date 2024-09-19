@@ -3,7 +3,9 @@ using LFG.Hubs;
 using LFG.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +32,7 @@ namespace LFG.Pages.Group
     public List<Models.Group> GameGroups { get; set; }
     public Models.Group Group { get; set; }
     public string? SelectedGroup { get; set; }
+    public string? CreateGroupErrorMessage { get; set; } = null;
 
     public async Task OnGetAsync()
     {
@@ -93,8 +96,16 @@ namespace LFG.Pages.Group
       await _groupSearchHubContext.Clients.All.SendAsync("groupSearch", GameGroups, SelectedGroup);
     }
 
-    public async Task OnPostCreateGroup()
+    public async Task<IActionResult> OnPostCreateGroup()
     {
+      ModelState.MaxAllowedErrors = 4;
+      if (ModelState.HasReachedMaxErrors)
+      {
+        CreateGroupErrorMessage = "Fields are invalid. Please try again.";
+        await OnGetAsync();
+        return Page();
+      }
+
       Group.Owner = await _context.Users.Where(u => u.Username == User.Identity.Name).Select(u => u.Id).SingleAsync();
       Group.Created = DateTime.Now;
 
@@ -103,13 +114,24 @@ namespace LFG.Pages.Group
 
       var newGroup = await _context.Groups.FirstOrDefaultAsync(g => g.Name == Group.Name);
       Game = await _context.Games.FirstOrDefaultAsync(g => g.Name == RouteData.Values["game"]);
-      var newGroupGame = new GroupGame{
+      var newGroupGame = new GroupGame
+      {
         GroupId = newGroup.Id,
         GameId = Game.Id
       };
+      var newUserGroup = new UserGroup
+      {
+        UserId = Group.Owner,
+        GroupId = newGroup.Id,
+        Rank = 1,
+        Role = Enums.GroupRole.Owner
+      };
 
       await _context.GroupsGames.AddAsync(newGroupGame);
+      await _context.UsersGroups.AddAsync(newUserGroup);
       await _context.SaveChangesAsync();
+
+      return RedirectToPage("/Group/Group", new { groupname = newGroup.Name });
     }
   }
 }

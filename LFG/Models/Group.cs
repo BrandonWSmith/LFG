@@ -1,4 +1,5 @@
 ﻿using LFG.Enums;
+using LFG.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,8 +12,9 @@ namespace LFG.Models
     public int Id { get; set; }
 
     [Required]
+    [UniqueGroupName]
     [Length(3, 30)]
-    [RegularExpression(@"^[A-Za-z]+\\\\w{2,19}")]
+    [RegularExpression(@"^[A-Za-z]+[\w -]+")]
     public string Name { get; set; }
 
     [Required]

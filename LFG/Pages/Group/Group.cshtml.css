@@ -56,7 +56,7 @@ hr {
 
 #toggle-games {
   height: 3rem;
-  width: 10rem;
+  width: 15rem;
   font-size: 1.5rem;
 }
 
@@ -69,8 +69,6 @@ hr {
 #start-a-thread-button,
 .start-a-thread-block button {
   height: 3rem;
-  width: auto;
-  padding: 0 1rem;
   font-size: 1.5rem;
   float: left;
 }

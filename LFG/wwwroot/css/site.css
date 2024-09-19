@@ -151,6 +151,12 @@ textarea {
   flex-flow: column;
 }
 
+#create-group-form {
+  align-items: flex-start;
+  opacity: 1;
+  transition: opacity ease-in-out 500ms;
+}
+
 #group-info-form {
   margin-left: 5%;
   grid-row: 1;
@@ -270,9 +276,9 @@ button:active {
   font-size: 1.2rem;
 }
 
-/*.join-button {
-  margin: 20px;
-}*/
+.save-changes {
+  align-self: center;
+}
 
 .thread-block a {
   font-family: 'IBM Plex Mono', monospace, sans-serif;

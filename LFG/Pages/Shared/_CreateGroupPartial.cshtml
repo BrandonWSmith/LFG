@@ -1,9 +1,12 @@
 ﻿@model LFG.Pages.Group.GameGroupsModel
 
 <form id="create-group-form" method="post">
+  <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+  <div class="text-danger">@Model.CreateGroupErrorMessage</div>
   <div class="form-item">
     <label asp-for="Group.Name"></label>
     <input asp-for="Group.Name" required />
+    <span class="text-danger" asp-validation-for="Group.Name"></span>
   </div>
   <div class="form-item">
     <label asp-for="Group.Description"></label>
@@ -17,5 +20,5 @@
     <label asp-for="Group.Status"></label>
     <select asp-for="Group.Status" asp-items="Html.GetEnumSelectList<Enums.GroupStatus>()"></select>
   </div>
-  <button class="save-changes small-button" type="submit">Create Group</button>
+  <button class="save-changes small-button" type="submit" asp-page-handler="CreateGroup">Create Group</button>
 </form>

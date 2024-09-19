@@ -22,9 +22,13 @@
 <div class="game-card">
   <partial name="_GameCardPartial" />
 </div>
-<button onclick="toggleCreateGroup()">Start A Group</button>
-<div id="create-group-block" style="display:none">
-  <partial name="_CreateGroupPartial" />
+<div class="create-group-group">
+  <button class="create-group-button" onclick="toggleCreateGroup()">Start A Group</button>
+  <div id="create-group" style="height: 0rem;">
+    <div class="create-group-block">
+      <partial name="_CreateGroupPartial" />
+    </div>
+  </div>
 </div>
 <div id="groups" class="game-groups">
   <partial name="_GameGroupCardsPartial" />
@@ -32,17 +36,34 @@
 
 @section Scripts
 {
+  <partial name="_ValidationScriptsPartial" />
   <script src="~/lib/jquery/dist/jquery.js"></script>
   <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
   <script src="~/js/groupsearch.js"></script>
   <script type="text/javascript">
     function toggleCreateGroup() {
-      const createGroup = document.getElementById("create-group-block");
+      const createGroup = document.getElementById("create-group");
+      const createGroupForm = document.getElementById("create-group-form");
 
-      if (createGroup.style.display === "none") {
-        createGroup.style.display = "flex";
+      if (createGroup.style.height === "0rem") {
+        createGroup.style.height = "33rem";
+        createGroupForm.style.opacity = "1";
       } else {
-        createGroup.style.display = "none";
+        createGroup.style.height = "0rem";
+        createGroupForm.style.opacity = "0";
+      }
+    }
+
+    function toggleCreateGroupWithErrors() {
+      const createGroup = document.getElementById("create-group");
+      const createGroupForm = document.getElementById("create-group-form");
+
+      if (createGroup.style.height === "0rem") {
+        createGroup.style.height = "36rem";
+        createGroupForm.style.opacity = "1";
+      } else {
+        createGroup.style.height = "0rem";
+        createGroupForm.style.opacity = "0";
       }
     }
 
@@ -57,15 +78,9 @@
       });
     });
 
-    $(document).on("submit", "#create-group-form", function (e) {
-      e.preventDefault();
-      var form = $(this);
-
-      $.ajax({
-        url: `?handler=CreateGroup`,
-        type: 'POST',
-        data: form.serialize()
-      });
-    });
+    @if (Model.CreateGroupErrorMessage != null)
+    {
+      @:toggleCreateGroupWithErrors();
+    }
   </script>
 }

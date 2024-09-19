@@ -10,39 +10,19 @@
   @if (@RouteData.Values["username"].ToString() == User.Identity.Name)
   {
     <div class="buttons small-button-block">
-      <a class="edit-button small-button" asp-page="/Profile/EditProfile" asp-route-username="@RouteData.Values["username"]">Edit</a>
+      <button class="edit-button small-button" onclick="toggleEditUserInfo()">Edit</button>
     </div>
   }
 </div>
-<div class="user-card">
-  <partial name="Shared/_DefaultUserAvatarPartial"/>
-  <div class="user-info">
-    <h2>@Model.User.Username</h2>
-    @if (@Model.User.Score > 0)
-    {
-      <div class="score">
-        <div class="score-icon"><i class="bi bi-shift-fill shift"></i><i class="bi bi-dpad-fill dpad"></i></div>
-        <h3>@string.Format("{0:N0}", Model.User.Score)</h3>
-      </div>
-    }
-    @if (@Model.User is { FirstName: not null, LastName: not null })
-    {
-      <p><b>Name: </b>@Model.User.FirstName @Model.User.LastName</p>
-    }
-    else if (@Model.User.FirstName != null)
-    {
-      <p><b>Name: </b>@Model.User.FirstName</p>
-    }
-    <p><b>Joined: </b>@Model.User.Created.ToString("MMMM d, yyyy")</p>
-    @if(@Model.User.Bio != null)
-    {
-      <p><b>Bio: </b>@Model.User.Bio</p>
-    }
-    @if (@Model.UserPlatforms.Count > 0)
-    {
-      <p><b>Platforms: </b>@string.Join(", ", @Model.UserPlatformNames)</p>
-    }
-  </div>
+<div id="user-card" style="display:grid">
+  @if (@Model.UpdateMessage != null)
+  {
+    <p class="update-message text-success">@Model.UpdateMessage</p>
+  }
+  <partial name="_ProfilePartial" />
+</div>
+<div id="edit-user-card" style="display:none">
+  <partial name="_EditProfilePartial" />
 </div>
 @if (@Model.UserGroups.Count > 0)
 {
@@ -58,4 +38,71 @@
       </a>
     }
   </div>
+}
+
+@section Scripts
+{
+  <partial name="_ValidationScriptsPartial" />
+  <script src="~/lib/jquery/dist/jquery.js"></script>
+  <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+  <script src="~/js/profile.js"></script>
+  <script type="text/javascript">
+
+    @* Toggle Edit User Info *@
+    function toggleEditUserInfo() {
+      const userCard = document.getElementById("user-card");
+      const editUserCard = document.getElementById("edit-user-card");
+
+      if (userCard.style.display === "grid") {
+        userCard.style.display = "none";
+        editUserCard.style.display = "grid";
+      } else {
+        userCard.style.display = "grid";
+        editUserCard.style.display = "none";
+      }
+    }
+
+    @* Edit User Info *@
+    $(document).on("submit", "#profile-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=UpdateUserInfo`,
+        type: 'POST',
+        data: form.serialize()
+      });
+
+      toggleEditUserInfo();
+    });
+
+    @* Add Platform *@
+      $(document).on("submit", "#platform-select-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=AddPlatform`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Remove Platform *@
+    $(document).on("submit", "#remove-platform-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=RemovePlatform`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @if (Model.PlatformExists != null)
+    {
+      @:toggleEditUserInfo();
+    }
+  </script>
 }

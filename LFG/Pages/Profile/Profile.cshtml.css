@@ -29,39 +29,11 @@ h3 {
   grid-column: 2;
 }
 
-.user-card {
+#user-card,
+#edit-user-card {
   display: grid;
   grid-template-columns: 12.5rem 1fr;
   margin-top: 3rem;
-}
-
-.user-info {
-  margin-left: 5%;
-}
-
-.score {
-  display: flex;
-  align-items: flex-start;
-}
-
-.score-icon {
-  height: 1.4rem;
-  width: 1.7rem;
-  margin-bottom: .5rem;
-}
-
-.shift {
-  position: absolute;
-  transform: scale(1.6);
-  background: linear-gradient(#0000ff 0%, #6328D5 75%);
-  background-clip: text;
-  color: transparent;
-}
-
-.dpad {
-  position: absolute;
-  color: white;
-  transform: scale(.75);
 }
 
 .user-groups {

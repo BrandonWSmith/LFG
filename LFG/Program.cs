@@ -70,5 +70,6 @@ app.MapHub<CommentVoteHub>("/hubs/comment-rating");
 app.MapHub<GroupPageHub>("/hubs/group-page");
 app.MapHub<GroupSearchHub>("/hubs/group-search");
 app.MapHub<GameSearchHub>("/hubs/game-search");
+app.MapHub<ProfileHub>("/hubs/profile");
 
 app.Run();

@@ -29,9 +29,9 @@ p {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.profile-heading h1 {
-  grid-column: 2;
-}
+  .profile-heading h1 {
+    grid-column: 2;
+  }
 
 .user-card {
   display: grid;
@@ -100,9 +100,9 @@ p {
   text-decoration: none;
 }
 
-.platform-button::before {
-  transform: scale(.5);
-}
+  .platform-button::before {
+    transform: scale(.5);
+  }
 
   .platform-button:hover {
     box-shadow: 1px 1px 4px;
@@ -115,6 +115,6 @@ p {
   background: red;
 }
 
-.platform-remove-button::before {
-  transform: scale(.35);
-}
+  .platform-remove-button::before {
+    transform: scale(.35);
+  }

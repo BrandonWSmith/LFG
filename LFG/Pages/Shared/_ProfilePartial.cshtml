@@ -1,0 +1,30 @@
+﻿@model LFG.Pages.Profile.ProfileModel
+
+<partial name="_DefaultUserAvatarPartial"/>
+<div class="user-info">
+  <h2>@Model.User.Username</h2>
+  @if (Model.User.Score > 0)
+  {
+    <div class="score">
+      <div class="score-icon"><i class="bi bi-shift-fill shift"></i><i class="bi bi-dpad-fill dpad"></i></div>
+      <h3>@string.Format("{0:N0}", Model.User.Score)</h3>
+    </div>
+  }
+  @if (Model.User is { FirstName: not null, LastName: not null })
+  {
+    <p><b>Name: </b>@Model.User.FirstName @Model.User.LastName</p>
+  }
+  else if (Model.User.FirstName != null)
+  {
+    <p><b>Name: </b>@Model.User.FirstName</p>
+  }
+  <p><b>Joined: </b>@Model.User.Created.ToString("MMMM d, yyyy")</p>
+  @if(Model.User.Bio != null)
+  {
+    <p><b>Bio: </b>@Model.User.Bio</p>
+  }
+  @if (Model.UserPlatforms.Count > 0)
+  {
+    <p><b>Platforms: </b>@string.Join(", ", Model.UserPlatformNames)</p>
+  }
+</div>

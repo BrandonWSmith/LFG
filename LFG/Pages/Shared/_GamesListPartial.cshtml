@@ -1,5 +1,11 @@
 ﻿<h1>Games</h1>
 <div class="group-games">
+  @if (Model.GroupGames.Count == 0)
+  {
+    <div class="game-card">
+      <h3 class="no-games">No Games Yet</h3>
+    </div>
+  }
   @foreach (var game in Model.GroupGames)
   {
     <a asp-page="/Group/GameGroups" asp-route-game="@game.Name">

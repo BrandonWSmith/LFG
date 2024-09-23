@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.DirectoryServices.ActiveDirectory;
+using System.Text.RegularExpressions;
 using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
@@ -33,18 +37,30 @@ namespace LFG.Pages.Group
     public GroupRole UserRole { get; set; }
     public Models.Group Group { get; set; }
     public User Owner { get; set; }
+    public int GroupMemberCount { get; set; }
+    public List<GroupLink> GroupLinks { get; set; }
+    public Website SelectedSite { get; set; }
+
+    [DataType(DataType.Url)]
+    [Display(Name = "Link")]
+    public string? InputLink { get; set; }
+
+    [RegularExpression(@"[\w \-%]+", ErrorMessage = "Invalid URL")]
+    [Display(Name = "Link")]
+    public string? InputSubdirectory { get; set; }
+    public string LinkToRemove { get; set; }
     public List<Game> GroupGames { get; set; }
     public List<string> GroupGameNames { get; set; }
     public List<string> AllGamesList { get; set; }
-    public string? SelectedGame { get; set; }
-    public string? GameToRemove { get; set; }
+    public string SelectedGame { get; set; }
+    public string GameToRemove { get; set; }
     public List<Thread> GroupThreads { get; set; }
     public List<Comment> ThreadComments { get; set; }
     public Thread Thread { get; set; }
     public Comment Comment { get; set; }
 
-    [ViewData]
-    public string GameExists { get; set; }
+    public string? LinkExists { get; set; }
+    public string? GameExists { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -58,6 +74,8 @@ namespace LFG.Pages.Group
         UserRole = UserGroup.Role;
       }
 
+      GroupMemberCount = _context.UsersGroups.Where(g => g.GroupId == Group.Id).Count();
+      GroupLinks = await _context.GroupsLinks.Where(l => l.GroupId == Group.Id).ToListAsync();
       GroupGames = await _context.GroupsGames
         .Where(g => g.GroupId == Group.Id)
         .Include(g => g.Game)
@@ -94,9 +112,117 @@ namespace LFG.Pages.Group
       await _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", groupId);
     }
 
+    public async Task OnPostUpdateLinkForm()
+    {
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateLinkForm", Group.Id, SelectedSite);
+    }
+
+    public async Task OnPostAddLink()
+    {
+      ModelState.MaxAllowedErrors = 13;
+      if (ModelState.HasReachedMaxErrors)
+      {
+        return;
+      }
+
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+
+      GroupLink linkToAdd;
+      if (SelectedSite == Website.Other) 
+      {
+        linkToAdd = new GroupLink
+        {
+          GroupId = Group.Id,
+          SiteName = SelectedSite,
+          Link = InputLink
+        };
+      }
+      else
+      {
+        string baseUri = "";
+        switch (SelectedSite)
+        {
+          case Website.Discord:
+            baseUri = "https://discord.gg/";
+            break;
+          case Website.Facebook:
+            baseUri = "https://facebook.com/groups/";
+            break;
+          case Website.Twitter:
+            baseUri = "https://x.com/";
+            break;
+          case Website.Instagram:
+            baseUri = "https://instagram.com/";
+            break;
+          case Website.Reddit:
+            baseUri = "https://reddit.com/r/";
+            break;
+          case Website.Steam:
+            baseUri = "https://steamcommunity.com/groups/";
+            break;
+        }
+
+        linkToAdd = new GroupLink
+        {
+          GroupId = Group.Id,
+          SiteName = SelectedSite,
+          Link = baseUri + InputSubdirectory
+        };
+      }
+
+      if (!_context.GroupsLinks.Contains(linkToAdd))
+      {
+        await _context.GroupsLinks.AddAsync(linkToAdd);
+        await _context.SaveChangesAsync();
+      }
+      else
+      {
+        LinkExists = "Link already added";
+      }
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", Group.Id);
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
+    }
+
+    public async Task OnPostRemoveLink()
+    {
+      ModelState.MaxAllowedErrors = 12;
+      if (ModelState.HasReachedMaxErrors)
+      {
+        return;
+      }
+
+      Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
+
+      var linkToRemoveLink = _context.GroupsLinks.Where(l => l.SiteName == Enum.Parse<Website>(LinkToRemove) && l.GroupId == Group.Id).Select(l => l.Link).Single();
+
+      var linkToRemove = new GroupLink
+      {
+        GroupId = Group.Id,
+        SiteName = Enum.Parse<Website>(LinkToRemove),
+        Link = linkToRemoveLink
+      };
+
+      if (_context.GroupsLinks.Contains(linkToRemove))
+      {
+        _context.GroupsLinks.Remove(linkToRemove);
+        await _context.SaveChangesAsync();
+      }
+      else
+      {
+        LinkExists = "Link has not been added";
+      }
+
+      await _groupPageHubContext.Clients.All.SendAsync("updateGroupInfo", Group.Id);
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
+    }
+
     public async Task OnPostAddGame()
     {
-      if (string.IsNullOrEmpty(SelectedGame))
+      ModelState.MaxAllowedErrors = 12;
+      if (ModelState.HasReachedMaxErrors)
       {
         return;
       }
@@ -124,23 +250,22 @@ namespace LFG.Pages.Group
         GameExists = "Game already added";
       }
 
-      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
       await _groupPageHubContext.Clients.All.SendAsync("updateGroupGames", Group.Id);
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
     }
 
     public async Task OnPostRemoveGame()
     {
-      if (string.IsNullOrEmpty(GameToRemove))
+      ModelState.MaxAllowedErrors = 12;
+      if (ModelState.HasReachedMaxErrors)
       {
         return;
       }
 
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
 
-      var gameToRemoveName = Request.Form["GameToRemove"].ToString();
-
       var gameId = await _context.Games
-        .Where(g => g.Name == gameToRemoveName)
+        .Where(g => g.Name == GameToRemove)
         .Select(g => g.Id)
         .SingleAsync();
 
@@ -160,9 +285,8 @@ namespace LFG.Pages.Group
         GameExists = "Game has not been added";
       }
 
-      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
       await _groupPageHubContext.Clients.All.SendAsync("updateGroupGames", Group.Id);
-
+      await _groupPageHubContext.Clients.All.SendAsync("updateEditGroupInfo", Group.Id);
     }
 
     public async Task<IActionResult> OnPostJoin()

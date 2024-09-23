@@ -1,13 +1,60 @@
-﻿@model LFG.Pages.Group.GroupModel
+﻿@using LFG.Enums
+@model LFG.Pages.Group.GroupModel
 
 <partial name="_DefaultGroupAvatarPartial" />
 <div class="group-info">
   <h2>@Model.Group.Name</h2>
   <p><b>Owner: </b>@Model.Owner.Username</p>
   <p><b>Created: </b>@Model.Group.Created.ToString("MMMM d, yyyy")</p>
+  <p><b>Members: </b>@Model.GroupMemberCount</p>
   @if (Model.Group.Description != null)
   {
     <p><b>Bio: </b>@Model.Group.Description</p>
   }
   <p><b>Status: </b>@Model.Group.Status</p>
+  <p><b>Links: </b></p>
+  <div class="links-block">
+    @foreach (var link in Model.GroupLinks)
+    {
+        @switch (link.SiteName)
+        {
+          case Website.Discord:
+            <a href="@link.Link" class="site-block" aria-label="Discord @link.Link">
+              <div class="bi bi-discord site-icon"></div>
+            </a>
+            break;
+          case Website.Facebook:
+            <a href="@link.Link" class="site-block" aria-label="Facebook @link.Link">
+              <div class="bi bi-facebook site-icon"></div>
+            </a>
+            break;
+          case Website.Twitter:
+            <a href="@link.Link" class="site-block" aria-label="Twitter @link.Link">
+              <div class="bi bi-twitter-x site-icon"></div>
+            </a>
+            break;
+          case Website.Instagram:
+            <a href="@link.Link" class="site-block" aria-label="Instagram @link.Link">
+              <div class="bi bi-instagram site-icon"></div>
+            </a>
+            break;
+          case Website.Reddit:
+            <a href="@link.Link" class="site-block" aria-label="Reddit @link.Link">
+              <div class="bi bi-reddit site-icon"></div>
+            </a>
+            break;
+          case Website.Steam:
+            <a href="@link.Link" class="site-block" aria-label="Steam @link.Link">
+              <div class="bi bi-steam site-icon"></div>
+            </a>
+            break;
+          default:
+            <a href="@link.Link" class="default-site-block" aria-label="@link.Link">
+              <div class="bi bi-link site-icon"></div>
+              @(link.Link.Substring(8))
+            </a>
+            break;
+        }
+    }
+  </div>
 </div>

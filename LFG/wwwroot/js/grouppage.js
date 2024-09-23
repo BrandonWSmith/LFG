@@ -26,7 +26,13 @@ groupPageConnection.on("updateGroupInfo",
 
 groupPageConnection.on("updateEditGroupInfo",
   async (groupId) => {
-    await groupPageConnection.invoke("UpdateEditGroupInfo", groupId);
+    await groupPageConnection.invoke("UpdateEditGroupInfo", groupId, null);
+  }
+);
+
+groupPageConnection.on("updateLinkForm",
+  async (groupId, selectedSite) => {
+    await groupPageConnection.invoke("UpdateEditGroupInfo", groupId, selectedSite);
   }
 );
 

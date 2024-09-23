@@ -31,13 +31,10 @@
 <div id="edit-group-card" style="display:none">
   <partial id="group-card-partial" name="Shared/_EditGroupCardPartial" />
 </div>
-@if (Model.GroupGames.Count > 0)
-{
-  <button id="toggle-games" onclick="toggleGames()">Show Games</button>
-  <div id="games-list">
-    <partial name="_GamesListPartial" />
-  </div>
-}
+<button id="toggle-games" onclick="toggleGames()">Show Games</button>
+<div id="games-list">
+  <partial name="_GamesListPartial" />
+</div>
 <div class="start-a-thread-group">
   <button id="start-a-thread-button" onclick="toggleStartAThread()">Start A Thread</button>
   <div id="start-a-thread" style="height: 0rem;">
@@ -78,6 +75,21 @@
   <script src="~/js/grouppage.js"></script>
   <script type="text/javascript">
 
+    $(document).on("change", "#site-select", function (e) {
+      e.preventDefault();
+      var form = $(this);
+      var token = $('input[name="__RequestVerificationToken"]').val();
+
+      $.ajax({
+        url: `?handler=UpdateLinkForm`,
+        type: 'POST',
+        headers: {
+          RequestVerificationToken: token
+        },
+        data: form.serialize()
+      });
+    });
+
     @* Toggle Edit Group Info *@
     function toggleEditGroupInfo() {
       const groupCard = document.getElementById("group-card");
@@ -105,6 +117,30 @@
       });
 
       toggleEditGroupInfo();
+    });
+
+     @* Add Link *@
+    $(document).on("submit", "#link-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=AddLink`,
+        type: 'POST',
+        data: form.serialize()
+      });
+    });
+
+    @* Remove Link *@
+    $(document).on("submit", "#remove-link-form", function (e) {
+      e.preventDefault();
+      var form = $(this);
+
+      $.ajax({
+        url: `?handler=RemoveLink`,
+        type: 'POST',
+        data: form.serialize()
+      });
     });
 
     @* Add Game *@

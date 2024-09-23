@@ -41,7 +41,7 @@ public class LFGContext : DbContext
     modelBuilder.Entity<GroupLink>(
         eb =>
         {
-          eb.HasNoKey();
+          eb.HasKey(x => new { x.GroupId, x.SiteName });
         }
     );
     modelBuilder.Entity<UserFriend>(

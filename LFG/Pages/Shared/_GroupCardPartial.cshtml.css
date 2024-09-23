@@ -11,3 +11,60 @@ h2 {
 .group-info {
   margin-left: 5%;
 }
+
+.links-block {
+  display: flex;
+
+}
+
+.site-icon {
+  width: fit-content;
+}
+
+.site-icon::before {
+  transform: scale(2);
+  margin: 1rem;
+}
+
+.site-block {
+  display: flex;
+  color: white;
+  width: fit-content;
+  transition: all 100ms ease-out;
+}
+
+.site-block:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: all 100ms ease-out;
+}
+
+  .site-block:active {
+    transform: scale(1);
+    transition: all 100ms ease-out;
+    color: #3F3F3F;
+  }
+
+.default-site-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  color: white;
+  text-decoration: none;
+  transition: all 100ms ease-out;
+}
+
+  .default-site-block:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    transform: scale(1.1);
+    transition: all 100ms ease-out;
+  }
+
+  .default-site-block:active {
+    text-decoration: none;
+    transform: scale(1);
+    transition: all 100ms ease-out;
+    color: #3F3F3F;
+  }

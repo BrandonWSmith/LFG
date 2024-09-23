@@ -1,4 +1,5 @@
-﻿@model LFG.Pages.Group.GroupModel
+﻿@using LFG.Enums
+@model LFG.Pages.Group.GroupModel
 
 <partial name="_DefaultGroupAvatarPartial" />
 <form id="group-info-form" method="post">
@@ -21,18 +22,135 @@
   </div>
   <button class="save-changes small-button" type="submit" form="group-info-form">Save Changes</button>
 </form>
+<div class="edit-links">
+  <label class="link-label" asp-for="GroupLinks">
+    Links
+    <ul class="link-list">
+      @if (Model.GroupLinks.Count == 0)
+      {
+        <li class="no-links">None</li>
+      }
+      @foreach (var link in Model.GroupLinks)
+      {
+        <li class="link">
+          @switch (link.SiteName)
+          {
+            case Website.Discord:
+              <div class="site-block" aria-label="Discord">
+                <div class="bi bi-discord site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            case Website.Facebook:
+              <div class="site-block" aria-label="Facebook">
+                <div class="bi bi-facebook site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            case Website.Twitter:
+              <div class="site-block" aria-label="Twitter">
+                <div class="bi bi-twitter-x site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            case Website.Instagram:
+              <div class="site-block" aria-label="Instagram">
+                <div class="bi bi-instagram site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            case Website.Reddit:
+              <div class="site-block" aria-label="Reddit">
+                <div class="bi bi-reddit site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            case Website.Steam:
+              <div class="site-block" aria-label="Steam">
+                <div class="bi bi-steam site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+            default:
+              <div class="default-site-block" aria-label="@link.Link">
+                <div class="bi bi-link site-icon"></div>
+                @(link.Link.Substring(8))
+              </div>
+              break;
+          }
+          <form id="remove-link-form" method="post">
+            <input type="hidden" asp-for="LinkToRemove" value="@link.SiteName" />
+            <button class="bi bi-dash-lg link-button link-remove-button" type="submit"></button>
+          </form>
+        </li>
+      }
+    </ul>
+  </label>
+  @if (@Model.LinkExists != null)
+  {
+    <p class="text-danger">@Model.LinkExists</p>
+  }
+  <div class="add-link">
+    <form id="link-form" class="link-form" method="post">
+      <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+      <label asp-for="SelectedSite">Add A Link</label>
+      <select id="site-select" asp-for="SelectedSite" asp-items="@Html.GetEnumSelectList<Enums.Website>()"></select>
+      <div class="link-input-group">
+        @{
+          string linkValue = "";
+          switch (Model.SelectedSite)
+          {
+            case Website.Discord:
+              linkValue = "https://discord.gg/";
+              break;
+            case Website.Facebook:
+              linkValue = "https://facebook.com/groups/";
+              break;
+            case Website.Twitter:
+              linkValue = "https://x.com/";
+              break;
+            case Website.Instagram:
+              linkValue = "https://instagram.com/";
+              break;
+            case Website.Reddit:
+              linkValue = "https://reddit.com/r/";
+              break;
+            case Website.Steam:
+              linkValue = "https://steamcommunity.com/groups/";
+              break;
+            default:
+              linkValue = "https://";
+              break;
+          }
+        }
+        @if (Model.SelectedSite == Website.Other)
+        {
+          <input asp-for="InputLink" type="url" value="@linkValue" required />
+        }
+        else
+        {
+          <p class="base-uri">@linkValue</p>
+          <input asp-for="InputSubdirectory" type="text" required />
+        }
+        <button class="bi bi-plus-lg link-button" type="submit"></button>
+        <span class="text-danger" asp-validation-for="InputLink"></span>
+        <span class="text-danger" asp-validation-for="InputSubdirectory"></span>
+      </div>
+    </form>
+  </div>
+</div>
 <div class="edit-games">
   <label class="game-label" asp-for="SelectedGame" form="game-form">
     Games
     <ul class="game-list">
-      @foreach (var game in @Model.GroupGameNames)
+      @foreach (var game in @Model.GroupGames)
       {
         <li>
           <div class="game">
-            @game
-            <form id="remove-game-form" method="post" asp-page-handler="RemoveGame">
-              <input type="hidden" asp-for="GameToRemove" value="@game" />
-              <button class="bi bi-dash-lg game-button game-remove-button" type="submit" form="remove-game-form"></button>
+            @game.Name
+            <form id="remove-game-form" method="post">
+              <input type="hidden" asp-for="GameToRemove" value="@game.Name" />
+              <button class="bi bi-dash-lg game-button game-remove-button" type="submit"></button>
             </form>
           </div>
         </li>

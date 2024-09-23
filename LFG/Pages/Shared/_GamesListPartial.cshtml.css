@@ -29,6 +29,11 @@ h3 {
   margin-bottom: .5rem;
 }
 
+.no-games {
+  font-style: italic;
+  color: #555555;
+}
+
 .game-name {
   margin: .5rem;
   font-weight: bold;

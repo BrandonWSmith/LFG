@@ -103,6 +103,15 @@ textarea {
   border-radius: 6px;
 }
 
+select {
+  max-width: fit-content;
+  margin-bottom: .2rem;
+  color: white;
+  background-color: #3F3F3F;
+  border: 2px solid #555555;
+  border-radius: 6px;
+}
+
 [type=checkbox] {
   height: 1rem;
   width: 1rem;
@@ -161,6 +170,11 @@ textarea {
   margin-left: 5%;
   grid-row: 1;
   grid-column: 2;
+  align-items: flex-start;
+}
+
+.link-form {
+  max-width: 25rem;
   align-items: flex-start;
 }
 

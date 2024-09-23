@@ -16,12 +16,32 @@ h2 {
   margin-top: 0;
 }
 
+.edit-links,
 .edit-games {
   grid-column: 2;
   margin-left: 5%;
-
 }
 
+.no-links {
+  color: #555555;
+  font-style: italic;
+}
+
+.link,
+.site-block,
+.default-site-block {
+  display: flex;
+}
+
+.site-icon {
+  margin-right: .5rem;
+}
+
+.add-link {
+  margin-bottom: 1rem;
+}
+
+.link-button,
 .game-button {
   width: 1.5rem;
   height: 1.5rem;
@@ -30,14 +50,17 @@ h2 {
   text-decoration: none;
 }
 
+  .link-button::before,
   .game-button::before {
     transform: scale(.5);
   }
 
+  .link-button:hover,
   .game-button:hover {
     box-shadow: 1px 1px 4px;
   }
 
+.link-remove-button,
 .game-remove-button {
   width: 1rem;
   height: 1rem;
@@ -45,19 +68,22 @@ h2 {
   background: red;
 }
 
+  .link-remove-button::before,
   .game-remove-button::before {
     transform: scale(.35);
   }
 
+.add-link,
 .game-search {
   display: flex;
   flex-direction: column;
-  max-width: 50%;
 }
 
+.link-list,
 .game-list {
   list-style: none;
   padding: 0;
+  max-width: 25rem;
 }
 
 .game-list li {
@@ -69,21 +95,30 @@ h2 {
   align-items: center;
 }
 
+.link-input-group,
 .search-bar-group {
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
   align-items: center;
 }
 
+.base-uri {
+  margin: 0;
+}
+
+.link-input-group button,
 .search-bar-group button {
   width: 2.5rem;
   height: 2.5rem;
 }
 
+  .link-input-group button:hover,
   .search-bar-group button:hover {
     box-shadow: 2px 2px 7px;
   }
 
+  .link-input-group button::before,
   .search-bar-group button::before {
     transform: scale(1);
   }

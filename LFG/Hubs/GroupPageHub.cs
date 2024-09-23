@@ -1,4 +1,5 @@
 ﻿using LFG.Data;
+using LFG.Enums;
 using LFG.Interface;
 using LFG.Models;
 using LFG.Pages.Group;
@@ -72,17 +73,20 @@ public class GroupPageHub : Hub
     GroupModel = new GroupModel(_context, _threadVoteHubContext, _commentVoteHubContext, null);
     GroupModel.Group = await _context.Groups.FindAsync(groupId);
     GroupModel.Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == GroupModel.Group.Owner);
+    GroupModel.GroupMemberCount = _context.UsersGroups.Where(g => g.GroupId == groupId).Count();
+    GroupModel.GroupLinks = await _context.GroupsLinks.Where(l => l.GroupId == groupId).ToListAsync();
 
     var groupCardPartial =
       await _renderer.RenderPartialToStringAsync("_GroupCardPartial", GroupModel);
 
     await Clients.All.SendAsync("refreshGroupInfo", groupCardPartial);
   }
-  public async Task UpdateEditGroupInfo(int groupId)
+  public async Task UpdateEditGroupInfo(int groupId, Website? selectedSite)
   {
     GroupModel = new GroupModel(_context, _threadVoteHubContext, _commentVoteHubContext, null);
     GroupModel.Group = await _context.Groups.FindAsync(groupId);
     GroupModel.Owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == GroupModel.Group.Owner);
+    GroupModel.GroupLinks = await _context.GroupsLinks.Where(l => l.GroupId == groupId).ToListAsync();
     GroupModel.GroupGames = await _context.GroupsGames
         .Where(g => g.GroupId == GroupModel.Group.Id)
         .Include(g => g.Game)
@@ -94,6 +98,11 @@ public class GroupPageHub : Hub
         .ToListAsync();
     GroupModel.GroupGameNames = GroupModel.GroupGames.Select(g => g.Name).ToList();
     GroupModel.AllGamesList = await _context.Games.Select(g => g.Name).ToListAsync();
+
+    if (selectedSite != null)
+    {
+      GroupModel.SelectedSite = (Website)selectedSite;
+    }
 
     var editGroupCardPartial =
       await _renderer.RenderPartialToStringAsync("_EditGroupCardPartial", GroupModel);

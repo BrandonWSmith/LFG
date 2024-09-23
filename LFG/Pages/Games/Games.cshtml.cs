@@ -1,10 +1,10 @@
 using LFG.Data;
 using LFG.Hubs;
 using LFG.Models;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LFG.Pages.Games
 {

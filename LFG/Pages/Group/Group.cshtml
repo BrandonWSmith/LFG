@@ -7,23 +7,24 @@
   ViewData["Title"] = Model.Group.Name;
 }
 
-<div class="profile-heading">
+<div class="group-heading">
   <h1>@Model.Group.Name</h1>
-  @if (Model.Owner.Username == User.Identity.Name)
-  {
-    <div class="small-button-block">
-      <button class="edit-button small-button" onclick="toggleEditGroupInfo()">Edit</button>>
-    </div>
-  }
-  @if (Model.UserGroup == null && Model.Group.Public)
-  {
-    <div class="small-button-block">
+  <div class="small-button-block">
+    @if (Model.Owner.Username == User.Identity.Name)
+    {
+      <button class="edit-button small-button" onclick="toggleEditGroupInfo()">Edit</button>
+    }
+    @if (Model.UserGroup == null && Model.Group.Public)
+    {
       <form id="join-form" method="post" asp-page-handler="Join"></form>
       <button class="join-button small-button" form="join-form">
         Join
       </button>
+    }
+    <div class="buttons">
+      <a class="small-button" asp-page="/Group/GroupMembers" asp-route-groupname="@Model.Group.Name">Members</a>
     </div>
-  }
+  </div>
 </div>
 <div id="group-card" style="display:grid">
   <partial id="group-card-partial" name="Shared/_GroupCardPartial" />

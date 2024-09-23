@@ -1,0 +1,52 @@
+﻿h1 {
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  font-weight: bold;
+  height: 64px;
+  background: linear-gradient(#0000ff 0%, #6328D5 86%);
+  background-clip: text;
+  color: transparent;
+}
+
+.group-heading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+  .heading {
+    grid-column: 2;
+  }
+
+.members-table {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+table {
+  width: 50%;
+  text-align: center;
+  border-style: hidden;
+}
+
+thead {
+  background: linear-gradient(#0000ff 0%, #6328D5 70%);
+  background-clip: text;
+  color: transparent;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 2rem;
+}
+
+tbody {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace, sans-serif;
+  font-size: 1.3rem;
+}
+
+th,
+td {
+  border-color: #555555;
+  border-style: ridge;
+  border-width: 5px;
+}

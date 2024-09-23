@@ -1,0 +1,39 @@
+﻿@page "/Group/{groupname}/Members"
+@model LFG.Pages.Group.GroupMembersModel
+@{
+  ViewData["Title"] = $"{Model.Group.Name} Members";
+}
+
+<div class="group-heading">
+  <div class="heading">
+    <h1>@Model.Group.Name</h1>
+    <h1>Members</h1>
+  </div>
+  <div class="small-button-block">
+    <div class="buttons">
+      <a class="small-button" asp-page="/Group/Group" asp-route-groupname="@Model.Group.Name">&#60; Back</a>
+    </div>
+  </div>
+</div>
+<div class="members-table">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Rank</th>
+        <th scope="col">Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var member in Model.GroupMembers)
+      {
+        var username = Model.Usernames.FirstOrDefault(u => u.Key == member.UserId).Value; 
+        <tr>
+          <th scope="row">@username</th>
+          <td>@member.Rank</td>
+          <td>@member.Role</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

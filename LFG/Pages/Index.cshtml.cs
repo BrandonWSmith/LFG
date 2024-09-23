@@ -1,12 +1,10 @@
 using LFG.Data;
 using LFG.Interface;
 using LFG.Models;
-using LFG.Pages.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 

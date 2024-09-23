@@ -28,13 +28,25 @@ hr {
   color: white;
 }
 
-.profile-heading {
+.group-heading {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
-.profile-heading h1 {
+.group-heading h1 {
   grid-column: 2;
+}
+
+.small-button-block {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-button,
+.join-button {
+  margin-bottom: 0;
 }
 
 #group-card {

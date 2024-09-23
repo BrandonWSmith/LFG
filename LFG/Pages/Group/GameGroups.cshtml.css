@@ -26,10 +26,8 @@ h2 {
   align-items: center;
 }
 
-  .groups-heading h1 {
+  .heading {
     grid-column: 2;
-    min-height: 9rem;
-    line-height: 1;
   }
 
 .search-bar-group {

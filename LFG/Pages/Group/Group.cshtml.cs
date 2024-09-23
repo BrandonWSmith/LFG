@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.DirectoryServices.ActiveDirectory;
-using System.Text.RegularExpressions;
 using Thread = LFG.Models.Thread;
 
 namespace LFG.Pages.Group
@@ -130,7 +127,7 @@ namespace LFG.Pages.Group
       Group = await _context.Groups.FirstOrDefaultAsync(g => g.Name == RouteData.Values["groupname"]);
 
       GroupLink linkToAdd;
-      if (SelectedSite == Website.Other) 
+      if (SelectedSite == Website.Other)
       {
         linkToAdd = new GroupLink
         {

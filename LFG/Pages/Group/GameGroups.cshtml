@@ -5,7 +5,10 @@
 }
 
 <div class="groups-heading">
-  <h1>@Model.Game.Name<br/>Groups</h1>
+  <div class="heading">
+    <h1>@Model.Game.Name</h1>
+    <h1>Groups</h1>
+  </div>
   <div class="search-bar-group">
     <form id="group-search-form" class="row-form" method="post">
       <input type="search" list="game-groups-list" asp-for="SelectedGroup" placeholder="Search" required />

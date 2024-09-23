@@ -280,6 +280,10 @@ button:active {
   justify-self: end;
 }
 
+.small-button-block a {
+  margin-top: 2rem;
+}
+
 .small-button {
   display: flex;
   justify-content: center;

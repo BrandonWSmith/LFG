@@ -13,12 +13,32 @@
       <input asp-for="User.FirstName" type="text" />
     </div>
     <div class="form-item">
+      <label asp-for="User.FirstNamePublic"></label>
+      <input asp-for="User.FirstNamePublic" type="checkbox" checked="@Model.User.FirstNamePublic" />
+    </div>
+    <div class="form-item">
       <label asp-for="User.LastName"></label>
       <input asp-for="User.LastName" type="text" />
     </div>
     <div class="form-item">
+      <label asp-for="User.LastNamePublic"></label>
+      <input asp-for="User.LastNamePublic" type="checkbox" checked="@Model.User.LastNamePublic" />
+    </div>
+    <div class="form-item">
       <label asp-for="User.Bio"></label>
       <textarea asp-for="User.Bio" maxlength="250"></textarea>
+    </div>
+    <div class="form-item">
+      <label asp-for="User.BioPublic"></label>
+      <input asp-for="User.BioPublic" type="checkbox" checked="@Model.User.BioPublic" />
+    </div>
+    <div class="form-item">
+      <label asp-for="User.PlatformsPublic"></label>
+      <input asp-for="User.PlatformsPublic" type="checkbox" checked="@Model.User.PlatformsPublic" />
+    </div>
+    <div class="form-item">
+      <label asp-for="User.GroupsPublic"></label>
+      <input asp-for="User.GroupsPublic" type="checkbox" checked="@Model.User.GroupsPublic" />
     </div>
   </form>
   <div class="form-item">

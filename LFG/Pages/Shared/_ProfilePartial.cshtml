@@ -10,20 +10,24 @@
       <h3>@string.Format("{0:N0}", Model.User.Score)</h3>
     </div>
   }
-  @if (Model.User is { FirstName: not null, LastName: not null })
+  @if (Model.User.FirstName != null && Model.User.LastName != null && Model.User.FirstNamePublic && Model.User.LastNamePublic)
   {
     <p><b>Name: </b>@Model.User.FirstName @Model.User.LastName</p>
   }
-  else if (Model.User.FirstName != null)
+  else if (Model.User.FirstName != null && Model.User.FirstNamePublic)
   {
     <p><b>Name: </b>@Model.User.FirstName</p>
   }
+  else if (Model.User.LastName != null && Model.User.LastNamePublic)
+  {
+    <p><b>Name: </b>@Model.User.LastName</p>
+  }
   <p><b>Joined: </b>@Model.User.Created.ToString("MMMM d, yyyy")</p>
-  @if(Model.User.Bio != null)
+  @if(Model.User.Bio != null && Model.User.BioPublic)
   {
     <p><b>Bio: </b>@Model.User.Bio</p>
   }
-  @if (Model.UserPlatforms.Count > 0)
+  @if (Model.UserPlatforms.Count > 0 && Model.User.PlatformsPublic)
   {
     <p><b>Platforms: </b>@string.Join(", ", Model.UserPlatformNames)</p>
   }

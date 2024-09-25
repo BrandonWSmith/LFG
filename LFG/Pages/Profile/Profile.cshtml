@@ -24,7 +24,7 @@
 <div id="edit-user-card" style="display:none">
   <partial name="_EditProfilePartial" />
 </div>
-@if (@Model.UserGroups.Count > 0)
+@if (@Model.UserGroups.Count > 0 && Model.User.GroupsPublic)
 {
   <h1>Groups</h1>
   <div class="user-groups">
@@ -32,7 +32,20 @@
     {
       <a asp-page="/Group/Group" asp-route-groupname="@group.Name">
         <div class="group-card">
-          <partial name="Shared/_DefaultGroupAvatarPartial" />
+          <div class="default-avatar-container">
+            @if (group.Owner == Model.User.Id)
+            {
+              <p class="group-owner"><b>Owner</b></p>
+            }
+            @{ var groupRole = Model.UserGroupRoles.FirstOrDefault(g => g.Key == group.Id).Value; }
+            @if (groupRole == Enums.GroupRole.Admin)
+            {
+              <p class="group-admin"><b>Admin</b></p>
+            }
+            <div class="default-avatar-icon">
+              <i class="bi bi-people"></i>
+            </div>
+          </div>
           <h3 class="group-name">@group.Name</h3>
         </div>
       </a>

@@ -3,6 +3,6 @@
 public enum GroupRole
 {
   Owner,
-  Moderator,
+  Admin,
   Member
 }

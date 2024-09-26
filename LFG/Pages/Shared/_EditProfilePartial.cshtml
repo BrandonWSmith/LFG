@@ -3,7 +3,8 @@
 <partial name="_DefaultUserAvatarPartial" />
 <div class="user-info">
   <h2>@Model.User.Username</h2>
-  <form id="profile-form" class="profile-form" method="post" asp-page-handler="UpdateUserInfo()">
+  <form id="profile-form" class="profile-form" method="post">
+    <input type="hidden" asp-for="UserGroupRoles" readonly />
     <div class="form-item">
       <label asp-for="User.Email"></label>
       <input asp-for="User.Email" type="email" required />

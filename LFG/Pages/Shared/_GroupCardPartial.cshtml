@@ -12,10 +12,12 @@
     <p><b>Bio: </b>@Model.Group.Description</p>
   }
   <p><b>Status: </b>@Model.Group.Status</p>
-  <p><b>Links: </b></p>
-  <div class="links-block">
-    @foreach (var link in Model.GroupLinks)
-    {
+  @if (Model.GroupLinks.Count != 0)
+  {
+    <p><b>Links: </b></p>
+    <div class="links-block">
+      @foreach (var link in Model.GroupLinks)
+      {
         @switch (link.SiteName)
         {
           case Website.Discord:
@@ -55,6 +57,7 @@
             </a>
             break;
         }
-    }
-  </div>
+      }
+    </div>
+  }
 </div>

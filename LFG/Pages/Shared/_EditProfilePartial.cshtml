@@ -3,10 +3,10 @@
 <partial name="_DefaultUserAvatarPartial" />
 <div class="user-info">
   <h2>@Model.User.Username</h2>
-  <form id="profile-form" class="profile-form" method="post">
+  <form id="profile-form" class="profile-form" method="post" asp-page-handler="UpdateUserInfo()">
     <div class="form-item">
       <label asp-for="User.Email"></label>
-      <input asp-for="User.Email" type="text" required />
+      <input asp-for="User.Email" type="email" required />
     </div>
     <div class="form-item">
       <label asp-for="User.FirstName"></label>
@@ -14,7 +14,7 @@
     </div>
     <div class="form-item">
       <label asp-for="User.FirstNamePublic"></label>
-      <input asp-for="User.FirstNamePublic" type="checkbox" checked="@Model.User.FirstNamePublic" />
+      <input asp-for="User.FirstNamePublic" type="checkbox" />
     </div>
     <div class="form-item">
       <label asp-for="User.LastName"></label>
@@ -22,7 +22,7 @@
     </div>
     <div class="form-item">
       <label asp-for="User.LastNamePublic"></label>
-      <input asp-for="User.LastNamePublic" type="checkbox" checked="@Model.User.LastNamePublic" />
+      <input asp-for="User.LastNamePublic" type="checkbox" />
     </div>
     <div class="form-item">
       <label asp-for="User.Bio"></label>
@@ -30,15 +30,15 @@
     </div>
     <div class="form-item">
       <label asp-for="User.BioPublic"></label>
-      <input asp-for="User.BioPublic" type="checkbox" checked="@Model.User.BioPublic" />
+      <input asp-for="User.BioPublic" type="checkbox" />
     </div>
     <div class="form-item">
       <label asp-for="User.PlatformsPublic"></label>
-      <input asp-for="User.PlatformsPublic" type="checkbox" checked="@Model.User.PlatformsPublic" />
+      <input asp-for="User.PlatformsPublic" type="checkbox" />
     </div>
     <div class="form-item">
       <label asp-for="User.GroupsPublic"></label>
-      <input asp-for="User.GroupsPublic" type="checkbox" checked="@Model.User.GroupsPublic" />
+      <input asp-for="User.GroupsPublic" type="checkbox" />
     </div>
   </form>
   <div class="form-item">

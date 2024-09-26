@@ -76,18 +76,18 @@
     }
 
     @* Edit User Info *@
-    $(document).on("submit", "#profile-form", function (e) {
-      e.preventDefault();
-      var form = $(this);
+    // $(document).on("submit", "#profile-form", function (e) {
+    //   e.preventDefault();
+    //   var form = $(this);
 
-      $.ajax({
-        url: `?handler=UpdateUserInfo`,
-        type: 'POST',
-        data: form.serialize()
-      });
+    //   $.ajax({
+    //     url: `?handler=UpdateUserInfo`,
+    //     type: 'POST',
+    //     data: form.serialize()
+    //   });
 
-      toggleEditUserInfo();
-    });
+    //   toggleEditUserInfo();
+    // });
 
     @* Add Platform *@
       $(document).on("submit", "#platform-select-form", function (e) {

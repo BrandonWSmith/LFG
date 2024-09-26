@@ -30,13 +30,22 @@ namespace LFG.Models
     [Display(Name = "First Name")]
     public string? FirstName { get; set; }
 
+    [Display(Name = "Show First Name")]
+    public bool FirstNamePublic { get; set; } = true;
+
     [Length(1, 20)]
     [RegularExpression(@"[A-Za-z]+")]
     [Display(Name = "Last Name")]
     public string? LastName { get; set; }
 
+    [Display(Name = "Show Last Name")]
+    public bool LastNamePublic { get; set; } = true;
+
     [MaxLength(250)]
     public string? Bio { get; set; }
+
+    [Display(Name = "Show Bio")]
+    public bool BioPublic { get; set; } = true;
 
     public int? AvatarId { get; set; }
 
@@ -49,5 +58,11 @@ namespace LFG.Models
     [Required]
     [Display(Name = "Remember Me")]
     public bool Persistent { get; set; } = false;
+
+    [Display(Name = "Show Platforms")]
+    public bool PlatformsPublic { get; set; } = true;
+
+    [Display(Name = "Show Groups")]
+    public bool GroupsPublic { get; set; } = true;
   }
 }

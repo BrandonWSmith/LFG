@@ -1,4 +1,5 @@
 using LFG.Data;
+using LFG.Enums;
 using LFG.Hubs;
 using LFG.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,7 @@ namespace LFG.Pages.Profile
     public User User { get; set; }
     public List<Platform> UserPlatforms { get; set; }
     public List<string> UserPlatformNames { get; set; }
+    public SortedList<int, GroupRole> UserGroupRoles { get; set; }
     public List<Models.Group> UserGroups { get; set; }
 
     [BindNever]
@@ -48,15 +50,21 @@ namespace LFG.Pages.Profile
           Name = p.Platform.Name
         })
         .ToListAsync();
-
       UserPlatformNames = UserPlatforms.Select(p => p.Name).ToList();
 
-      UserGroups = await _context.UsersGroups
-        .Where(g => g.UserId == User.Id)
+      var usersGroups = _context.UsersGroups.Where(g => g.UserId == User.Id);
+      usersGroups.ToList().ForEach(group =>
+      {
+        UserGroupRoles.Add(group.GroupId, group.Role);
+      });
+      UserGroups = await usersGroups
+        .OrderBy(g => g.Role)
         .Include(g => g.Group)
         .Select(g => new Models.Group
         {
+          Id = g.Group.Id,
           Name = g.Group.Name,
+          Owner = g.Group.Owner,
           AvatarId = g.Group.AvatarId
         })
         .ToListAsync();

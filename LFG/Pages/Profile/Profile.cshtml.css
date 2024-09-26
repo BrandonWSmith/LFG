@@ -45,10 +45,19 @@ h3 {
 }
 
 .group-card {
+  position: relative;
   display: flex;
   flex-flow: column;
   align-items: center;
   margin-bottom: .5rem;
+}
+
+.group-owner,
+.group-admin {
+  position: absolute;
+  top: 2%;
+  right: 7%;
+  margin: 0;
 }
 
 .group-name {

@@ -26,6 +26,7 @@ namespace LFG.Pages.Profile
     }
 
     public User User { get; set; }
+    public List<Message> UserMessages { get; set; }
     public List<Platform> UserPlatforms { get; set; }
     public List<string> UserPlatformNames { get; set; }
     public SortedList<int, GroupRole> UserGroupRoles { get; set; }
@@ -41,6 +42,7 @@ namespace LFG.Pages.Profile
     public async Task OnGetAsync()
     {
       User = await _context.Users.FirstOrDefaultAsync(u => u.Username == RouteData.Values["username"]);
+      UserMessages = await _context.Messages.Where(m => m.UserId == User.Id).ToListAsync();
 
       UserPlatforms = await _context.UsersPlatforms
         .Where(p => p.UserId == User.Id)

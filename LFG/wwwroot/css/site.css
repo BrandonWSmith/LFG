@@ -138,17 +138,10 @@ select {
 
 .logout-form {
   justify-self: end;
-  margin-right: 15%;
   grid-column: 3;
   font-family: 'IBM Plex Mono', monospace, sans-serif;
   color: white;
 }
-
-  .logout-form p {
-    margin: 2%;
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
 
 .profile-form,
 .platform-select-form {
@@ -270,7 +263,7 @@ button:active {
 .logout-button button {
   width: 150px;
   height: 30px;
-  margin-top: 0;
+  margin: 0 2rem 0 1rem;
   font-size: 20px;
 }
 
@@ -350,6 +343,11 @@ button:active {
   }
 
 /* Avatars/Game Covers */
+.default-user-avatar {
+  width: 12.5rem;
+  height: 12.5rem;
+}
+
 .default-avatar-container,
 .default-cover-container {
   display: flex;

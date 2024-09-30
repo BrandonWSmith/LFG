@@ -17,7 +17,35 @@
       <img src="/images/LFG Letters TNR.png" alt="LFG" style="height:70px"/>
     </a>
   </div>
-  <partial name="_LogoutPartial"/>
+  <div class="user-block">
+    <div class="notifications-icon" onclick="toggleNotifications()">
+        <i class="bi bi-bell-fill"></i>
+    </div>
+    <div id="notifications" style="display:none">
+      <ul>
+        @if (Model.UserMessages.Count == 0)
+        {
+          <li class="no-messages">No Messages</li>
+        }
+        @foreach (var message in Model.UserMessages)
+        {
+          <li id="message-@message.Id" class="message" onclick="toggleMessageBody(@message.Id)">
+            <p><b>@message.Subject</b></p>
+            <p>@message.Sender</p>
+            <p id="message-body-@message.Id">@message.Body</p>
+            <p class="message-sent">@message.Sent</p>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="user-options">
+      <div class="username">
+        <img class="default-user-avatar" src="/images/Default User Avatar.png" />
+        <p>@User.Identity.Name</p>
+      </div>
+      <partial name="_LogoutPartial" />
+    </div>
+  </div>
 </header>
 <nav class="side-navbar navbar-expand-sm navbar-toggleable-sm">
   <div class="nav-contaier">
@@ -52,6 +80,18 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script type="text/javascript">
+  function toggleNotifications() {
+    const notifications = document.getElementById("notifications");
+
+    if (notifications.style.display === "none") {
+      notifications.style.display = "block";
+    }
+    else {
+      notifications.style.display = "none";
+    }
+  }  
+ </script>
 
 @await RenderSectionAsync("Scripts", false)
 </body>
